@@ -43,7 +43,7 @@
                           :items="departements"
                           item-text="name"
                           item-value="id"
-                          v-model="editedItem.departement.id"
+                          v-model="editedItem.department.id"
                           label="departements"
                         ></v-select>
                       </v-col>
@@ -120,7 +120,7 @@ export default {
     headers: [
       { text: "id", align: "start", value: "id", sortable: true },
       { text: "name", value: "name", sortable: true },
-      { text: "departement", value: "departement.name", sortable: true },
+      { text: "department", value: "department.name", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
     roles: [],
@@ -130,15 +130,15 @@ export default {
     editedItem: {
       id: "",
       name: "",
-      departement: {
-        id: "",
+      department: {
+        id: null,
       },
     },
     defaultItem: {
       id: "",
       name: "",
-      departement: {
-        id: "",
+      department: {
+        id: null,
       },
     },
     confirmAddSave: false,
@@ -161,8 +161,8 @@ export default {
         this.editedItem = {
           id: "",
           name: "",
-          departement: {
-            id: "",
+          department: {
+            id: null,
           },
         };
       }
@@ -201,6 +201,7 @@ export default {
       this.dialog = true;
     },
     deleteItem(item) {
+      console.log("item", item);
       this.editedIndex = item.id;
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;

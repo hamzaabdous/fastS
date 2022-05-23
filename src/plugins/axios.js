@@ -10,14 +10,18 @@ CustomizedAxios.defaults.baseURL = "http://localhost:8080/";
     Accept: "application/json",
   };
 } */
+var tk = localStorage.getItem("token");
+//debugger;
 const token =
-  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoYW16YSIsImV4cCI6MTY1MjI3Njc0NywiaWF0IjoxNjUyMjU4NzQ3fQ.cDeGpMAXoRGFtP1ySLP_or1hqfnzrWx_y8qUDcZPPQvZ2OjlbGu2aU9KCugLrBX7RZCbjdds4uW9NN3SSg6KdQ";
+  "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJoYW16YSIsImV4cCI6MTY1MzIyOTYwNiwiaWF0IjoxNjUzMjExNjA2fQ.zlSDDLns0yA-VI46NtC-DEPMwIwtxeNMphgFnESmuW-aQMUG99vo-na1uAxugTrs6zFIAreBbaXe14bkX7CPrA";
 /* CustomizedAxios.defaults.headers.common["Accept"] = "application/json";
 CustomizedAxios.defaults.headers.common = {
   Authorization: `Bearer ` + token,
 }; */
 CustomizedAxios.defaults.headers.common["Accept"] = "application/json";
-CustomizedAxios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+if (tk != null) {
+  CustomizedAxios.defaults.headers.common["Authorization"] = `Bearer ${tk}`;
+}
 
 /*
 //console.log("store.getters.getCurrentdepartement", this.$store);

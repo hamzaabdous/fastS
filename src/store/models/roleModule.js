@@ -25,7 +25,7 @@ const rolesModule = {
   actions: {
     setRolesAction({ commit }) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.get("roles/")
+        CustomizedAxios.get("Function/")
           .then((response) => {
             commit("SET_ROLES", response.data);
             console.log("set ROLE 1");
@@ -38,11 +38,11 @@ const rolesModule = {
     },
     addRoleAction({ commit }, ROLE) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("roles/add", {
+        CustomizedAxios.post("Function/add", {
           id: ROLE.id,
           name: ROLE.name,
-          departement: {
-            id: ROLE.departement.id,
+          department: {
+            id: ROLE.department.id,
           },
         })
           .then((response) => {
@@ -58,7 +58,7 @@ const rolesModule = {
 
     deleteRoleAction({ commit }, id) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("roles/delete/" + id)
+        CustomizedAxios.post("Function/delete/" + id)
           .then((response) => {
             commit("DELETE_ROLE", id);
             resolve(response.data);
@@ -70,11 +70,11 @@ const rolesModule = {
     },
     editRoleAction({ commit }, ROLE) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.put("/roles/update", {
+        CustomizedAxios.put("Function/update", {
           id: ROLE.id,
           name: ROLE.name,
-          departement: {
-            id: ROLE.departement.id,
+          department: {
+            id: ROLE.department.id,
           },
         })
           .then((response) => {

@@ -8,10 +8,8 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>users</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
-          <v-dialog v-model="dialog" max-width="600px">
+          <v-dialog v-model="dialog" max-width="1000px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
                 color="#99A799"
@@ -24,10 +22,6 @@
               </v-btn>
             </template>
             <v-card>
-              <v-card-title>
-                <span class="text-h5">{{ formTitle }}</span>
-              </v-card-title>
-
               <v-card-text>
                 <v-container>
                   <v-row>
@@ -101,9 +95,42 @@
           </v-dialog>
         </v-toolbar>
       </template>
+      <template v-slot:item="{ item }">
+        <tr>
+          <td class="custom-class">{{ item.username }}</td>
+          <td class="custom-class">{{ item.lastName }} {{ item.firstName }}</td>
+          <td class="custom-class">{{ item.phoneNumber }}</td>
+          <td class="custom-class">{{ item.function }}</td>
+
+          <td class="custom-class">
+            <v-btn
+              color="#99A799"
+              class="mb-2 btn white--text"
+              @click="editItem(item)"
+            >
+              <v-icon medium class="mr-2"> mdi-pencil </v-icon>
+            </v-btn>
+            <br />
+            <v-btn
+              color="#99A799"
+              class="mb-2 btn white--text"
+              @click="editItem(item)"
+            >
+              <v-icon medium @click="deleteItem(item)"> mdi-delete </v-icon>
+            </v-btn>
+          </td>
+        </tr>
+      </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-btn
+          color="#99A799"
+          class="mb-2 btn white--text"
+          @click="editItem(item)"
+        >
+          <v-icon medium class="mr-2"> mdi-pencil </v-icon>
+        </v-btn>
+
+        <v-icon medium @click="deleteItem(item)"> mdi-delete </v-icon>
       </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="initialize()"> Reset </v-btn>
@@ -119,14 +146,10 @@ export default {
     dialog: false,
     dialogDelete: false,
     headers: [
-      { text: "id", align: "start", value: "id", sortable: true },
-      { text: "lastName", value: "lastName", sortable: true },
-      { text: "firstName", value: "firstName", sortable: true },
-      { text: "email", value: "email", sortable: true },
-      { text: "role", value: "role.name", sortable: true },
-      { text: "phone Number", value: "phoneNumber", sortable: true },
-      { text: "created Date", value: "createdDate", sortable: true },
-
+      { text: "username", align: "start", sortable: true },
+      { text: "fullname", sortable: true },
+      { text: "phone Number", sortable: true },
+      { text: "function", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
     users: [],
@@ -185,6 +208,7 @@ export default {
   },
   methods: {
     initialize() {
+      console.log("initialize");
       this.setUsersAction().then(() => {
         this.users = [...this.getUsers];
         console.log(this.users);
@@ -200,7 +224,6 @@ export default {
     editItem(item) {
       this.editedIndex = this.users.indexOf(item) + 1;
       this.editedItem = Object.assign({}, item);
-      console.log("item :", item);
       this.dialog = true;
     },
     deleteItem(item) {
@@ -220,17 +243,17 @@ export default {
     closeDelete() {
       this.dialogDelete = false;
     },
-    save(editedItem) {
+    save() {
       if (this.editedIndex == -1) {
         console.log("add");
-        this.addUserAction(editedItem).then(() => {
+        this.addUserAction(this.editedItem).then(() => {
           this.users = [...this.getUsers];
         });
       } else {
         console.log("edite");
 
-        this.editUserAction(editedItem).then(() => {
-          this.users = this.getUsers;
+        this.editUserAction(this.editedItem).then(() => {
+          this.users = [...this.getUsers];
         });
       }
 

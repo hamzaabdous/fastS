@@ -24,7 +24,7 @@ const damageTypeModule = {
   actions: {
     setDAMAGETYPESAction({ commit }) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.get("DamageTypes/")
+        CustomizedAxios.get("DamageType/")
           .then((response) => {
             commit("SET_DAMAGETYPS", response.data);
             console.log("set damageTypes ");
@@ -37,11 +37,15 @@ const damageTypeModule = {
     },
     addDAMAGETYPEAction({ commit }, damageTypes) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("DamageTypes/add", {
-          id: damageTypes.id,
+        CustomizedAxios.post("DamageType/add", {
+          created_date: damageTypes.created_date,
+          updateDate: damageTypes.updateDate,
           name: damageTypes.name,
-          group: {
-            id: damageTypes.group.id,
+          department: {
+            id: damageTypes.department.id,
+          },
+          profileGroup: {
+            id: damageTypes.profileGroup.id,
           },
         })
           .then((response) => {
@@ -57,7 +61,7 @@ const damageTypeModule = {
 
     deleteDAMAGETYPEAction({ commit }, id) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("DamageTypes/delete/" + id)
+        CustomizedAxios.post("DamageType/delete/" + id)
           .then((response) => {
             commit("DELETE_DAMAGETYPE", id);
             resolve(response.data);
@@ -69,11 +73,15 @@ const damageTypeModule = {
     },
     editDAMAGETYPEAction({ commit }, damageTypes) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.put("/DamageTypes/update", {
-          id: damageTypes.id,
+        CustomizedAxios.put("DamageType/update", {
+          created_date: damageTypes.created_date,
+          updateDate: damageTypes.updateDate,
           name: damageTypes.name,
-          group: {
-            id: damageTypes.group.id,
+          department: {
+            id: damageTypes.department.id,
+          },
+          profileGroup: {
+            id: damageTypes.profileGroup.id,
           },
         })
           .then((response) => {

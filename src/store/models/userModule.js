@@ -26,8 +26,8 @@ const usersModule = {
       return new Promise((resolve, reject) => {
         CustomizedAxios.get("users/")
           .then((response) => {
-            commit("SET_USERS", response.data);
-            console.log("set user 1");
+            commit("SET_USERS", response.data.payload);
+            console.log("set user ");
             resolve(response);
           })
           .catch((error) => {
@@ -64,7 +64,7 @@ const usersModule = {
 
     deleteUserAction({ commit }, id) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("users/delete/" + id)
+        CustomizedAxios.post("users/delete/", +id)
           .then((response) => {
             commit("DELETE_USER", id);
             resolve(response.data);

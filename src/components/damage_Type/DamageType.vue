@@ -2,14 +2,12 @@
   <div style="padding: 5px; padding-top: 8%">
     <v-data-table
       :headers="headers"
-      :items="damageTypes"
+      :items="damageTypesFiltre"
       sort-by="item.id"
       class="elevation-1"
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Damage Type</v-toolbar-title>
-          <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
@@ -39,7 +37,7 @@
                     </v-col>
                     <v-col cols="12" sm="6" md="8">
                       <v-text-field
-                        v-model="editedItem.group.id"
+                        v-model="editedItem.profileGroup.id"
                         label="groupe"
                       ></v-text-field>
                     </v-col>
@@ -95,9 +93,41 @@
           </v-dialog>
         </v-toolbar>
       </template>
+      <template v-slot:item="{ item }">
+        <tr>
+          <td class="custom-class">{{ item.name }}</td>
+          <td class="custom-class">{{ item.createdDate }}</td>
+          <td class="custom-class">{{ item.profileGroup.name }}</td>
+          <td class="custom-class">{{ item.department.name }}</td>
+
+          <td class="custom-class">
+            <v-btn
+              color="#99A799"
+              class="mb-2 btn white--text"
+              @click="editItem(item)"
+            >
+              <v-icon medium class="mr-2"> mdi-pencil </v-icon>
+            </v-btn>
+            <br />
+            <v-btn
+              color="#99A799"
+              class="mb-2 btn white--text"
+              @click="editItem(item)"
+            >
+              <v-icon medium @click="deleteItem(item)"> mdi-delete </v-icon>
+            </v-btn>
+          </td>
+        </tr>
+      </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-icon small class="mr-2" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-btn color="#99A799" class="m-2 mb-2 btn white--text">
+          <v-icon large class="mr-2" @click="editItem(item)">
+            mdi-pencil
+          </v-icon>
+        </v-btn>
+        <v-btn color="#99A799" class="m-2 btn white--text">
+          <v-icon large @click="deleteItem(item)"> mdi-delete </v-icon>
+        </v-btn>
       </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="initialize()"> Reset </v-btn>
@@ -114,25 +144,36 @@ export default {
     dialogDelete: false,
     confirmAddSave: false,
     headers: [
-      { text: "id", align: "start", value: "id", sortable: true },
       { text: "name", value: "name", sortable: true },
-      { text: "groupe", value: "group.name", sortable: true },
+      { text: "created date", value: "createdDate", sortable: true },
+      { text: "profile Group", value: "profileGroup.name", sortable: true },
+      { text: "department", value: "department.name", sortable: true },
+
       { text: "Actions", value: "actions", sortable: false },
     ],
     damageTypes: [],
+    damageTypesFiltre: [],
     isAdd: true,
     editedIndex: -1,
     editedItem: {
-      id: "",
+      created_date: "",
+      updateDate: "",
       name: "",
-      group: {
+      department: {
+        id: "",
+      },
+      profileGroup: {
         id: "",
       },
     },
     defaultItem: {
-      id: "",
+      created_date: "",
+      updateDate: "",
       name: "",
-      group: {
+      department: {
+        id: "",
+      },
+      profileGroup: {
         id: "",
       },
     },
@@ -153,9 +194,13 @@ export default {
       if (this.editedIndex == -1) {
         this.editedIndex = -1;
         this.editedItem = {
-          id: "",
+          created_date: "",
+          updateDate: "",
           name: "",
-          group: {
+          department: {
+            id: "",
+          },
+          profileGroup: {
             id: "",
           },
         };
@@ -168,13 +213,18 @@ export default {
     },
   },
   created() {
-    this.initialize();
+    //this.initialize();
   },
   methods: {
     initialize() {
       this.setDAMAGETYPESAction().then(() => {
         this.damageTypes = [...this.getdamageTypes];
-        console.log(this.damageTypes);
+        this.damageTypes.map((item) => {
+          if (item.profileGroup.id == localStorage.getItem("id")) {
+            this.damageTypesFiltre.push(item);
+          }
+        });
+        console.log(this.damageTypesFiltre);
       });
     },
     ...mapActions([

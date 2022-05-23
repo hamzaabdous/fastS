@@ -24,7 +24,7 @@ const departementModule = {
   actions: {
     setDepartementsAction({ commit }) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.get("departements/")
+        CustomizedAxios.get("Departments/")
           .then((response) => {
             commit("SET_DEPARTEMENTS", response.data);
             console.log("set department 1");
@@ -37,7 +37,7 @@ const departementModule = {
     },
     addDepartementAction({ commit }, departements) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("departements/add", {
+        CustomizedAxios.post("Departments/add", {
           id: departements.id,
           name: departements.name,
         })
@@ -54,7 +54,7 @@ const departementModule = {
 
     deleteDepartementAction({ commit }, id) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("departements/delete/" + id)
+        CustomizedAxios.post("Departments/delete/" + id)
           .then((response) => {
             commit("DELETE_DEPARTEMENT", id);
             resolve(response.data);
@@ -66,7 +66,7 @@ const departementModule = {
     },
     editDepartementAction({ commit }, departements) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.put("/departements/update", {
+        CustomizedAxios.put("Departments/update", {
           id: departements.id,
           name: departements.name,
         })

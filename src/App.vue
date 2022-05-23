@@ -1,6 +1,6 @@
 <template>
-  <v-card class="mx-auto overflow-hidden">
-    <v-app-bar color="#D3E4CD" style="border-bottom: 0px solid #666666">
+  <v-card v-if="logged" class="mx-auto overflow-hidden">
+    <v-app-bar color="#fff" style="border-bottom: 2px solid #002f6c">
       <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
       <v-toolbar-title>
         <v-img
@@ -35,59 +35,51 @@
             src="./assets/TangerAlliance.png"
           ></v-img>
           <v-list>
-            <v-list-group
-              v-for="item in listDrawerRouter"
+            <v-list-item
+              v-for="item in listDrawerChildRouter"
               :key="item.id"
-              v-model="item.active"
-              :prepend-icon="item.action"
-              no-action
+              link
+              :to="item.ROUTE"
+              class="sideBarItem"
             >
-              <template v-slot:activator>
-                <v-list-item-content>
-                  <v-list-item-title>
-                    <h2>{{ item.name }}</h2>
-                  </v-list-item-title>
-                </v-list-item-content>
-              </template>
-
-              <v-list-item
-                v-for="item in listDrawerChildRouter"
-                :key="item.id"
-                link
-                :to="item.ROUTE"
-                class="sideBarItem"
-              >
-                <v-list-item class="test">
-                  <v-list-item-content>{{ item.name }}</v-list-item-content>
-                </v-list-item>
+              <v-list-item class="test">
+                <v-list-item-content>{{ item.name }}</v-list-item-content>
+                <template v-slot:activator>
+                  <v-list-item-content>
+                    <v-list-item-title>
+                      <h2>{{ item.name }}</h2>
+                    </v-list-item-title>
+                  </v-list-item-content>
+                </template>
               </v-list-item>
-            </v-list-group>
+            </v-list-item>
           </v-list>
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-app style="background-color: #fef5ed">
+    <v-app style="background-color: #fff">
       <router-view />
     </v-app>
   </v-card>
+  <Login v-else />
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-
+import Login from "./View/Login.vue";
 export default {
+  components: {
+    Login,
+  },
   data() {
     return {
       drawer: false,
+      logged: false,
       listDrawerRouter: [{ id: 1, name: "Gestion" }],
       listDrawerChildRouter: [
         { id: 1, name: "user", ROUTE: "/user" },
-        { id: 2, name: "Departement", ROUTE: "/Departement" },
-        { id: 3, name: "Role", ROUTE: "/Role" },
-        { id: 4, name: "domainGroupe", ROUTE: "/domainGroupe" },
-        { id: 5, name: "damageType", ROUTE: "/damageType" },
-        { id: 6, name: "damage", ROUTE: "/damage" },
-        { id: 7, name: "domain", ROUTE: "/domain" },
+        { id: 2, name: "damage", ROUTE: "/Damage" },
+        { id: 3, name: "profile_groupe", ROUTE: "/profile_groupe" },
       ],
       users: [],
       show: true,
@@ -95,7 +87,9 @@ export default {
   },
   mounted() {
     document.title = "Dashboard";
-
+    if (localStorage.getItem("token") == null) {
+      this.logged = false;
+    } else if (localStorage.getItem("token") != null) this.logged = true;
     //  this.initialize();
   },
   computed: {
