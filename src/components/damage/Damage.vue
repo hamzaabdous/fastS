@@ -20,37 +20,37 @@
               item-value="id"
               v-model="equipments_id"
               label="Equipment :"
-              @change="changeEquipmentsFiltreeSELECT"
+              @change="changeEquipmentsFiltreSELECT"
               :disabled="disabledEquipmentsFiltre"
             ></v-select>
           </v-col>
         </v-row>
         <v-dialog v-model="dialogTEC" persistent max-width="290">
           <v-card>
-            <v-card-title class="text-h5"> error? </v-card-title>
-            <v-card-text>error</v-card-text>
+            <v-card-title class="text-h5"> Warning ! </v-card-title>
+            <v-card-text
+              >Are you sure you want to add this damage ?</v-card-text
+            >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="cancelTEC">
-                Disagree
-              </v-btn>
+              <v-btn color="green darken-1" text @click="cancelTEC"> No </v-btn>
               <v-btn color="green darken-1" text @click="dialogTEC = false">
-                Agree
+                Yes
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
         <v-dialog v-model="dialogIT" persistent max-width="290">
           <v-card>
-            <v-card-title class="text-h5"> error? </v-card-title>
-            <v-card-text>error</v-card-text>
+            <v-card-title class="text-h5"> Warning ! </v-card-title>
+            <v-card-text
+              >Are you sure you want to add this damage ?</v-card-text
+            >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="cancelIT">
-                Disagree
-              </v-btn>
+              <v-btn color="green darken-1" text @click="cancelIT"> No </v-btn>
               <v-btn color="green darken-1" text @click="dialogIT = false">
-                Agree
+                Yes
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -64,7 +64,9 @@
                   <v-col cols="4">
                     <span>IT </span>
                     <span class="red--text"
-                      >({{ this.modelIT.length }})</span
+                      >({{
+                        this.modelDamageIT.length + this.modelIT.length
+                      }})</span
                     ></v-col
                   >
                   <v-col cols="3"></v-col>
@@ -73,7 +75,12 @@
 
               <v-col cols="12" sm="12" class="scroll">
                 <v-list>
-                  <v-list-item-group v-model="modelIT" multiple color="#f54">
+                  <v-list-item-group
+                    name="it"
+                    v-model="modelIT"
+                    multiple
+                    color="#f54"
+                  >
                     <div>
                       <div>
                         <v-list-item
@@ -87,13 +94,15 @@
                           "
                         >
                           <v-list-item-icon>
-                            <v-icon v-text="item.icon"></v-icon>
+                            <v-icon medium> mdi-progress-wrench </v-icon>
                           </v-list-item-icon>
 
                           <v-list-item-content>
                             <v-list-item-title
+                              name="modelDamageIT"
                               v-text="item.name"
                             ></v-list-item-title>
+                            <h4>on progress</h4>
                           </v-list-item-content>
                         </v-list-item>
                       </div>
@@ -106,11 +115,12 @@
                         @click="validerIT"
                       >
                         <v-list-item-icon>
-                          <v-icon v-text="item.icon"> </v-icon>
+                          <v-icon> mdi-cellphone-link-off</v-icon>
                         </v-list-item-icon>
 
                         <v-list-item-content>
                           <v-list-item-titlele
+                            name="damageTypesIT"
                             v-text="item.name"
                           ></v-list-item-titlele>
                         </v-list-item-content>
@@ -119,7 +129,6 @@
                   </v-list-item-group>
                 </v-list>
               </v-col>
-              {{ this.modelIT }}
             </v-col>
             <v-col cols="2"></v-col>
             <v-col cols="5" class="TECpanell">
@@ -129,7 +138,9 @@
                   <v-col cols="6">
                     <span>Technique </span>
                     <span class="red--text">
-                      ({{ this.modelTEC.length }})</span
+                      ({{
+                        this.modelDamageTEC.length + this.modelTEC.length
+                      }})</span
                     ></v-col
                   >
                   <v-col cols="3"></v-col>
@@ -138,7 +149,12 @@
 
               <v-col cols="12" sm="12" class="scroll">
                 <v-list>
-                  <v-list-item-group v-model="modelTEC" multiple color="#f54">
+                  <v-list-item-group
+                    name="TEC"
+                    v-model="modelTEC"
+                    multiple
+                    color="#f54"
+                  >
                     <div>
                       <v-list-item
                         v-for="(item, i) in modelDamageTEC"
@@ -151,13 +167,15 @@
                         :disabled="true"
                       >
                         <v-list-item-icon>
-                          <v-icon v-text="item.icon"></v-icon>
+                          <v-icon medium> mdi-progress-wrench </v-icon>
                         </v-list-item-icon>
 
                         <v-list-item-content>
                           <v-list-item-title
+                            name="modelDamageTEC"
                             v-text="item.name"
                           ></v-list-item-title>
+                          <h4>on progress</h4>
                         </v-list-item-content>
                       </v-list-item>
                     </div>
@@ -169,11 +187,12 @@
                         @click="validerTEC"
                       >
                         <v-list-item-icon>
-                          <v-icon v-text="item.icon"></v-icon>
+                          <v-icon>mdi-car-wrench</v-icon>
                         </v-list-item-icon>
 
                         <v-list-item-content>
                           <v-list-item-title
+                            name="damageTypesTEC"
                             v-text="item.name"
                           ></v-list-item-title>
                         </v-list-item-content>
@@ -182,7 +201,6 @@
                   </v-list-item-group>
                 </v-list>
               </v-col>
-              {{ this.modelTEC }}
             </v-col>
           </v-row>
         </v-container>
@@ -222,6 +240,7 @@ export default {
     damageTypesTEC: [],
     modelIT: [],
     modelTEC: [],
+    sendDamages: [],
     modelDamageIT: [],
     modelDamageTEC: [],
     profile_groupe_id: null,
@@ -266,22 +285,25 @@ export default {
       this.modelDamageIT.length = 0;
       this.modelDamageTEC.length = 0;
       this.equipmentsFiltre.length = 0;
+      this.damageTypesIT.length = 0;
+      this.damageTypesTEC.length = 0;
+      this.damageFunction();
       this.disabledEquipmentsFiltre = false;
       this.equipments.map((item) => {
         if (item.profileGroup.id == this.profile_groupe_id) {
           this.equipmentsFiltre.push(item);
         }
       });
+      console.log("equipments", this.equipments);
     },
-    changeEquipmentsFiltreeSELECT() {
+    changeEquipmentsFiltreSELECT() {
       this.modelDamageIT.length = 0;
       this.modelDamageTEC.length = 0;
       this.damageTypesIT.length = 0;
       this.damageTypesTEC.length = 0;
       this.damageFunction();
       this.FindDamageTypeByEquipmentIDAction(this.equipments_id).then(() => {
-        // debugger;
-
+        //debugger;
         this.equipmentsDamageType = [...this.getDamageTypeByEquipmentID];
         this.equipmentsDamageType.map((item) => {
           if (item.damageType.department.name == "IT") {
@@ -290,22 +312,14 @@ export default {
             this.modelDamageTEC.push(item.damageType);
           }
         });
-        for (let i = 0; i < this.damageTypesIT.length; i++) {
-          for (let j = 0; j < this.modelDamageIT.length; j++) {
+        this.deleteDamage();
+        /*  for (var i = 0; i < this.damageTypesIT.length; i++) {
+          for (var j = 1; j < this.modelDamageIT.length; j++) {
             if (this.damageTypesIT[i].name == this.modelDamageIT[j].name) {
-              this.damageTypesIT.splice(i, 1);
+              this.damageTypesIT.splice(i + 1, 1);
             }
           }
-        }
-        for (let i = 0; i < this.damageTypesTEC.length; i++) {
-          for (let j = 0; j < this.modelDamageTEC.length; j++) {
-            if (this.damageTypesTEC[i].name == this.modelDamageTEC[j].name) {
-              this.damageTypesTEC.splice(i, 1);
-            }
-          }
-        }
-        //console.log("damageTypesIT ccc", this.damageTypesIT);
-        //  console.log("modelDamageTEC", this.modelDamageTEC);
+        } */
       });
     },
     initialize() {
@@ -339,7 +353,38 @@ export default {
       "setDOMAINGROUPESAction",
       "setequipmentsAction",
       "FindDamageTypeByEquipmentIDAction",
+      "addDAMAGESAction",
     ]),
+    deleteDamage() {
+      /* this.damageTypesIT.map((item) => {
+        this.modelDamageIT.map((item2) => {
+          if (item.name == item2.name) {
+            //delete this.damageTypesTEC[index];
+            // debugger;
+            let index = this.damageTypesIT.indexOf(item);
+            this.damageTypesIT.splice(index, 1);
+          }
+        });
+      }); */
+      this.damageTypesIT = this.damageTypesIT.filter((e) => {
+        return (
+          this.modelDamageIT.filter((e1) => {
+            return e.name == e1.name;
+          }).length == 0
+        );
+      });
+      this.damageTypesTEC.map((item) => {
+        this.modelDamageTEC.map((item2) => {
+          if (item.name == item2.name) {
+            //delete this.damageTypesTEC[index];
+            // debugger;
+            let index = this.damageTypesTEC.indexOf(item);
+            this.damageTypesTEC.splice(index, 1);
+            console.log("damageTypesTEC 333", this.damageTypesTEC[index]);
+          }
+        });
+      });
+    },
     validerTEC() {
       this.dialogTEC = true;
     },
@@ -355,7 +400,7 @@ export default {
       this.dialogIT = false;
     },
     damageFunction() {
-      // this.setDAMAGEAction().then(() => {
+      //this.setDAMAGEAction().then(() => {
       this.damage = [...this.getdamage];
       /*  this.damage.map((item) => {
           if (item.damageType.department.name == "IT") {
@@ -377,6 +422,13 @@ export default {
           }
         });
       });
+      /* this.sendDamages.length = 0;
+      this.sendDamages.push(this.modelIT);
+      this.sendDamages.push(this.modelTEC);
+      console.log("cccc sendDamages", this.sendDamages); */
+      /*  this.addDAMAGESAction(this.sendDamages).then(() => {
+        this.damage = [...this.getdamage];
+      }); */
     },
   },
 };

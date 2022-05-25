@@ -12,7 +12,7 @@
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
-                color="#99A799"
+                color="#002f6c"
                 class="mb-2 btn white--text"
                 v-bind="attrs"
                 v-on="on"

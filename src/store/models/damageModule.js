@@ -13,6 +13,9 @@ const damageTypeModule = {
     ADD_DAMAGE(state, damage) {
       state.damages.push(damage);
     },
+    ADD_DAMAGES(state, damages) {
+      state.damages.push(damages);
+    },
     DELETE_DAMAGE(state, id) {
       state.damages = state.damages.filter((c) => c.id != id);
     },
@@ -62,7 +65,20 @@ const damageTypeModule = {
           });
       });
     },
+    addDAMAGESAction({ commit }, damages) {
+      const data = JSON.stringify({ damages: damages });
 
+      return new Promise((resolve, reject) => {
+        CustomizedAxios.post("Damage/addDamages", data)
+          .then((response) => {
+            commit("ADD_DAMAGES", response.data);
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
     deleteDAMAGEAction({ commit }, id) {
       return new Promise((resolve, reject) => {
         CustomizedAxios.post("Damage/delete/" + id)

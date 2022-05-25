@@ -43,11 +43,13 @@
               class="sideBarItem"
             >
               <v-list-item class="test">
-                <v-list-item-content>{{ item.name }}</v-list-item-content>
+                <v-list-item-content>
+                  <h4>{{ item.name }}</h4>
+                </v-list-item-content>
                 <template v-slot:activator>
                   <v-list-item-content>
                     <v-list-item-title>
-                      <h2>{{ item.name }}</h2>
+                      <h1 class="header">{{ item.name }}</h1>
                     </v-list-item-title>
                   </v-list-item-content>
                 </template>
@@ -77,9 +79,9 @@ export default {
       logged: false,
       listDrawerRouter: [{ id: 1, name: "Gestion" }],
       listDrawerChildRouter: [
-        { id: 1, name: "user", ROUTE: "/user" },
-        { id: 2, name: "damage", ROUTE: "/Damage" },
-        { id: 3, name: "profile_groupe", ROUTE: "/profile_groupe" },
+        { id: 1, name: "User", ROUTE: "/user" },
+        { id: 2, name: "Damage", ROUTE: "/Damage" },
+        { id: 3, name: "Profile Groupe", ROUTE: "/profile_groupe" },
       ],
       users: [],
       show: true,
@@ -89,6 +91,7 @@ export default {
     document.title = "Dashboard";
     if (localStorage.getItem("token") == null) {
       this.logged = false;
+      //window.location.reload();
     } else if (localStorage.getItem("token") != null) this.logged = true;
     //  this.initialize();
   },

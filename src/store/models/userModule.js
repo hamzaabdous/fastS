@@ -48,6 +48,11 @@ const usersModule = {
           role: {
             id: user.role.id,
           },
+          profileGroups: [
+            {
+              id: user.profileGroups.id,
+            },
+          ],
           firstName: user.firstName,
           lastName: user.lastName,
         })
@@ -87,6 +92,11 @@ const usersModule = {
           role: {
             id: user.role.id,
           },
+          profileGroups: [
+            {
+              id: user.profileGroups.id,
+            },
+          ],
           firstName: user.firstName,
           lastName: user.lastName,
         })

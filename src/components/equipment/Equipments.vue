@@ -2,7 +2,7 @@
   <div style="padding: 5px; padding-top: 8%">
     <v-data-table
       :headers="headers"
-      :items="users"
+      :items="equipmentsFiltre"
       sort-by="item.id"
       class="elevation-1"
     >
@@ -97,8 +97,9 @@
       </template>
       <template v-slot:item="{ item }">
         <tr>
-          <td class="custom-class">{{ item.username }}</td>
-          <td class="custom-class">{{ item.lastName }} {{ item.firstName }}</td>
+          <td class="custom-class">{{ item.name }}</td>
+          <td class="custom-class">{{ item.description }}</td>
+          <td class="custom-class">{{ item.phoneNumber }}</td>
           <td class="custom-class">{{ item.function }}</td>
 
           <td class="custom-class">
@@ -145,41 +146,28 @@ export default {
     dialog: false,
     dialogDelete: false,
     headers: [
-      { text: "username", align: "start", sortable: true },
-      { text: "fullname", sortable: true },
-      { text: "function", sortable: true },
+      { text: "name", sortable: true },
+      { text: "description", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    users: [],
+    equipments: [],
+    equipmentsFiltre: [],
+    idgrp: null,
     isAdd: true,
     editedIndex: -1,
     editedItem: {
-      id: "",
-      created_date: null,
-      email: "",
-      password: null,
-      phone_number: "",
-      update_date: null,
-      username: "",
-      role: {
-        id: 1,
+      id: null,
+      name: "",
+      department: {
+        id: null,
       },
-      firstName: "",
-      lastName: "",
     },
     defaultItem: {
-      id: "",
-      created_date: "",
-      email: "",
-      password: null,
-      phone_number: "",
-      update_date: "",
-      username: "",
-      role: {
-        id: 1,
+      id: null,
+      name: "",
+      department: {
+        id: null,
       },
-      firstName: "",
-      lastName: "",
     },
   }),
   mounted() {
@@ -191,7 +179,7 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    ...mapGetters(["getUsers"]),
+    ...mapGetters(["getequipments"]),
   },
   watch: {
     dialog(val) {
@@ -202,25 +190,34 @@ export default {
     },
   },
   created() {
-    this.initialize();
+    this.idgrp = localStorage.getItem("id");
+    //this.initialize();
   },
   methods: {
     initialize() {
       console.log("initialize");
-      this.setUsersAction().then(() => {
-        this.users = [...this.getUsers];
-        console.log("ccswdwd", this.users[2].profileGroups);
+      //debugger;
+
+      this.setequipmentsAction().then(() => {
+        this.equipments = [...this.getequipments];
+        console.log(this.equipments);
+      });
+
+      this.equipments.map((item) => {
+        if (item.profileGroup.id == this.idgrp) {
+          this.equipmentsFiltre.push(item);
+        }
       });
     },
     ...mapActions([
-      "setUsersAction",
-      "editUserAction",
-      "deleteUserAction",
-      "addUserAction",
+      "setequipmentsAction",
+      "editEQUIPMENTAction",
+      "deleteEQUIPMENTAction",
+      "addEQUIPMENTAction",
     ]),
 
     editItem(item) {
-      this.editedIndex = this.users.indexOf(item) + 1;
+      this.editedIndex = this.equipments.indexOf(item) + 1;
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
@@ -230,8 +227,8 @@ export default {
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      this.deleteUserAction(this.editedIndex).then(() => {
-        this.users = this.getUsers;
+      this.deleteEQUIPMENTAction(this.editedIndex).then(() => {
+        this.equipments = this.getequipments;
       });
       this.closeDelete();
     },
@@ -245,13 +242,13 @@ export default {
       if (this.editedIndex == -1) {
         console.log("add");
         this.addUserAction(this.editedItem).then(() => {
-          this.users = [...this.getUsers];
+          this.equipments = [...this.getequipments];
         });
       } else {
         console.log("edite");
 
         this.editUserAction(this.editedItem).then(() => {
-          this.users = [...this.getUsers];
+          this.equipments = [...this.getequipments];
         });
       }
 

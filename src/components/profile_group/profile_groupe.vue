@@ -8,7 +8,7 @@
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>Equipements groups</v-toolbar-title>
+          <v-toolbar-title>Equipments groups</v-toolbar-title>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
@@ -125,11 +125,11 @@
           <v-dialog v-model="dialogView" width="1000px">
             <v-card>
               <v-container>
-                <div>Equipements groups :</div>
+                <div>Equipments groups :</div>
                 <v-tabs color="#1D4F91" left>
                   <v-tab>users</v-tab>
                   <v-tab>Damage type</v-tab>
-                  <v-tab>Equipement</v-tab>
+                  <v-tab>Equipment</v-tab>
 
                   <v-tab-item>
                     <v-container fluid>
