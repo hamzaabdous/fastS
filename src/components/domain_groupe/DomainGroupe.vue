@@ -5,10 +5,18 @@
       :items="domainGroupes"
       sort-by="item.id"
       class="elevation-1"
+      :search="search"
     >
       <template v-slot:top>
         <v-toolbar flat>
           <v-toolbar-title>DOMAINGROUPE</v-toolbar-title>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
@@ -118,6 +126,7 @@ export default {
   data: () => ({
     dialog: false,
     dialogDelete: false,
+    search: "",
     confirmAddSave: false,
     headers: [
       { text: "id", align: "start", value: "id", sortable: true },

@@ -1,12 +1,16 @@
 .btn{
     border-radius: 6px;   
-    width: 130px; 
-    color: #fff;
+    width: 90px; 
+    color: rgb(255, 255, 255);
+}
+.table{
+    border: 2px solid rgb(85, 85, 85);
+    border-radius: 15px;
 }
 .titreGRP{
     font-weight: bold;
     font-size:20px;
-    color: #007DBA;
+    color: #007dba;
 }
 .ITpanell{
     width: 320px;
@@ -54,6 +58,12 @@
 .scroll{
     overflow:scroll;
     height: 300px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 1.5px solid #000000d4;
+
+
+
 }
 
     .item{

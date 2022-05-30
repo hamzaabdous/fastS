@@ -1,13 +1,21 @@
 <template>
-  <div style="padding: 5px; padding-top: 8%">
+  <div style="padding: 5px; padding-top: 2%">
     <v-data-table
       :headers="headers"
       :items="damageTypesFiltre"
       sort-by="item.id"
-      class="elevation-1"
+      class="elevation-1 table"
+      :search="search"
     >
       <template v-slot:top>
         <v-toolbar flat>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
           <v-spacer></v-spacer>
           <v-dialog v-model="dialog" max-width="500px">
             <template v-slot:activator="{ on, attrs }">
@@ -93,34 +101,8 @@
           </v-dialog>
         </v-toolbar>
       </template>
-      <template v-slot:item="{ item }">
-        <tr>
-          <td class="custom-class">{{ item.name }}</td>
-          <td class="custom-class">{{ item.createdDate }}</td>
-          <td class="custom-class">{{ item.profileGroup.name }}</td>
-          <td class="custom-class">{{ item.department.name }}</td>
-
-          <td class="custom-class">
-            <v-btn
-              color="#99A799"
-              class="mb-2 btn white--text"
-              @click="editItem(item)"
-            >
-              <v-icon medium class="mr-2"> mdi-pencil </v-icon>
-            </v-btn>
-            <br />
-            <v-btn
-              color="#99A799"
-              class="mb-2 btn white--text"
-              @click="editItem(item)"
-            >
-              <v-icon medium @click="deleteItem(item)"> mdi-delete </v-icon>
-            </v-btn>
-          </td>
-        </tr>
-      </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn color="#99A799" class="m-2 mb-2 btn white--text">
+        <v-btn color="#99A799" class="m-2 mr-2 btn white--text">
           <v-icon large class="mr-2" @click="editItem(item)">
             mdi-pencil
           </v-icon>
@@ -143,6 +125,8 @@ export default {
     dialog: false,
     dialogDelete: false,
     confirmAddSave: false,
+    search: "",
+
     headers: [
       { text: "name", value: "name", sortable: true },
       { text: "created date", value: "createdDate", sortable: true },

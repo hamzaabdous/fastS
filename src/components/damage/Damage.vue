@@ -82,37 +82,35 @@
                     color="#f54"
                   >
                     <div>
-                      <div>
-                        <v-list-item
-                          v-for="(item, i) in modelDamageIT"
-                          :key="i"
-                          class="item itemDamaged"
-                          :disabled="true"
-                          style="
-                            background-color: rgb(255, 235, 234);
-                            color: #f54;
-                          "
-                        >
-                          <v-list-item-icon>
-                            <v-icon medium> mdi-progress-wrench </v-icon>
-                          </v-list-item-icon>
+                      <v-list-item
+                        v-for="(item, i) in modelDamageIT"
+                        :key="i"
+                        class="item itemDamaged"
+                        :disabled="true"
+                        style="
+                          background-color: rgb(255, 235, 234);
+                          color: #f54;
+                        "
+                      >
+                        <v-list-item-icon>
+                          <v-icon medium> mdi-progress-wrench </v-icon>
+                        </v-list-item-icon>
 
-                          <v-list-item-content>
-                            <v-list-item-title
-                              name="modelDamageIT"
-                              v-text="item.name"
-                            ></v-list-item-title>
-                            <h4>on progress</h4>
-                          </v-list-item-content>
-                        </v-list-item>
-                      </div>
+                        <v-list-item-content>
+                          <v-list-item-title
+                            name="modelDamageIT"
+                            v-text="item.name"
+                          ></v-list-item-title>
+                          <h4>on progress</h4>
+                        </v-list-item-content>
+                      </v-list-item>
                     </div>
                     <div>
                       <v-list-item
                         v-for="(item, i) in damageTypesIT"
                         :key="i"
                         class="item"
-                        @click="validerIT"
+                        @click="validerIT(item)"
                       >
                         <v-list-item-icon>
                           <v-icon> mdi-cellphone-link-off</v-icon>
@@ -184,7 +182,7 @@
                         v-for="(item, i) in damageTypesTEC"
                         :key="i"
                         class="item"
-                        @click="validerTEC"
+                        @click="validerTEC(item)"
                       >
                         <v-list-item-icon>
                           <v-icon>mdi-car-wrench</v-icon>
@@ -211,7 +209,7 @@
               <v-btn
                 color="#1D4F91"
                 class="mb-2 btn white--text"
-                @click="damageFunction"
+                @click="validerDamages"
               >
                 Valider
               </v-btn>
@@ -226,7 +224,6 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import CustomizedAxios from "../../plugins/axios";
 
 export default {
   data: () => ({
@@ -244,11 +241,12 @@ export default {
     modelDamageIT: [],
     modelDamageTEC: [],
     profile_groupe_id: null,
-    equipments_id: null,
+    equipments_id: "",
     equipmentsFiltre: [],
     equipmentsDamageType: [],
     disabledEquipmentsFiltre: true,
     isDamaged: false,
+    damagesend: [],
   }),
   mounted() {
     document.title = "damage";
@@ -289,12 +287,15 @@ export default {
       this.damageTypesTEC.length = 0;
       this.damageFunction();
       this.disabledEquipmentsFiltre = false;
+      //debugger;
+      console.log("equipments", this.equipments);
+
       this.equipments.map((item) => {
         if (item.profileGroup.id == this.profile_groupe_id) {
           this.equipmentsFiltre.push(item);
         }
       });
-      console.log("equipments", this.equipments);
+      // console.log("equipments", this.equipmentsFiltre);
     },
     changeEquipmentsFiltreSELECT() {
       this.modelDamageIT.length = 0;
@@ -312,14 +313,6 @@ export default {
             this.modelDamageTEC.push(item.damageType);
           }
         });
-        this.deleteDamage();
-        /*  for (var i = 0; i < this.damageTypesIT.length; i++) {
-          for (var j = 1; j < this.modelDamageIT.length; j++) {
-            if (this.damageTypesIT[i].name == this.modelDamageIT[j].name) {
-              this.damageTypesIT.splice(i + 1, 1);
-            }
-          }
-        } */
       });
     },
     initialize() {
@@ -332,16 +325,6 @@ export default {
       this.setequipmentsAction().then(() => {
         this.equipments = [...this.getequipments];
         console.log(this.equipments);
-      });
-      this.setDAMAGETYPESAction().then(() => {
-        this.damageTypes = [...this.getdamageTypes];
-        this.damageTypes.map((item) => {
-          if (item.department.name == "IT") {
-            this.damageTypesIT.push(item);
-          } else if (item.department.name == "TECHNIQUE") {
-            this.damageTypesTEC.push(item);
-          }
-        });
       });
     },
     ...mapActions([
@@ -356,16 +339,6 @@ export default {
       "addDAMAGESAction",
     ]),
     deleteDamage() {
-      /* this.damageTypesIT.map((item) => {
-        this.modelDamageIT.map((item2) => {
-          if (item.name == item2.name) {
-            //delete this.damageTypesTEC[index];
-            // debugger;
-            let index = this.damageTypesIT.indexOf(item);
-            this.damageTypesIT.splice(index, 1);
-          }
-        });
-      }); */
       this.damageTypesIT = this.damageTypesIT.filter((e) => {
         return (
           this.modelDamageIT.filter((e1) => {
@@ -376,8 +349,6 @@ export default {
       this.damageTypesTEC.map((item) => {
         this.modelDamageTEC.map((item2) => {
           if (item.name == item2.name) {
-            //delete this.damageTypesTEC[index];
-            // debugger;
             let index = this.damageTypesTEC.indexOf(item);
             this.damageTypesTEC.splice(index, 1);
             console.log("damageTypesTEC 333", this.damageTypesTEC[index]);
@@ -385,10 +356,35 @@ export default {
         });
       });
     },
-    validerTEC() {
+    validerTEC(item) {
+      var id = item.id;
+      var userid = 1;
+      var equipmentsid = this.equipments_id;
+      var name = "dmagaetest";
+
+      console.log("item vvvv", id);
+      console.log("equipmentsid vvvv", equipmentsid);
+      var obj = {
+        name: name,
+        status: "",
+        description: "",
+        equipement: {
+          id: equipmentsid,
+        },
+        userDeclaration: {
+          id: userid,
+        },
+        damageType: {
+          id: id,
+        },
+      };
+      this.damagesend.push(obj);
+
+      console.log(this.damagesend);
       this.dialogTEC = true;
     },
-    validerIT() {
+    validerIT(item) {
+      console.log("item vvvv", item);
       this.dialogIT = true;
     },
     cancelTEC() {
@@ -400,35 +396,30 @@ export default {
       this.dialogIT = false;
     },
     damageFunction() {
-      //this.setDAMAGEAction().then(() => {
       this.damage = [...this.getdamage];
-      /*  this.damage.map((item) => {
-          if (item.damageType.department.name == "IT") {
-            this.modelDamageIT.push(item);
-          } else if (item.damageType.department.name == "TECHNIQUE") {
-            this.modelDamageTEC.push(item);
-          }
-        });
-        console.log("modelDamageIT", this.modelDamageIT);
-        console.log("modelDamageTEC", this.modelDamageTEC); */
-      //});
+
       this.setDAMAGETYPESAction().then(() => {
+        this.damageTypes.length = 0;
         this.damageTypes = [...this.getdamageTypes];
         this.damageTypes.map((item) => {
-          if (item.department.name == "IT") {
+          if (
+            item.profileGroup.id == this.profile_groupe_id &&
+            item.department.name == "IT"
+          ) {
             this.damageTypesIT.push(item);
-          } else if (item.department.name == "TECHNIQUE") {
+          } else if (
+            item.profileGroup.id == this.profile_groupe_id &&
+            item.department.name == "TECHNIQUE"
+          ) {
             this.damageTypesTEC.push(item);
           }
         });
       });
-      /* this.sendDamages.length = 0;
-      this.sendDamages.push(this.modelIT);
-      this.sendDamages.push(this.modelTEC);
-      console.log("cccc sendDamages", this.sendDamages); */
-      /*  this.addDAMAGESAction(this.sendDamages).then(() => {
-        this.damage = [...this.getdamage];
-      }); */
+    },
+    validerDamages() {
+      this.addDAMAGESAction(this.damagesend).then(() => {
+        console.log("validerDamages");
+      });
     },
   },
 };

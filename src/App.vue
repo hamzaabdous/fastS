@@ -23,7 +23,7 @@
       absolute
       temporary
       width="15em"
-      style="background-color: #d3e4cd"
+      style="background-color: #fff"
     >
       <v-list style="padding: 0px; align-items: center" nav dense>
         <v-list-item-group active-class="deep-purple--text text--accent-4">
@@ -59,7 +59,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-app style="background-color: #fff">
+    <v-app style="background-color: #d6e6f2">
       <router-view />
     </v-app>
   </v-card>
@@ -81,7 +81,7 @@ export default {
       listDrawerChildRouter: [
         { id: 1, name: "User", ROUTE: "/user" },
         { id: 2, name: "Damage", ROUTE: "/Damage" },
-        { id: 3, name: "Profile Groupe", ROUTE: "/profile_groupe" },
+        { id: 3, name: "Equipment Profile ", ROUTE: "/profile_groupe" },
       ],
       users: [],
       show: true,

@@ -38,7 +38,7 @@ const damageTypeModule = {
             resolve(response);
           })
           .catch((error) => {
-            reject(error);
+            console.log("error :", error);
           });
       });
     },
@@ -66,10 +66,8 @@ const damageTypeModule = {
       });
     },
     addDAMAGESAction({ commit }, damages) {
-      const data = JSON.stringify({ damages: damages });
-
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("Damage/addDamages", data)
+        CustomizedAxios.post("Damage/addList", damages)
           .then((response) => {
             commit("ADD_DAMAGES", response.data);
             resolve(response.data);
