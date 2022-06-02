@@ -2,7 +2,7 @@
   <div style="padding: 5px; padding-top: 2%">
     <v-data-table
       :headers="headers"
-      :items="damageTypesFiltre"
+      :items="damageTypesByProfile_group_id"
       sort-by="item.id"
       class="elevation-1 table"
       :search="search"
@@ -103,12 +103,12 @@
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-btn color="#99A799" class="m-2 mr-2 btn white--text">
-          <v-icon large class="mr-2" @click="editItem(item)">
+          <v-icon medium class="mr-2" @click="editItem(item)">
             mdi-pencil
           </v-icon>
         </v-btn>
         <v-btn color="#99A799" class="m-2 btn white--text">
-          <v-icon large @click="deleteItem(item)"> mdi-delete </v-icon>
+          <v-icon medium @click="deleteItem(item)"> mdi-delete </v-icon>
         </v-btn>
       </template>
       <template v-slot:no-data>
@@ -130,13 +130,12 @@ export default {
     headers: [
       { text: "name", value: "name", sortable: true },
       { text: "created date", value: "createdDate", sortable: true },
-      { text: "profile Group", value: "profileGroup.name", sortable: true },
-      { text: "department", value: "department.name", sortable: true },
 
       { text: "Actions", value: "actions", sortable: false },
     ],
     damageTypes: [],
     damageTypesFiltre: [],
+    damageTypesByProfile_group_id: [],
     isAdd: true,
     editedIndex: -1,
     editedItem: {
@@ -171,7 +170,7 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    ...mapGetters(["getdamageTypes"]),
+    ...mapGetters(["getdamageTypes", "getdamageTypesByProfile_group_id"]),
   },
   watch: {
     dialog(val) {
@@ -201,13 +200,17 @@ export default {
   },
   methods: {
     initialize() {
-      this.setDAMAGETYPESAction().then(() => {
-        this.damageTypes = [...this.getdamageTypes];
-        this.damageTypes.map((item) => {
+      this.setDAMAGETYPESByProfile_group_idAction(
+        localStorage.getItem("id")
+      ).then(() => {
+        this.damageTypesByProfile_group_id = [
+          ...this.getdamageTypesByProfile_group_id,
+        ];
+        /* this.damageTypes.map((item) => {
           if (item.profileGroup.id == localStorage.getItem("id")) {
             this.damageTypesFiltre.push(item);
           }
-        });
+        }); */
         console.log(this.damageTypesFiltre);
       });
     },
@@ -216,6 +219,7 @@ export default {
       "editDAMAGETYPEAction",
       "deleteDAMAGETYPEAction",
       "addDAMAGETYPEAction",
+      "setDAMAGETYPESByProfile_group_idAction",
     ]),
 
     editItem(item) {

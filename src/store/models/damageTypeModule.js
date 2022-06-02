@@ -3,10 +3,14 @@ import CustomizedAxios from "../../plugins/axios";
 const damageTypeModule = {
   state: {
     damageTypes: [],
+    ByProfile_group_id: [],
   },
   mutations: {
     SET_DAMAGETYPS(state, damageTypes) {
       state.damageTypes = damageTypes;
+    },
+    SET_DAMAGETYPSByProfile_group_id(state, damageTypes) {
+      state.ByProfile_group_id = damageTypes;
     },
     ADD_DAMAGETYPE(state, damageTypes) {
       state.damageTypes.push(damageTypes);
@@ -28,6 +32,18 @@ const damageTypeModule = {
           .then((response) => {
             commit("SET_DAMAGETYPS", response.data);
             console.log("set damageTypes ");
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log("error :", error);
+          });
+      });
+    },
+    setDAMAGETYPESByProfile_group_idAction({ commit }, id) {
+      return new Promise((resolve, reject) => {
+        CustomizedAxios.post("DamageType/getByProfile_group_id/" + id)
+          .then((response) => {
+            commit("SET_DAMAGETYPSByProfile_group_id", response.data);
             resolve(response);
           })
           .catch((error) => {
@@ -97,6 +113,9 @@ const damageTypeModule = {
   getters: {
     getdamageTypes: (state) => {
       return state.damageTypes;
+    },
+    getdamageTypesByProfile_group_id: (state) => {
+      return state.ByProfile_group_id;
     },
   },
 };

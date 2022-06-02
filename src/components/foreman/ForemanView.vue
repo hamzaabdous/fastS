@@ -40,19 +40,40 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogIT" persistent max-width="290">
+        <v-dialog
+          v-model="dialogIT"
+          fullscreen
+          hide-overlay
+          transition="dialog-bottom-transition"
+        >
           <v-card>
-            <v-card-title class="text-h5"> Warning ! </v-card-title>
-            <v-card-text
-              >Are you sure you want to add this damage ?</v-card-text
-            >
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="cancelIT"> No </v-btn>
-              <v-btn color="green darken-1" text @click="dialogIT = false">
-                Yes
+            <v-toolbar dark color="primary">
+              <v-btn icon dark @click="cancelIT">
+                <v-icon>mdi-close</v-icon>
               </v-btn>
-            </v-card-actions>
+              <v-toolbar-title>Settings</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-toolbar-items>
+                <v-btn dark text @click="dialogIT"> Save </v-btn>
+              </v-toolbar-items>
+            </v-toolbar>
+            <v-card-title class="text-h5"> description : </v-card-title>
+            <v-col cols="12" md="6">
+              <v-textarea
+                solo
+                name="input-7-4"
+                label="Solo textarea"
+              ></v-textarea>
+            </v-col>
+            <v-card-title class="text-h5"> add picture : </v-card-title>
+            <v-col cols="12" md="6">
+              <v-file-input
+                label="File input"
+                filled
+                multiple
+                prepend-icon="mdi-camera"
+              ></v-file-input>
+            </v-col>
           </v-card>
         </v-dialog>
         <v-container>
@@ -86,11 +107,11 @@
                         v-for="(item, i) in modelDamageIT"
                         :key="i"
                         class="item itemDamaged"
-                        :disabled="true"
                         style="
                           background-color: rgb(255, 235, 234);
                           color: #f54;
                         "
+                        @click="validerIT(item)"
                       >
                         <v-list-item-icon>
                           <v-icon medium> mdi-progress-wrench </v-icon>
@@ -102,25 +123,6 @@
                             v-text="item.name"
                           ></v-list-item-title>
                           <h4>on progress</h4>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </div>
-                    <div>
-                      <v-list-item
-                        v-for="(item, i) in damageTypesIT"
-                        :key="i"
-                        class="item"
-                        @click="validerIT(item)"
-                      >
-                        <v-list-item-icon>
-                          <v-icon> mdi-cellphone-link-off</v-icon>
-                        </v-list-item-icon>
-
-                        <v-list-item-content>
-                          <v-list-item-titlele
-                            name="damageTypesIT"
-                            v-text="item.name"
-                          ></v-list-item-titlele>
                         </v-list-item-content>
                       </v-list-item>
                     </div>
@@ -162,7 +164,6 @@
                           background-color: rgb(255, 235, 234);
                           color: #f54;
                         "
-                        :disabled="true"
                       >
                         <v-list-item-icon>
                           <v-icon medium> mdi-progress-wrench </v-icon>
@@ -174,25 +175,6 @@
                             v-text="item.name"
                           ></v-list-item-title>
                           <h4>on progress</h4>
-                        </v-list-item-content>
-                      </v-list-item>
-                    </div>
-                    <div>
-                      <v-list-item
-                        v-for="(item, i) in damageTypesTEC"
-                        :key="i"
-                        class="item"
-                        @click="validerTEC(item)"
-                      >
-                        <v-list-item-icon>
-                          <v-icon>mdi-car-wrench</v-icon>
-                        </v-list-item-icon>
-
-                        <v-list-item-content>
-                          <v-list-item-title
-                            name="damageTypesTEC"
-                            v-text="item.name"
-                          ></v-list-item-title>
                         </v-list-item-content>
                       </v-list-item>
                     </div>
@@ -337,22 +319,6 @@ export default {
           });
         });
 
-        this.damageTypesTEC.map((item) => {
-          this.modelDamageTEC.map((item2) => {
-            if (item.name == item2.name) {
-              let index = this.damageTypesTEC.indexOf(item);
-              this.damageTypesTEC.splice(index, 1);
-            }
-          });
-        });
-        this.damageTypesIT.map((item) => {
-          this.modelDamageIT.map((item2) => {
-            if (item.name == item2.name) {
-              let index = this.damageTypesIT.indexOf(item);
-              this.damageTypesIT.splice(index, 1);
-            }
-          });
-        });
         console.log("equipmentsDamageType", this.equipmentsDamageType);
         console.log("damageTypesTEC", this.damageTypesTEC);
         console.log("modelDamageTEC", this.modelDamageTEC);
@@ -448,30 +414,7 @@ export default {
       this.dialogTEC = true;
     },
     validerIT(item) {
-      var id = item.id;
-      var userid = 1;
-      var equipmentsid = this.equipments_id;
-      var name = "dmagaetest";
-
-      console.log("item vvvv", id);
-      console.log("equipmentsid vvvv", equipmentsid);
-      var obj = {
-        name: name,
-        status: "",
-        description: "",
-        equipement: {
-          id: equipmentsid,
-        },
-        userDeclaration: {
-          id: userid,
-        },
-        damageType: {
-          id: id,
-        },
-      };
-      this.damagesend.push(obj);
-
-      console.log(this.damagesend);
+      console.log(item);
       this.dialogIT = true;
     },
     cancelTEC() {
