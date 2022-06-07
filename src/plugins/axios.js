@@ -18,7 +18,10 @@ const token =
 CustomizedAxios.defaults.headers.common = {
   Authorization: `Bearer ` + token,
 }; */
+
 CustomizedAxios.defaults.headers.common["Accept"] = "application/json";
+CustomizedAxios.defaults.headers.common["Content-Type"] = "multipart/mixed";
+
 if (tk != null) {
   CustomizedAxios.defaults.headers.common["Authorization"] = `Bearer ${tk}`;
 }

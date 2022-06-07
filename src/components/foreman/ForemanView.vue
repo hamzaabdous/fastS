@@ -24,20 +24,42 @@
               :disabled="disabledEquipmentsFiltre"
             ></v-select>
           </v-col>
+          
         </v-row>
-        <v-dialog v-model="dialogTEC" persistent max-width="290">
+        <v-dialog
+          v-model="dialogTEC"
+          fullscreen
+          hide-overlay
+          transition="dialog-bottom-transition"
+        >
           <v-card>
-            <v-card-title class="text-h5"> Warning ! </v-card-title>
-            <v-card-text
-              >Are you sure you want to add this damage ?</v-card-text
-            >
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="cancelTEC"> No </v-btn>
-              <v-btn color="green darken-1" text @click="dialogTEC = false">
-                Yes
+            <v-toolbar dark color="primary">
+              <v-btn icon dark @click="cancelTEC">
+                <v-icon>mdi-close</v-icon>
               </v-btn>
-            </v-card-actions>
+              <v-toolbar-title>Settings</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-toolbar-items>
+                <v-btn dark text @click="validerDamages"> Save </v-btn>
+              </v-toolbar-items>
+            </v-toolbar>
+            <v-card-title class="text-h5"> description : </v-card-title>
+            <v-col cols="12" md="6">
+              <v-textarea
+                solo
+                name="input-7-4"
+                label="Description"
+              ></v-textarea>
+            </v-col>
+            <v-card-title class="text-h5"> add picture : </v-card-title>
+            <v-col cols="12" md="6">
+              <v-file-input
+                label="Pictures"
+                filled
+                multiple
+                prepend-icon="mdi-camera"
+              ></v-file-input>
+            </v-col>
           </v-card>
         </v-dialog>
         <v-dialog
@@ -57,20 +79,22 @@
                 <v-btn dark text @click="dialogIT"> Save </v-btn>
               </v-toolbar-items>
             </v-toolbar>
+            
             <v-card-title class="text-h5"> description : </v-card-title>
             <v-col cols="12" md="6">
               <v-textarea
                 solo
                 name="input-7-4"
-                label="Solo textarea"
+                label="Description"
               ></v-textarea>
             </v-col>
             <v-card-title class="text-h5"> add picture : </v-card-title>
             <v-col cols="12" md="6">
               <v-file-input
-                label="File input"
+                label="Pictures"
                 filled
-                multiple
+                v-model="file"
+                @change="validerDamages"
                 prepend-icon="mdi-camera"
               ></v-file-input>
             </v-col>
@@ -85,9 +109,7 @@
                   <v-col cols="4">
                     <span>IT </span>
                     <span class="red--text"
-                      >({{
-                        this.modelDamageIT.length + this.modelIT.length
-                      }})</span
+                      >({{ this.modelDamageIT.length }})</span
                     ></v-col
                   >
                   <v-col cols="3"></v-col>
@@ -138,9 +160,7 @@
                   <v-col cols="6">
                     <span>Technique </span>
                     <span class="red--text">
-                      ({{
-                        this.modelDamageTEC.length + this.modelTEC.length
-                      }})</span
+                      ({{ this.modelDamageTEC.length }})</span
                     ></v-col
                   >
                   <v-col cols="3"></v-col>
@@ -164,6 +184,7 @@
                           background-color: rgb(255, 235, 234);
                           color: #f54;
                         "
+                        @click="validerTEC(item)"
                       >
                         <v-list-item-icon>
                           <v-icon medium> mdi-progress-wrench </v-icon>
@@ -196,7 +217,12 @@
                 Valider
               </v-btn>
             </v-col>
-            <v-col cols="4"></v-col>
+            <v-col cols="4"><v-img
+          max-height="100"
+          max-width="150"
+          :src="image"
+          alt="image"
+        ></v-img></v-col>
           </v-row>
         </v-container>
       </v-container>
@@ -206,7 +232,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-
+import CustomizedAxios from "../../plugins/axios.js";
 export default {
   data: () => ({
     dialogTEC: false,
@@ -231,6 +257,8 @@ export default {
     damagesend: [],
     Data: [],
     departements: [],
+    file: "",
+    image: "",
   }),
   mounted() {
     document.title = "damage";
@@ -291,8 +319,8 @@ export default {
       // this.damageFunction();
       this.modelDamageIT.length = 0;
       this.modelDamageTEC.length = 0;
-      this.damageTypesIT.length = 0;
-      this.damageTypesTEC.length = 0;
+      //this.damageTypesIT.length = 0;
+      //this.damageTypesTEC.length = 0;
       //this.Data.length = 0;
       this.damagetypeITandTEC();
       this.FindDamageTypeByEquipmentIDAction(this.equipments_id).then(() => {
@@ -322,6 +350,8 @@ export default {
         console.log("equipmentsDamageType", this.equipmentsDamageType);
         console.log("damageTypesTEC", this.damageTypesTEC);
         console.log("modelDamageTEC", this.modelDamageTEC);
+        console.log("damageTypesIT", this.damageTypesIT);
+        console.log("modelDamageIT", this.modelDamageIT);
       });
     },
     initialize() {
@@ -368,6 +398,8 @@ export default {
     },
     damagetypeITandTEC() {
       this.setDepartementsAction(this.equipments_id).then(() => {
+        this.damageTypesIT.length = 0;
+        this.damageTypesTEC.length = 0;
         //debugger;
         this.departements = [...this.getdepartements];
         this.departements[0].damageTypes.map((item) => {
@@ -387,7 +419,7 @@ export default {
       });
     },
     validerTEC(item) {
-      var id = item.id;
+      /*  var id = item.id;
       var userid = 1;
       var equipmentsid = this.equipments_id;
       var name = "dmagaetest";
@@ -408,13 +440,13 @@ export default {
           id: id,
         },
       };
-      this.damagesend.push(obj);
+      this.damagesend.push(obj); */
 
-      console.log(this.damagesend);
+      console.log("item valide", item);
       this.dialogTEC = true;
     },
     validerIT(item) {
-      console.log(item);
+      console.log("item valide", item);
       this.dialogIT = true;
     },
     cancelTEC() {
@@ -450,9 +482,28 @@ export default {
       });
     },
     validerDamages() {
-      this.addDAMAGESAction(this.damagesend).then(() => {
-        console.log("validerDamages");
+      /* var formData = new FormData();
+      formData.append("image", this.file,this.file.name);
+      formData.append("damage", "22");
+      formData.append("description", "testehamzaabdous"); */
+      
+        CustomizedAxios
+      .get("Picture/files/1_AbiX4LwtSNozoyfypcKvEg.png", {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+
+        this.image = URL.createObjectURL(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
+     // console.log(this.file.type);
+
+      
     },
   },
 };

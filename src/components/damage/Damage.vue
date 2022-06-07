@@ -249,6 +249,8 @@ export default {
     damagesend: [],
     Data: [],
     departements: [],
+    testIT: [],
+    testTEC: [],
   }),
   mounted() {
     document.title = "damage";
@@ -303,7 +305,7 @@ export default {
           this.equipmentsFiltre.push(item);
         }
       });
-      this.damagetypeITandTEC();
+      //this.damagetypeITandTEC();
     },
     changeEquipmentsFiltreSELECT() {
       // this.damageFunction();
@@ -311,8 +313,8 @@ export default {
       this.modelDamageTEC.length = 0;
       this.damageTypesIT.length = 0;
       this.damageTypesTEC.length = 0;
-      //this.Data.length = 0;
       this.damagetypeITandTEC();
+      //this.Data.length = 0;
       this.FindDamageTypeByEquipmentIDAction(this.equipments_id).then(() => {
         this.equipmentsDamageType = [...this.getDamageTypeByEquipmentID];
 
@@ -341,7 +343,7 @@ export default {
           this.modelDamageTEC.map((item2) => {
             if (item.name == item2.name) {
               let index = this.damageTypesTEC.indexOf(item);
-              this.damageTypesTEC.splice(index, 1);
+              this.testIT.push(item);
             }
           });
         });
@@ -349,13 +351,11 @@ export default {
           this.modelDamageIT.map((item2) => {
             if (item.name == item2.name) {
               let index = this.damageTypesIT.indexOf(item);
-              this.damageTypesIT.splice(index, 1);
+              this.testTEC.push(item);
             }
           });
         });
-        console.log("equipmentsDamageType", this.equipmentsDamageType);
-        console.log("damageTypesTEC", this.damageTypesTEC);
-        console.log("modelDamageTEC", this.modelDamageTEC);
+
       });
     },
     initialize() {

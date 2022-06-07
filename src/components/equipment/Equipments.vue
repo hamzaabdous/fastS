@@ -34,38 +34,14 @@
                 <v-row>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                      v-model="editedItem.username"
-                      label="username"
+                      v-model="editedItem.name"
+                      label="name"
                     ></v-text-field>
                   </v-col>
                   <v-col cols="12" sm="6" md="4">
                     <v-text-field
-                      v-model="editedItem.lastName"
-                      label="lastName"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.firstName"
-                      label="firstName"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.email"
-                      label="email"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.update_date"
-                      label="update date"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.phone_number"
-                      label="phone number"
+                      v-model="editedItem.description"
+                      label="description"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -145,14 +121,16 @@ export default {
     editedItem: {
       id: null,
       name: "",
-      department: {
+      description:"",
+      profileGroup: {
         id: null,
       },
     },
     defaultItem: {
       id: null,
       name: "",
-      department: {
+      description:"",
+      profileGroup: {
         id: null,
       },
     },
@@ -227,14 +205,23 @@ export default {
     },
     save() {
       if (this.editedIndex == -1) {
-        console.log("add");
-        this.addUserAction(this.editedItem).then(() => {
+        this.editedItem.profileGroup.id=localStorage.getItem("id");
+        /* var obj ={
+          id: this.editedItem.id,
+          name: this.editedItem.name,
+          description: this.editedItem.description,
+          profileGroup: {
+            id: localStorage.getItem("id"),
+          },
+        }; */
+        console.log("add", this.editedItem);
+       this.addEQUIPMENTAction(this.editedItem).then(() => {
           this.equipments = [...this.getequipments];
-        });
+        }); 
       } else {
         console.log("edite");
 
-        this.editUserAction(this.editedItem).then(() => {
+        this.editEQUIPMENTAction(this.editedItem).then(() => {
           this.equipments = [...this.getequipments];
         });
       }

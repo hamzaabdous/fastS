@@ -13,8 +13,8 @@
       </v-toolbar-title>
       <p><b>Checklist</b></p>
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon>mdi-cog-outline</v-icon>
+      <v-btn icon @click="logout">
+        <v-icon>mdi-logout-variant</v-icon>
       </v-btn>
     </v-app-bar>
 
@@ -106,6 +106,12 @@ export default {
         this.users = [...this.getUsers];
         console.log(this.users);
       });
+    },
+    logout() {
+      localStorage.removeItem("token");
+      window.location.reload();
+      console.log(localStorage.getItem("token"));
+      
     },
     ...mapActions([
       "setUsersAction",

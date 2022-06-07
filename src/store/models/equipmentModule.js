@@ -41,8 +41,9 @@ const equipmentModule = {
         CustomizedAxios.post("Equipment/add", {
           id: EQUIPMENT.id,
           name: EQUIPMENT.name,
-          department: {
-            id: EQUIPMENT.department.id,
+          description: EQUIPMENT.description,
+          profileGroup: {
+            id: EQUIPMENT.profileGroup.id,
           },
         })
           .then((response) => {
@@ -58,7 +59,12 @@ const equipmentModule = {
 
     deleteEQUIPMENTAction({ commit }, id) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("Equipment/delete/" + id)
+        CustomizedAxios.post("Equipment/delete",
+        {
+          id: id,
+          
+        }
+         )
           .then((response) => {
             commit("DELETE_EQUIPMENT", id);
             resolve(response.data);
@@ -73,8 +79,9 @@ const equipmentModule = {
         CustomizedAxios.put("Equipment/update", {
           id: EQUIPMENT.id,
           name: EQUIPMENT.name,
-          department: {
-            id: EQUIPMENT.department.id,
+          description: EQUIPMENT.description,
+          profileGroup: {
+            id: EQUIPMENT.profileGroup.id,
           },
         })
           .then((response) => {
