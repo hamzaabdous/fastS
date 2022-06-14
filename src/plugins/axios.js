@@ -20,8 +20,7 @@ CustomizedAxios.defaults.headers.common = {
 }; */
 
 CustomizedAxios.defaults.headers.common["Accept"] = "application/json";
-CustomizedAxios.defaults.headers.common["Content-Type"] = "multipart/mixed";
-
+CustomizedAxios.defaults.headers.common["Content-Type"] = "multipart/form-data";
 if (tk != null) {
   CustomizedAxios.defaults.headers.common["Authorization"] = `Bearer ${tk}`;
 }

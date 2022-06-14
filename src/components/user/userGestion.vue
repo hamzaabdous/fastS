@@ -1,0 +1,439 @@
+<template>
+  <div style="padding: 5px; padding-top: 8%">
+    <v-data-table
+      :headers="headers"
+      :items="users"
+      sort-by="item.id"
+      class="elevation-1"
+      :search="search"
+      :loading="loading"
+    >
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-text-field
+            v-model="search"
+            append-icon="mdi-magnify"
+            label="Search"
+            single-line
+            hide-details
+          ></v-text-field>
+          <v-spacer></v-spacer>
+          <v-dialog
+            v-model="dialog"
+            fullscreen
+            hide-overlay
+            transition="dialog-bottom-transition"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                color="#002f6c"
+                class="mb-2 btn white--text"
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon left> mdi-account-multiple-plus </v-icon>
+                Add
+              </v-btn>
+            </template>
+            <v-card>
+              <v-toolbar dark color="primary">
+                <v-btn icon dark @click="close(item)">
+                  <v-icon>mdi-close</v-icon>
+                </v-btn>
+                <v-toolbar-title>Settings</v-toolbar-title>
+                <v-spacer></v-spacer>
+                <v-toolbar-items>
+                  <v-btn dark text @click="save(editedItem)"> Save </v-btn>
+                </v-toolbar-items>
+              </v-toolbar>
+              <v-card-title class="text-h5 grey--text text--darken-3">
+                User Profile :
+              </v-card-title>
+              <v-container>
+                <v-row>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.username"
+                      label="username"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.lastName"
+                      label="lastName"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.firstName"
+                      label="firstName"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.email"
+                      label="email"
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="12" sm="6" md="4">
+                    <v-text-field
+                      v-model="editedItem.phone_number"
+                      label="phone number"
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-container>
+              <v-card-title class="text-h5 grey--text text--darken-3">
+                Function :
+              </v-card-title>
+              <v-container>
+                <v-row>
+                  <v-col cols="6" md="6">
+                    <v-select
+                      :items="role"
+                      item-text="name"
+                      item-value="id"
+                      v-model="editedItem.function.id"
+                      label="function"
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="6" md="6">
+                    <v-btn
+                      color="#99A799"
+                      class="mr-2 btn white--text"
+                      @click="showInput = true"
+                    >
+                      <v-icon left> mdi-plus </v-icon>Add
+                    </v-btn>
+
+                    <div v-if="showInput">
+                      <v-text-field
+                        v-model="editedItem.phone_number"
+                        label="name"
+                      ></v-text-field>
+
+                      <v-select
+                        :items="department"
+                        item-text="name"
+                        item-value="id"
+                        v-model="departmentID"
+                        label="department"
+                      ></v-select>
+                      <v-btn
+                        color="#99A799"
+                        class="mr-2 btn white--text"
+                        @click="showInput = false"
+                      >
+                        <v-icon left> mdi-check-circle-outline </v-icon>
+                        valider
+                      </v-btn>
+                    </div>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card>
+          </v-dialog>
+          <v-dialog max-width="1000px">
+            <v-card>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.username"
+                        label="username"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.lastName"
+                        label="lastName"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.firstName"
+                        label="firstName"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.email"
+                        label="email"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.phone_number"
+                        label="phone number"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col class="" cols="6" sm="6">
+                      <v-select
+                        :items="role"
+                        item-text="name"
+                        item-value="id"
+                        v-model="editedItem.function.id"
+                        label="function"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="close(item)">
+                  Cancel
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="save(editedItem)">
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-dialog v-model="dialogModifier" max-width="1000px">
+            <v-card>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.username"
+                        label="username"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.lastName"
+                        label="lastName"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.firstName"
+                        label="firstName"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.email"
+                        label="email"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="4">
+                      <v-text-field
+                        v-model="editedItem.phoneNumber"
+                        label="phone number"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col class="" cols="6" sm="6">
+                      <v-select
+                        :items="role"
+                        item-text="name"
+                        item-value="id"
+                        v-model="editedItem.function.id"
+                        label="function"
+                      ></v-select>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="closemodifier(item)">
+                  Cancel
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="save(editedItem)">
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-dialog v-model="dialogDelete" max-width="500px">
+            <v-card>
+              <v-card-title class="text-h5"
+                >Are you sure you want to delete this item?</v-card-title
+              >
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="closeDelete"
+                  >Cancel</v-btn
+                >
+                <v-btn color="blue darken-1" text @click="deleteItemConfirm"
+                  >OK</v-btn
+                >
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
+      </template>
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-btn
+          color="#99A799"
+          class="mr-2 btn white--text"
+          @click="editItem(item)"
+        >
+          <v-icon medium class="mr-2"> mdi-pencil </v-icon>
+        </v-btn>
+        <v-btn
+          color="#99A799"
+          class="m-2 btn white--text"
+          @click="deleteItem(item)"
+        >
+          <v-icon medium @click="deleteItem(item)"> mdi-delete </v-icon>
+        </v-btn>
+      </template>
+      <template v-slot:no-data>
+        <v-btn color="primary" @click="initialize()"> Reset </v-btn>
+      </template>
+    </v-data-table>
+  </div>
+</template>
+<script>
+import { mapActions, mapGetters } from "vuex";
+
+export default {
+  data: () => ({
+    dialog: false,
+    dialogDelete: false,
+    dialogModifier: false,
+    showInput: false,
+    search: "",
+    loading: "false",
+    headers: [
+      { text: "username", value: "username", align: "start", sortable: true },
+      { text: "lastName", value: "lastName", sortable: true },
+      { text: "firstName", value: "firstName", sortable: true },
+      { text: "email", value: "email", sortable: true },
+      { text: "Actions", value: "actions", sortable: false },
+    ],
+    users: [],
+    department: [],
+    role: [],
+    isAdd: true,
+    profile_groupe_id: "",
+    editedIndex: -1,
+    departmentID: "",
+    editedItem: {
+      id: "",
+      created_date: null,
+      email: "",
+      password: null,
+      phone_number: "",
+      update_date: null,
+      username: "",
+      function: {
+        id: null,
+      },
+      firstName: "",
+      lastName: "",
+    },
+    defaultItem: {
+      id: "",
+      created_date: "",
+      email: "",
+      password: null,
+      phone_number: "",
+      update_date: "",
+      username: "",
+      function: {
+        id: null,
+      },
+      firstName: "",
+      lastName: "",
+    },
+  }),
+  mounted() {
+    document.title = "user";
+    this.loading = true;
+    setTimeout(() => {
+      this.initialize();
+      this.loading = false;
+    }, 2500);
+  },
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? "New Item" : "Edit Item";
+    },
+    ...mapGetters(["getUsers", "getdepartements", "getroles"]),
+  },
+  watch: {
+    dialog(val) {
+      val || this.close();
+    },
+    dialogDelete(val) {
+      val || this.closeDelete();
+    },
+  },
+  created() {
+    // this.initialize();
+  },
+  methods: {
+    initialize() {
+      console.log("initialize");
+      this.setUsersAction().then(() => {
+        this.users = [...this.getUsers];
+      });
+      this.setDepartementsAction().then(() => {
+        this.department = [...this.getdepartements];
+      });
+      this.setRolesAction().then(() => {
+        this.role = [...this.getroles];
+      });
+    },
+    ...mapActions([
+      "setUsersAction",
+      "editUserAction",
+      "deleteUserAction",
+      "addUserAction",
+      "setDepartementsAction",
+      "setRolesAction",
+    ]),
+
+    editItem(item) {
+      this.editedIndex = this.users.indexOf(item) + 1;
+      this.editedItem = Object.assign({}, item);
+      this.dialogModifier = true;
+    },
+    deleteItem(item) {
+      this.editedIndex = item.id;
+      this.editedItem = Object.assign({}, item);
+      this.dialogDelete = true;
+    },
+    deleteItemConfirm() {
+      this.deleteUserAction(this.editedIndex).then(() => {
+        this.users = this.getUsers;
+      });
+      this.closeDelete();
+    },
+    close() {
+      this.dialog = false;
+    },
+    closemodifier() {
+      this.dialogModifier = false;
+    },
+    closeDelete() {
+      this.dialogDelete = false;
+    },
+    save() {
+      if (this.editedIndex == -1) {
+        console.log("add");
+        this.addUserAction(this.editedItem).then(() => {
+          this.users = [...this.getUsers];
+        });
+      } else {
+        console.log("edite");
+
+        this.editUserAction(this.editedItem).then(() => {
+          this.users = [...this.getUsers];
+        });
+      }
+
+      this.close();
+    },
+  },
+};
+</script>

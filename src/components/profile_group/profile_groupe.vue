@@ -3,6 +3,7 @@
     <v-data-table
       :headers="headers"
       :items="domainGroupes"
+      :loading="loading"
       sort-by="item.id"
       class="elevation-1"
     >
@@ -35,18 +36,6 @@
                       <v-text-field
                         v-model="editedItem.name"
                         label="name"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.departement"
-                        label="departement"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.domain.id"
-                        label="domain"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -202,42 +191,32 @@ export default {
     dialogDelete: false,
     confirmAddSave: false,
     dialogView: false,
+    loading: "false",
     headers: [
       { text: "name", value: "name", sortable: true },
       { text: "equipments", value: "equipments.length", sortable: true },
+      { text: "Actions", value: "actions", sortable: false },
+    ],
 
-      { text: "Actions", value: "actions", sortable: false },
-    ],
-    headersEquipement: [
-      { text: "id", align: "start", value: "id", sortable: true },
-      { text: "name", value: "name", sortable: true },
-      { text: "groupe", value: "group.name", sortable: true },
-      { text: "Actions", value: "actions", sortable: false },
-    ],
     domainGroupes: [],
     isAdd: true,
     editedIndex: -1,
     editedItem: {
       id: "",
       name: "",
-      departement: "",
-      domain: {
-        id: "",
-      },
     },
     defaultItem: {
       id: "",
       name: "",
-      departement: "",
-      domain: {
-        id: "",
-      },
     },
   }),
   mounted() {
     document.title = "domainGroupes";
-
-    this.initialize();
+    this.loading = true;
+    setTimeout(() => {
+      this.initialize();
+      this.loading = false;
+    }, 2500);
   },
   computed: {
     formTitle() {
@@ -252,10 +231,6 @@ export default {
         this.editedItem = {
           id: "",
           name: "",
-          departement: "",
-          domain: {
-            id: "",
-          },
         };
       }
 
@@ -266,7 +241,7 @@ export default {
     },
   },
   created() {
-    this.initialize();
+   // this.initialize();
   },
   methods: {
     initialize() {

@@ -11,6 +11,7 @@ import Damage_IT from "../components/damage/IT/Damage_IT.vue";
 import profile_groupe from "../components/profile_group/profile_groupe.vue";
 import ViewEquipement from "../components/ViewEquipement.vue";
 import ForemanView from "../components/foreman/ForemanView.vue";
+import userGestion from "../components/user/userGestion.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -18,6 +19,16 @@ const routes = [
     path: "/user",
     name: "user",
     component: Users,
+    params: true,
+
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+  },
+  {
+    path: "/userGestion",
+    name: "userGestion",
+    component: userGestion,
     params: true,
 
     // route level code-splitting

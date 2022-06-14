@@ -24,7 +24,6 @@
               :disabled="disabledEquipmentsFiltre"
             ></v-select>
           </v-col>
-          
         </v-row>
         <v-dialog
           v-model="dialogTEC"
@@ -43,7 +42,20 @@
                 <v-btn dark text @click="validerDamages"> Save </v-btn>
               </v-toolbar-items>
             </v-toolbar>
-            <v-card-title class="text-h5"> description : </v-card-title>
+            <v-card-title class="text-h5">
+              Status : <span class="red--text text--lighten-1">{{ this.statusdamage }} </span> 
+            </v-card-title>
+            <v-col cols="12" md="6">
+              <v-select
+                :items="statusList"
+                item-text="name"
+                item-value="name"
+                v-model="statusclick"
+                label="status :"
+                @change="changeProfile_groupeSELECT"
+              ></v-select>
+            </v-col>
+            <v-card-title class="text-h5"> Description : </v-card-title>
             <v-col cols="12" md="6">
               <v-textarea
                 solo
@@ -51,7 +63,7 @@
                 label="Description"
               ></v-textarea>
             </v-col>
-            <v-card-title class="text-h5"> add picture : </v-card-title>
+            <v-card-title class="text-h5"> Add picture : </v-card-title>
             <v-col cols="12" md="6">
               <v-file-input
                 label="Pictures"
@@ -79,7 +91,17 @@
                 <v-btn dark text @click="dialogIT"> Save </v-btn>
               </v-toolbar-items>
             </v-toolbar>
-            
+            <v-card-title class="text-h5"> Status : </v-card-title>
+            <v-col cols="12" md="6">
+              <v-select
+                :items="statusList"
+                item-text="name"
+                item-value="name"
+                v-model="statusclick"
+                label="status :"
+                @change="changeProfile_groupeSELECT"
+              ></v-select>
+            </v-col>
             <v-card-title class="text-h5"> description : </v-card-title>
             <v-col cols="12" md="6">
               <v-textarea
@@ -144,7 +166,6 @@
                             name="modelDamageIT"
                             v-text="item.name"
                           ></v-list-item-title>
-                          <h4>on progress</h4>
                         </v-list-item-content>
                       </v-list-item>
                     </div>
@@ -195,7 +216,6 @@
                             name="modelDamageTEC"
                             v-text="item.name"
                           ></v-list-item-title>
-                          <h4>on progress</h4>
                         </v-list-item-content>
                       </v-list-item>
                     </div>
@@ -212,17 +232,20 @@
               <v-btn
                 color="#1D4F91"
                 class="mb-2 btn white--text"
-                @click="validerDamages"
+                @click="damageFunction"
               >
                 Valider
               </v-btn>
             </v-col>
-            <v-col cols="4"><v-img
-          max-height="100"
-          max-width="150"
-          :src="image"
-          alt="image"
-        ></v-img></v-col>
+            <v-list>
+              <v-subheader>List of Images</v-subheader>
+              <v-list-item-group color="primary">
+                <v-list-item v-for="(image, index) in image" :key="index">
+                  <a :href="image.url">{{ image.name }}</a>
+                  <img :src="image.url" :alt="image.name" />
+                </v-list-item>
+              </v-list-item-group>
+            </v-list>
           </v-row>
         </v-container>
       </v-container>
@@ -259,6 +282,23 @@ export default {
     departements: [],
     file: "",
     image: "",
+    statusList: [
+      {
+        id: "1",
+        name: "on progress",
+      },
+      {
+        id: "2",
+        name: "Confirmed",
+      },
+      {
+        id: "3",
+        name: "closed",
+      },
+    ],
+    statusclick: "",
+    statusdamage: "",
+    FindDamageTypeByEquipmentID:[],
   }),
   mounted() {
     document.title = "damage";
@@ -316,7 +356,7 @@ export default {
       this.damagetypeITandTEC();
     },
     changeEquipmentsFiltreSELECT() {
-      // this.damageFunction();
+      /*   // this.damageFunction();
       this.modelDamageIT.length = 0;
       this.modelDamageTEC.length = 0;
       //this.damageTypesIT.length = 0;
@@ -346,13 +386,27 @@ export default {
             }
           });
         });
-
-        console.log("equipmentsDamageType", this.equipmentsDamageType);
-        console.log("damageTypesTEC", this.damageTypesTEC);
-        console.log("modelDamageTEC", this.modelDamageTEC);
-        console.log("damageTypesIT", this.damageTypesIT);
-        console.log("modelDamageIT", this.modelDamageIT);
-      });
+      }); */
+      var IT = 1;
+      var TEC = 2;
+      CustomizedAxios.post(
+        `DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentIN/${this.profile_groupe_id}/${IT}/${this.equipments_id}`
+      )
+        .then((response) => {
+          this.modelDamageIT = response.data;
+        })
+        .catch((error) => {
+          console.log("error :", error);
+        });
+      CustomizedAxios.post(
+        `DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentIN/${this.profile_groupe_id}/${TEC}/${this.equipments_id}`
+      )
+        .then((response) => {
+          this.modelDamageTEC = response.data;
+        })
+        .catch((error) => {
+          console.log("error :", error);
+        });
     },
     initialize() {
       console.log("initialize");
@@ -441,7 +495,18 @@ export default {
         },
       };
       this.damagesend.push(obj); */
-
+      CustomizedAxios.post(
+        `Damage/FindDamageTypeByEquipmentID/${this.equipments_id}/${item.id}`
+      )
+        .then((response) => {
+          console.log("FindDamageTypeByEquipmentID :", response.data);
+          this.FindDamageTypeByEquipmentID=response.data;
+          this.statusdamage = response.data[0].status;
+          console.log("statusdamage :", this.statusdamage);
+        })
+        .catch((error) => {
+          console.log("error :", error);
+        });
       console.log("item valide", item);
       this.dialogTEC = true;
     },
@@ -458,7 +523,10 @@ export default {
       this.dialogIT = false;
     },
     damageFunction() {
-      this.damage = [...this.getdamage];
+      this.setDAMAGEAction().then(() => {
+        this.damage = [...this.getdamage];
+        console.log("damage function", this.damage);
+      });
 
       /* this.setDAMAGETYPESAction().then(() => {
         this.damageTypes.length = 0;
@@ -477,33 +545,24 @@ export default {
           }
         });
       }); */
-      this.setDAMAGEAction().then(() => {
+      /* this.setDAMAGEAction().then(() => {
         this.damageTypes = [...this.getdamageTypes];
-      });
+      }); */
     },
     validerDamages() {
-      /* var formData = new FormData();
-      formData.append("image", this.file,this.file.name);
-      formData.append("damage", "22");
-      formData.append("description", "testehamzaabdous"); */
-      
-        CustomizedAxios
-      .get("Picture/files/1_AbiX4LwtSNozoyfypcKvEg.png", {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then((res) => {
-        console.log(res);
+      var formData = new FormData();
+      formData.append("file", this.file);
+      formData.append("damage", parseFloat(this.FindDamageTypeByEquipmentID[0].id) );
+      formData.append("description", this.FindDamageTypeByEquipmentID[0].description); 
 
-        this.image = URL.createObjectURL(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-     // console.log(this.file.type);
-
-      
+      CustomizedAxios.post("Picture/upload",formData)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      // console.log(this.file.type);
     },
   },
 };

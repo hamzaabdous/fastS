@@ -156,17 +156,18 @@ export default {
   },
   created() {
     this.idgrp = localStorage.getItem("id");
-    //this.initialize();
+     this.setequipmentsAction().then(() => {
+        this.equipments = [...this.getequipments];
+        console.log(this.equipments);
+      });
+    this.initialize();
   },
   methods: {
     initialize() {
       console.log("initialize");
       //debugger;
 
-      this.setequipmentsAction().then(() => {
-        this.equipments = [...this.getequipments];
-        console.log(this.equipments);
-      });
+     
 
       this.equipments.map((item) => {
         if (item.profileGroup.id == this.idgrp) {
@@ -193,7 +194,7 @@ export default {
     },
     deleteItemConfirm() {
       this.deleteEQUIPMENTAction(this.editedIndex).then(() => {
-        this.equipments = this.getequipments;
+        this.equipments = [...this.getequipments];
       });
       this.closeDelete();
     },

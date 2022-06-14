@@ -176,33 +176,33 @@ export default {
     profile_groupe_id: "",
     editedIndex: -1,
     editedItem: {
-      id: "",
-      created_date: null,
-      email: "",
-      password: null,
-      phone_number: "",
-      update_date: null,
-      username: "",
-      role: {
-        id: 1,
-      },
-      firstName: "",
-      lastName: "",
-    },
+          id: "",
+          created_date:"",
+          email: "",
+          password: "",
+          phoneNumber: "",
+          update_date: "",
+          username: "",
+          function: {
+            id: null,
+          },
+          firstName: "",
+          lastName: "",
+        },
     defaultItem: {
-      id: "",
-      created_date: "",
-      email: "",
-      password: null,
-      phone_number: "",
-      update_date: "",
-      username: "",
-      role: {
-        id: 1,
-      },
-      firstName: "",
-      lastName: "",
-    },
+          id: "",
+          created_date:"",
+          email: "",
+          password: "",
+          phoneNumber: "",
+          update_date: "",
+          username: "",
+          function: {
+            id: null,
+          },
+          firstName: "",
+          lastName: "",
+        },
   }),
   mounted() {
     document.title = "user";
@@ -231,14 +231,7 @@ export default {
       console.log("initialize");
       this.setUsersAction().then(() => {
         this.users = [...this.getUsers];
-        //this.profile_groupe_id = localStorage.getItem("id");
-
-        /*  this.users.map((item) => {
-          console.log("item user", item.profileGroups[0]);
-          if (item.profileGroups[0].id == localStorage.getItem("id")) {
-            this.usersFiltreByGRP.push(item);
-          }
-        }); */
+       
         this.users.forEach((element) => {
           element.profileGroups.map((item) => {
             if (item.id == localStorage.getItem("id")) {

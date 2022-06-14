@@ -38,12 +38,8 @@ const domainGroupeModule = {
     addDOMAINGROUPEAction({ commit }, domainGroupes) {
       return new Promise((resolve, reject) => {
         CustomizedAxios.post("ProfileGroup/add", {
-          id: domainGroupes.id,
           name: domainGroupes.name,
-          departement: domainGroupes.departement,
-          domain: {
-            id: domainGroupes.domain.id,
-          },
+          
         })
           .then((response) => {
             console.log("res add ", response);
@@ -71,11 +67,7 @@ const domainGroupeModule = {
     editDOMAINGROUPEAction({ commit }, domainGroupes) {
       return new Promise((resolve, reject) => {
         CustomizedAxios.put("ProfileGroup/update", {
-          id: domainGroupes.id,
           name: domainGroupes.name,
-          domain: {
-            id: domainGroupes.domain.id,
-          },
         })
           .then((response) => {
             commit("EDIT_DOMAINGROUPE", response.data);

@@ -42,17 +42,12 @@ const usersModule = {
           created_date: user.created_date,
           email: user.email,
           password: user.password,
-          phone_number: user.phone_number,
+          phoneNumber: user.phoneNumber,
           update_date: user.update_date,
           username: user.username,
-          role: {
-            id: user.role.id,
+          function: {
+            id: user.function.id,
           },
-          profileGroups: [
-            {
-              id: user.profileGroups.id,
-            },
-          ],
           firstName: user.firstName,
           lastName: user.lastName,
         })
@@ -86,17 +81,12 @@ const usersModule = {
           created_date: user.created_date,
           email: user.email,
           password: user.password,
-          phone_number: user.phone_number,
+          phoneNumber: user.phoneNumber,
           update_date: user.update_date,
           username: user.username,
-          role: {
-            id: user.role.id,
+          function: {
+            id: user.function.id,
           },
-          profileGroups: [
-            {
-              id: user.profileGroups.id,
-            },
-          ],
           firstName: user.firstName,
           lastName: user.lastName,
         })
