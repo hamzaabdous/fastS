@@ -103,10 +103,20 @@
                       class="mr-2 btn white--text"
                       @click="showInput = true"
                     >
-                      <v-icon left> mdi-plus </v-icon>Add
-                    </v-btn>
+                      <v-icon left> mdi-cog </v-icon>Add
+                    </v-btn>                  
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card>
+          </v-dialog>
 
-                    <div v-if="showInput">
+          <v-dialog v-model="showInput" max-width="1000px">
+            <v-card>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                   <v-col cols="12" md="12">
                       <v-text-field
                         v-model="editedItem.phone_number"
                         label="name"
@@ -122,60 +132,11 @@
                       <v-btn
                         color="#99A799"
                         class="mr-2 btn white--text"
-                        @click="showInput = false"
+                        @click="showInputDepartment = true"
                       >
-                        <v-icon left> mdi-check-circle-outline </v-icon>
-                        valider
+                        <v-icon left> mdi-cog </v-icon>
+                        Add
                       </v-btn>
-                    </div>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-card>
-          </v-dialog>
-          <v-dialog max-width="1000px">
-            <v-card>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.username"
-                        label="username"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.lastName"
-                        label="lastName"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.firstName"
-                        label="firstName"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.email"
-                        label="email"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.phone_number"
-                        label="phone number"
-                      ></v-text-field>
-                    </v-col>
-                    <v-col class="" cols="6" sm="6">
-                      <v-select
-                        :items="role"
-                        item-text="name"
-                        item-value="id"
-                        v-model="editedItem.function.id"
-                        label="function"
-                      ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -183,7 +144,42 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="close(item)">
+                <v-btn color="blue darken-1" text @click="showInput = false">
+                  Cancel
+                </v-btn>
+                <v-btn color="blue darken-1" text @click="save(editedItem)">
+                  Save
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-dialog v-model="showInputDepartment" max-width="1000px">
+            <v-card>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                   <v-col cols="12" md="12">
+                      <v-text-field
+                        v-model="editedItem.phone_number"
+                        label="name"
+                      ></v-text-field>
+                    
+                      <v-btn
+                        color="#99A799"
+                        class="mr-2 btn white--text"
+                        @click="showInputDepartment = false"
+                      >
+                        <v-icon left> mdi-cog </v-icon>
+                        Add
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="blue darken-1" text @click="showInputDepartment = false">
                   Cancel
                 </v-btn>
                 <v-btn color="blue darken-1" text @click="save(editedItem)">
@@ -301,6 +297,7 @@ export default {
     dialogDelete: false,
     dialogModifier: false,
     showInput: false,
+    showInputDepartment: false,
     search: "",
     loading: "false",
     headers: [

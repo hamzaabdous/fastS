@@ -121,7 +121,7 @@ export default {
     editedItem: {
       id: null,
       name: "",
-      description:"",
+      description: "",
       profileGroup: {
         id: null,
       },
@@ -129,7 +129,7 @@ export default {
     defaultItem: {
       id: null,
       name: "",
-      description:"",
+      description: "",
       profileGroup: {
         id: null,
       },
@@ -155,24 +155,20 @@ export default {
     },
   },
   created() {
-    this.idgrp = localStorage.getItem("id");
-     this.setequipmentsAction().then(() => {
-        this.equipments = [...this.getequipments];
-        console.log(this.equipments);
-      });
-    this.initialize();
+    //this.initialize();
   },
   methods: {
     initialize() {
       console.log("initialize");
       //debugger;
-
-     
-
-      this.equipments.map((item) => {
-        if (item.profileGroup.id == this.idgrp) {
-          this.equipmentsFiltre.push(item);
-        }
+      this.idgrp = localStorage.getItem("id");
+      this.setequipmentsAction().then(() => {
+        this.equipments = [...this.getequipments];
+        this.equipments.map((item) => {
+          if (item.profileGroup.id == this.idgrp) {
+            this.equipmentsFiltre.push(item);
+          }
+        });
       });
     },
     ...mapActions([
@@ -206,7 +202,7 @@ export default {
     },
     save() {
       if (this.editedIndex == -1) {
-        this.editedItem.profileGroup.id=localStorage.getItem("id");
+        this.editedItem.profileGroup.id = localStorage.getItem("id");
         /* var obj ={
           id: this.editedItem.id,
           name: this.editedItem.name,
@@ -216,9 +212,9 @@ export default {
           },
         }; */
         console.log("add", this.editedItem);
-       this.addEQUIPMENTAction(this.editedItem).then(() => {
+        this.addEQUIPMENTAction(this.editedItem).then(() => {
           this.equipments = [...this.getequipments];
-        }); 
+        });
       } else {
         console.log("edite");
 

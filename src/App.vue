@@ -83,6 +83,7 @@ export default {
         { id: 2, name: "Damage", ROUTE: "/Damage" },
         { id: 3, name: "Equipment Profile ", ROUTE: "/profile_groupe" },
         { id: 4, name: "Foreman ", ROUTE: "/Foreman" },
+        { id: 5, name: "technique ", ROUTE: "/technique" },
       ],
       users: [],
       show: true,

@@ -12,6 +12,10 @@ import profile_groupe from "../components/profile_group/profile_groupe.vue";
 import ViewEquipement from "../components/ViewEquipement.vue";
 import ForemanView from "../components/foreman/ForemanView.vue";
 import userGestion from "../components/user/userGestion.vue";
+import technique from "../components/technique/technique.vue";
+import techniqueView from "../components/technique/techniqueView.vue";
+import techniqueEquipment from "../components/technique/techniqueEquipment.vue";
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -19,6 +23,36 @@ const routes = [
     path: "/user",
     name: "user",
     component: Users,
+    params: true,
+
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+  },
+  {
+    path: "/technique",
+    name: "technique",
+    component: technique,
+    params: true,
+
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+  },
+  {
+    path: "/techniqueView",
+    name: "techniqueView",
+    component: techniqueView,
+    params: true,
+
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+  },
+  {
+    path: "/techniqueEquipment",
+    name: "techniqueEquipment",
+    component: techniqueEquipment,
     params: true,
 
     // route level code-splitting
