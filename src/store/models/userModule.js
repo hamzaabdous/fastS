@@ -37,24 +37,20 @@ const usersModule = {
     },
     addUserAction({ commit }, user) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("users/add", {
+        CustomizedAxios.post("users/create", {
           id: user.id,
-          created_date: user.created_date,
+          username: user.username,
+          lastName: user.lastName,
+          firstName: user.firstName,
           email: user.email,
           password: user.password,
           phoneNumber: user.phoneNumber,
-          update_date: user.update_date,
-          username: user.username,
-          function: {
-            id: user.function.id,
-          },
-          firstName: user.firstName,
-          lastName: user.lastName,
+          fonction_id: user.fonction_id,
         })
           .then((response) => {
             console.log("res add ", response);
-            commit("ADD_USER", response.data);
-            resolve(response.data);
+            commit("ADD_USER", response.data.payload);
+            resolve(response.data.payload);
           })
           .catch((error) => {
             reject(error);
@@ -64,10 +60,12 @@ const usersModule = {
 
     deleteUserAction({ commit }, id) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("users/delete/", +id)
+        CustomizedAxios.post("users/delete/", {
+          id: id,
+        })
           .then((response) => {
             commit("DELETE_USER", id);
-            resolve(response.data);
+            resolve(response.data.payload);
           })
           .catch((error) => {
             reject(error);
@@ -78,21 +76,17 @@ const usersModule = {
       return new Promise((resolve, reject) => {
         CustomizedAxios.put("users/update", {
           id: user.id,
-          created_date: user.created_date,
+          username: user.username,
+          lastName: user.lastName,
+          firstName: user.firstName,
           email: user.email,
           password: user.password,
           phoneNumber: user.phoneNumber,
-          update_date: user.update_date,
-          username: user.username,
-          function: {
-            id: user.function.id,
-          },
-          firstName: user.firstName,
-          lastName: user.lastName,
+          fonction_id: user.fonction_id,
         })
           .then((response) => {
-            commit("EDIT_USER", response.data);
-            resolve(response.data);
+            commit("EDIT_USER", response.data.payload);
+            resolve(response.data.payload);
           })
           .catch((error) => {
             reject(error);

@@ -2,8 +2,8 @@ import Vue from "vue";
 import Vuex from "vuex";
 import usersModule from "./models/userModule";
 import departementModule from "./models/departementModule";
-import rolesModule from "./models/roleModule";
-import domainGroupeModule from "./models/domainGroupeModule";
+import functionModule from "./models/functionModule";
+import profilegroupModule from "./models/profilegroupModule";
 import damageTypeModule from "./models/damageTypeModule";
 import domainModule from "./models/domainModule";
 import damageModule from "./models/damageModule";
@@ -28,8 +28,8 @@ export default function () {
     modules: {
       usersModule,
       departementModule,
-      rolesModule,
-      domainGroupeModule,
+      functionModule,
+      profilegroupModule,
       damageTypeModule,
       domainModule,
       damageModule,

@@ -1,6 +1,6 @@
 import axios from "axios";
 const CustomizedAxios = axios;
-CustomizedAxios.defaults.baseURL = "http://localhost:8080/";
+CustomizedAxios.defaults.baseURL = "http://localhost:8000/api/";
 //var token;
 /* if (localStorage.cache) {
   token = JSON.parse(localStorage.cache);

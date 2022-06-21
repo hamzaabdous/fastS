@@ -1,6 +1,6 @@
 import CustomizedAxios from "../../plugins/axios";
 
-const domainGroupeModule = {
+const profilegroupModule = {
   state: {
     domainGroupes: [],
   },
@@ -39,7 +39,6 @@ const domainGroupeModule = {
       return new Promise((resolve, reject) => {
         CustomizedAxios.post("ProfileGroup/add", {
           name: domainGroupes.name,
-          
         })
           .then((response) => {
             console.log("res add ", response);
@@ -85,4 +84,4 @@ const domainGroupeModule = {
     },
   },
 };
-export default domainGroupeModule;
+export default profilegroupModule;

@@ -6,7 +6,6 @@
       sort-by="item.id"
       class="elevation-1"
       :search="search"
-      :loading="loading"
     >
       <template v-slot:top>
         <v-toolbar flat>
@@ -358,7 +357,7 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    ...mapGetters(["getUsers", "getdepartements", "getroles"]),
+    ...mapGetters(["getUsers", "getdepartements", "getfunctions"]),
   },
   watch: {
     dialog(val) {
@@ -380,8 +379,8 @@ export default {
       this.setDepartementsAction().then(() => {
         this.department = [...this.getdepartements];
       });
-      this.setRolesAction().then(() => {
-        this.role = [...this.getroles];
+      this.setFUNCTIONSAction().then(() => {
+        this.role = [...this.getfunctions];
       });
     },
     ...mapActions([
@@ -390,7 +389,7 @@ export default {
       "deleteUserAction",
       "addUserAction",
       "setDepartementsAction",
-      "setRolesAction",
+      "setFUNCTIONSAction",
     ]),
 
     editItem(item) {

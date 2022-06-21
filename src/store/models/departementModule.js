@@ -24,9 +24,9 @@ const departementModule = {
   actions: {
     setDepartementsAction({ commit }) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.get("Departments/")
+        CustomizedAxios.get("departments/")
           .then((response) => {
-            commit("SET_DEPARTEMENTS", response.data);
+            commit("SET_DEPARTEMENTS", response.data.payload);
             console.log("set department 1");
             resolve(response);
           })
@@ -35,15 +35,14 @@ const departementModule = {
           });
       });
     },
-    addDepartementAction({ commit }, departements) {
+    addDepartementAction({ commit }, departement) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("Departments/add", {
-          id: departements.id,
-          name: departements.name,
+        CustomizedAxios.post("departments/create", {
+          name: departement.name,
         })
           .then((response) => {
             console.log("res add ", response);
-            commit("ADD_DEPARTEMENT", response.data);
+            commit("ADD_DEPARTEMENT", response.data.payload);
             resolve(response.data);
           })
           .catch((error) => {
@@ -52,9 +51,11 @@ const departementModule = {
       });
     },
 
-    deleteDepartementAction({ commit }, id) {
+    deleteDepartementAction({ commit }, departement) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("Departments/delete/" + id)
+        CustomizedAxios.post("departments/delete",{
+          id:departement.id
+        })
           .then((response) => {
             commit("DELETE_DEPARTEMENT", id);
             resolve(response.data);
@@ -64,14 +65,13 @@ const departementModule = {
           });
       });
     },
-    editDepartementAction({ commit }, departements) {
+    editDepartementAction({ commit }, departement) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.put("Departments/update", {
-          id: departements.id,
-          name: departements.name,
+        CustomizedAxios.put("departments/update", {
+          name: departement.name,
         })
           .then((response) => {
-            commit("EDIT_DEPARTEMENT", response.data);
+            commit("EDIT_DEPARTEMENT", response.data.payload);
             resolve(response.data);
           })
           .catch((error) => {
