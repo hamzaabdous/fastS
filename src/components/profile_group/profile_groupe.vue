@@ -197,9 +197,7 @@ export default {
       { text: "equipments", value: "equipments.length", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
-
     domainGroupes: [],
-    isAdd: true,
     editedIndex: -1,
     editedItem: {
       id: "",
@@ -240,14 +238,11 @@ export default {
       val || this.closeDelete();
     },
   },
-  created() {
-   // this.initialize();
-  },
+  created() {},
   methods: {
     initialize() {
       this.setDOMAINGROUPESAction().then(() => {
         this.domainGroupes = [...this.getdomainGroupes];
-        console.log(this.domainGroupes);
       });
     },
     pageView(item) {
@@ -257,8 +252,6 @@ export default {
       });
       localStorage.removeItem("id");
       localStorage.setItem("id", item.id);
-
-      //this.dialogView = true;
     },
     ...mapActions([
       "setDOMAINGROUPESAction",

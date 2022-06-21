@@ -22,7 +22,9 @@
               </v-list-item-content>
 
               <v-list-item-avatar tile size="60" color="white">
-                <v-icon color="red" large> mdi-alarm-light </v-icon></v-list-item-avatar
+                <v-icon color="red" large>
+                  mdi-alarm-light
+                </v-icon></v-list-item-avatar
               >
             </v-list-item>
           </v-card>
@@ -42,7 +44,9 @@
               </v-list-item-content>
 
               <v-list-item-avatar tile size="60" color="white">
-                <v-icon color="blue" large> mdi-lock-open </v-icon></v-list-item-avatar
+                <v-icon color="blue" large>
+                  mdi-lock-open
+                </v-icon></v-list-item-avatar
               >
             </v-list-item>
           </v-card>
@@ -62,7 +66,9 @@
               </v-list-item-content>
 
               <v-list-item-avatar tile size="60" color="white">
-                <v-icon color="green" large> mdi-check-bold </v-icon></v-list-item-avatar
+                <v-icon color="green" large>
+                  mdi-check-bold
+                </v-icon></v-list-item-avatar
               >
             </v-list-item>
           </v-card>
@@ -72,7 +78,7 @@
     <div style="padding: 3px; padding-top: 4%">
       <v-data-table
         :headers="headers"
-        :items="damageByEquipment"
+        :items="damageByEquipments"
         :search="search"
         :loading="loading"
         sort-by="item.id"
@@ -91,7 +97,9 @@
           </v-toolbar>
         </template>
         <template v-slot:[`item.actions`]="{ item }">
-                  <v-icon medium class="mr-2" @click="pageView(item)"> mdi-eye-outline </v-icon>
+          <v-icon medium class="mr-2" @click="pageView(item)">
+            mdi-eye-outline
+          </v-icon>
         </template>
         <template v-slot:no-data>
           <v-btn color="primary" @click="initialize()"> Reset </v-btn>
@@ -117,11 +125,11 @@ export default {
       { text: "created At", value: "createdDate", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    damageByEquipment: [],
+    damageByEquipments: [],
     equipmentsFiltre: [],
     equipment: null,
     idEquipment: null,
-    isAdd: true,
+
     editedIndex: -1,
     editedItem: {
       id: null,
@@ -170,18 +178,16 @@ export default {
       this.equipment = localStorage.getItem("equipment");
       this.idEquipment = localStorage.getItem("idEquipment");
       this.FindDamageTypeByEquipmentIDAction(this.idEquipment).then(() => {
-        this.damageByEquipment = [...this.getDamageTypeByEquipmentID];
-        this.damageByEquipment.map((item) => {
+        this.damageByEquipments = [...this.getDamageTypeByEquipmentID];
+        this.damageByEquipments.map((item) => {
           if (item.profileGroup.name == this.equipment) {
             this.equipmentsFiltre.push(item);
           }
         });
       });
-      console.log("initialize", this.damageByEquipment);
+      console.log("initialize", this.damageByEquipments);
     },
-    ...mapActions([
-      "FindDamageTypeByEquipmentIDAction",
-    ]),
+    ...mapActions(["FindDamageTypeByEquipmentIDAction"]),
     pageView(item) {
       this.$router.push({
         name: "techniqueEquipment",
@@ -189,57 +195,6 @@ export default {
       });
       localStorage.removeItem("equipment");
       localStorage.setItem("equipment", item.name);
-
-      //this.dialogView = true;
-    },
-
-    editItem(item) {
-      this.editedIndex = this.equipments.indexOf(item) + 1;
-      this.editedItem = Object.assign({}, item);
-      this.dialog = true;
-    },
-    deleteItem(item) {
-      this.editedIndex = item.id;
-      this.editedItem = Object.assign({}, item);
-      this.dialogDelete = true;
-    },
-    deleteItemConfirm() {
-      this.deleteEQUIPMENTAction(this.editedIndex).then(() => {
-        this.equipments = [...this.getequipments];
-      });
-      this.closeDelete();
-    },
-    close() {
-      this.dialog = false;
-    },
-    closeDelete() {
-      this.dialogDelete = false;
-    },
-    save() {
-      if (this.editedIndex == -1) {
-        this.editedItem.profileGroup.name =
-          localStorage.getItem("idDomainGroupes");
-        /* var obj ={
-          id: this.editedItem.id,
-          name: this.editedItem.name,
-          description: this.editedItem.description,
-          profileGroup: {
-            id: localStorage.getItem("id"),
-          },
-        }; */
-        console.log("add", this.editedItem);
-        this.addEQUIPMENTAction(this.editedItem).then(() => {
-          this.equipments = [...this.getequipments];
-        });
-      } else {
-        console.log("edite");
-
-        this.editEQUIPMENTAction(this.editedItem).then(() => {
-          this.equipments = [...this.getequipments];
-        });
-      }
-
-      this.close();
     },
   },
 };

@@ -42,19 +42,7 @@
                 <v-btn dark text @click="validerDamages"> Save </v-btn>
               </v-toolbar-items>
             </v-toolbar>
-            <v-card-title class="text-h5">
-              Status : <span class="red--text text--lighten-1">{{ this.statusdamage }} </span> 
-            </v-card-title>
-            <v-col cols="12" md="6">
-              <v-select
-                :items="statusList"
-                item-text="name"
-                item-value="name"
-                v-model="statusclick"
-                label="status :"
-                @change="changeProfile_groupeSELECT"
-              ></v-select>
-            </v-col>
+
             <v-card-title class="text-h5"> Description : </v-card-title>
             <v-col cols="12" md="6">
               <v-textarea
@@ -91,17 +79,6 @@
                 <v-btn dark text @click="dialogIT"> Save </v-btn>
               </v-toolbar-items>
             </v-toolbar>
-            <v-card-title class="text-h5"> Status : </v-card-title>
-            <v-col cols="12" md="6">
-              <v-select
-                :items="statusList"
-                item-text="name"
-                item-value="name"
-                v-model="statusclick"
-                label="status :"
-                @change="changeProfile_groupeSELECT"
-              ></v-select>
-            </v-col>
             <v-card-title class="text-h5"> description : </v-card-title>
             <v-col cols="12" md="6">
               <v-textarea
@@ -237,15 +214,6 @@
                 Valider
               </v-btn>
             </v-col>
-            <v-list>
-              <v-subheader>List of Images</v-subheader>
-              <v-list-item-group color="primary">
-                <v-list-item v-for="(image, index) in image" :key="index">
-                  <a :href="image.url">{{ image.name }}</a>
-                  <img :src="image.url" :alt="image.name" />
-                </v-list-item>
-              </v-list-item-group>
-            </v-list>
           </v-row>
         </v-container>
       </v-container>
@@ -258,28 +226,25 @@ import { mapActions, mapGetters } from "vuex";
 import CustomizedAxios from "../../plugins/axios.js";
 export default {
   data: () => ({
-    dialogTEC: false,
-    dialogIT: false,
-    damage: [],
     profile_groupe: [],
-    equipments: [],
-    damageTypes: [],
+    damage: [],
+    equipmentsFiltre: [],
     damageTypesIT: [],
     damageTypesTEC: [],
     modelIT: [],
     modelTEC: [],
-    sendDamages: [],
     modelDamageIT: [],
     modelDamageTEC: [],
+    Data: [],
+    equipments: [],
+    departements: [],
+    statusdamage: "",
+    FindDamageTypeByEquipmentID: [],
     profile_groupe_id: null,
     equipments_id: "",
-    equipmentsFiltre: [],
-    equipmentsDamageType: [],
     disabledEquipmentsFiltre: true,
-    isDamaged: false,
-    damagesend: [],
-    Data: [],
-    departements: [],
+    dialogTEC: false,
+    dialogIT: false,
     file: "",
     image: "",
     statusList: [
@@ -296,9 +261,6 @@ export default {
         name: "closed",
       },
     ],
-    statusclick: "",
-    statusdamage: "",
-    FindDamageTypeByEquipmentID:[],
   }),
   mounted() {
     document.title = "damage";
@@ -328,9 +290,7 @@ export default {
       val || this.closeDelete();
     },
   },
-  created() {
-    //this.initialize();
-  },
+  created() {},
   methods: {
     changeProfile_groupeSELECT() {
       this.modelDamageIT.length = 0;
@@ -339,7 +299,6 @@ export default {
       this.damageTypesIT.length = 0;
       this.damageTypesTEC.length = 0;
       this.Data.length = 0;
-      //  this.damageFunction();
       this.disabledEquipmentsFiltre = false;
       this.profile_groupe.map((item) => {
         if (item.id == this.profile_groupe_id) {
@@ -356,37 +315,6 @@ export default {
       this.damagetypeITandTEC();
     },
     changeEquipmentsFiltreSELECT() {
-      /*   // this.damageFunction();
-      this.modelDamageIT.length = 0;
-      this.modelDamageTEC.length = 0;
-      //this.damageTypesIT.length = 0;
-      //this.damageTypesTEC.length = 0;
-      //this.Data.length = 0;
-      this.damagetypeITandTEC();
-      this.FindDamageTypeByEquipmentIDAction(this.equipments_id).then(() => {
-        this.equipmentsDamageType = [...this.getDamageTypeByEquipmentID];
-
-        this.equipmentsDamageType.map((item2) => {
-          console.log("item2 it", item2);
-          this.damageTypesIT.map((item) => {
-            console.log("item it", item);
-            if (item.id == item2.damageType.id) {
-              this.modelDamageIT.push(item);
-            }
-          });
-        });
-
-        this.equipmentsDamageType.map((item2) => {
-          console.log("item2 tec", item2);
-
-          this.damageTypesTEC.map((item) => {
-            console.log("item tec", item);
-            if (item.id == item2.damageType.id) {
-              this.modelDamageTEC.push(item);
-            }
-          });
-        });
-      }); */
       var IT = 1;
       var TEC = 2;
       CustomizedAxios.post(
@@ -445,73 +373,25 @@ export default {
           if (item.name == item2.name) {
             let index = this.damageTypesTEC.indexOf(item);
             this.damageTypesTEC.splice(index, 1);
-            console.log("damageTypesTEC 333", this.damageTypesTEC[index]);
           }
         });
       });
     },
-    damagetypeITandTEC() {
-      this.setDepartementsAction(this.equipments_id).then(() => {
-        this.damageTypesIT.length = 0;
-        this.damageTypesTEC.length = 0;
-        //debugger;
-        this.departements = [...this.getdepartements];
-        this.departements[0].damageTypes.map((item) => {
-          this.Data.map((dataitem) => {
-            if (dataitem.id == item.id) {
-              this.damageTypesIT.push(dataitem);
-            }
-          });
-        });
-        this.departements[1].damageTypes.map((item) => {
-          this.Data.map((dataitem) => {
-            if (dataitem.id == item.id) {
-              this.damageTypesTEC.push(dataitem);
-            }
-          });
-        });
-      });
-    },
-    validerTEC(item) {
-      /*  var id = item.id;
-      var userid = 1;
-      var equipmentsid = this.equipments_id;
-      var name = "dmagaetest";
 
-      console.log("item vvvv", id);
-      console.log("equipmentsid vvvv", equipmentsid);
-      var obj = {
-        name: name,
-        status: "",
-        description: "",
-        equipement: {
-          id: equipmentsid,
-        },
-        userDeclaration: {
-          id: userid,
-        },
-        damageType: {
-          id: id,
-        },
-      };
-      this.damagesend.push(obj); */
+    validerTEC(item) {
       CustomizedAxios.post(
         `Damage/FindDamageTypeByEquipmentID/${this.equipments_id}/${item.id}`
       )
         .then((response) => {
-          console.log("FindDamageTypeByEquipmentID :", response.data);
-          this.FindDamageTypeByEquipmentID=response.data;
+          this.FindDamageTypeByEquipmentID = response.data;
           this.statusdamage = response.data[0].status;
-          console.log("statusdamage :", this.statusdamage);
         })
         .catch((error) => {
           console.log("error :", error);
         });
-      console.log("item valide", item);
       this.dialogTEC = true;
     },
     validerIT(item) {
-      console.log("item valide", item);
       this.dialogIT = true;
     },
     cancelTEC() {
@@ -525,44 +405,27 @@ export default {
     damageFunction() {
       this.setDAMAGEAction().then(() => {
         this.damage = [...this.getdamage];
-        console.log("damage function", this.damage);
       });
-
-      /* this.setDAMAGETYPESAction().then(() => {
-        this.damageTypes.length = 0;
-        this.damageTypes = [...this.getdamageTypes];
-        this.damageTypes.map((item) => {
-          if (
-            item.profileGroup.id == this.profile_groupe_id &&
-            item.department.name == "IT"
-          ) {
-            this.damageTypesIT.push(item);
-          } else if (
-            item.profileGroup.id == this.profile_groupe_id &&
-            item.department.name == "TECHNIQUE"
-          ) {
-            this.damageTypesTEC.push(item);
-          }
-        });
-      }); */
-      /* this.setDAMAGEAction().then(() => {
-        this.damageTypes = [...this.getdamageTypes];
-      }); */
     },
     validerDamages() {
       var formData = new FormData();
       formData.append("file", this.file);
-      formData.append("damage", parseFloat(this.FindDamageTypeByEquipmentID[0].id) );
-      formData.append("description", this.FindDamageTypeByEquipmentID[0].description); 
+      formData.append(
+        "damage",
+        parseFloat(this.FindDamageTypeByEquipmentID[0].id)
+      );
+      formData.append(
+        "description",
+        this.FindDamageTypeByEquipmentID[0].description
+      );
 
-      CustomizedAxios.post("Picture/upload",formData)
+      CustomizedAxios.post("Picture/upload", formData)
         .then((res) => {
           console.log(res);
         })
         .catch((err) => {
           console.log(err);
         });
-      // console.log(this.file.type);
     },
   },
 };

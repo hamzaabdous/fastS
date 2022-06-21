@@ -1,7 +1,7 @@
 <template>
   <v-data-table
     :headers="headers"
-    :items="equipmentsFiltre"
+    :items="equipmentsFiltres"
     :search="search"
     sort-by="item.id"
     class="elevation-1"
@@ -114,9 +114,8 @@ export default {
       { text: "Actions", value: "actions", sortable: false },
     ],
     equipments: [],
-    equipmentsFiltre: [],
+    equipmentsFiltres: [],
     idgrp: null,
-    isAdd: true,
     editedIndex: -1,
     editedItem: {
       id: null,
@@ -137,7 +136,6 @@ export default {
   }),
   mounted() {
     document.title = "user";
-
     this.initialize();
   },
   computed: {
@@ -154,19 +152,16 @@ export default {
       val || this.closeDelete();
     },
   },
-  created() {
-    //this.initialize();
-  },
+  created() {},
   methods: {
     initialize() {
       console.log("initialize");
-      //debugger;
       this.idgrp = localStorage.getItem("id");
       this.setequipmentsAction().then(() => {
         this.equipments = [...this.getequipments];
         this.equipments.map((item) => {
           if (item.profileGroup.id == this.idgrp) {
-            this.equipmentsFiltre.push(item);
+            this.equipmentsFiltres.push(item);
           }
         });
       });
@@ -203,21 +198,10 @@ export default {
     save() {
       if (this.editedIndex == -1) {
         this.editedItem.profileGroup.id = localStorage.getItem("id");
-        /* var obj ={
-          id: this.editedItem.id,
-          name: this.editedItem.name,
-          description: this.editedItem.description,
-          profileGroup: {
-            id: localStorage.getItem("id"),
-          },
-        }; */
-        console.log("add", this.editedItem);
         this.addEQUIPMENTAction(this.editedItem).then(() => {
           this.equipments = [...this.getequipments];
         });
       } else {
-        console.log("edite");
-
         this.editEQUIPMENTAction(this.editedItem).then(() => {
           this.equipments = [...this.getequipments];
         });

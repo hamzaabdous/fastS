@@ -17,7 +17,7 @@
         <v-icon>mdi-logout-variant</v-icon>
       </v-btn>
     </v-app-bar>
-    
+
     <v-navigation-drawer
       v-model="drawer"
       absolute
@@ -77,49 +77,34 @@ export default {
     return {
       drawer: false,
       logged: false,
-      listDrawerRouter: [{ id: 1, name: "Gestion" }],
       listDrawerChildRouter: [
         { id: 1, name: "User", ROUTE: "/userGestion" },
         { id: 2, name: "Damage", ROUTE: "/Damage" },
         { id: 3, name: "Equipment Profile ", ROUTE: "/profile_groupe" },
         { id: 4, name: "Foreman ", ROUTE: "/Foreman" },
         { id: 5, name: "technique ", ROUTE: "/technique" },
+        { id: 6, name: "Dashboard ", ROUTE: "/Dashboard" },
       ],
-      users: [],
-      show: true,
     };
   },
   mounted() {
     document.title = "Dashboard";
     if (localStorage.getItem("token") == null) {
       this.logged = false;
-      //window.location.reload();
     } else if (localStorage.getItem("token") != null) this.logged = true;
-    //  this.initialize();
   },
   computed: {
     ...mapGetters(["getUsers"]),
   },
   watch: {},
   methods: {
-    initialize() {
-      this.setUsersAction().then(() => {
-        this.users = [...this.getUsers];
-        console.log(this.users);
-      });
-    },
+    initialize() {},
     logout() {
       localStorage.removeItem("token");
       window.location.reload();
       console.log(localStorage.getItem("token"));
-      
     },
-    ...mapActions([
-      "setUsersAction",
-      "editUserAction",
-      "deleteUserAction",
-      "addUserAction",
-    ]),
+    ...mapActions([]),
   },
 };
 </script>

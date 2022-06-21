@@ -136,7 +136,6 @@ export default {
       { text: "Actions", value: "actions", sortable: false },
     ],
     domainGroupes: [],
-    isAdd: true,
     editedIndex: -1,
     editedItem: {
       id: "",

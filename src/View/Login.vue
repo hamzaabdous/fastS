@@ -1,5 +1,5 @@
 <template>
-  <v-row style="margin: 0; padding: 0">
+  <v-row style="margin: 0; padding: 0;background: #fff;" >
     <v-col cols="7" class="backgroundLogin"> </v-col>
     <v-col cols="5" class="form">
       <v-row>

@@ -104,19 +104,18 @@
                       @click="showInput = true"
                     >
                       <v-icon left> mdi-cog </v-icon>Add
-                    </v-btn>                  
+                    </v-btn>
                   </v-col>
                 </v-row>
               </v-container>
             </v-card>
           </v-dialog>
-
           <v-dialog v-model="showInput" max-width="1000px">
             <v-card>
               <v-card-text>
                 <v-container>
                   <v-row>
-                   <v-col cols="12" md="12">
+                    <v-col cols="12" md="12">
                       <v-text-field
                         v-model="editedItem.phone_number"
                         label="name"
@@ -158,12 +157,12 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                   <v-col cols="12" md="12">
+                    <v-col cols="12" md="12">
                       <v-text-field
                         v-model="editedItem.phone_number"
                         label="name"
                       ></v-text-field>
-                    
+
                       <v-btn
                         color="#99A799"
                         class="mr-2 btn white--text"
@@ -179,7 +178,11 @@
 
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="blue darken-1" text @click="showInputDepartment = false">
+                <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="showInputDepartment = false"
+                >
                   Cancel
                 </v-btn>
                 <v-btn color="blue darken-1" text @click="save(editedItem)">
@@ -310,7 +313,7 @@ export default {
     users: [],
     department: [],
     role: [],
-    isAdd: true,
+
     profile_groupe_id: "",
     editedIndex: -1,
     departmentID: "",

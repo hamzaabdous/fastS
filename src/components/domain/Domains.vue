@@ -39,12 +39,6 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <!-- <v-col cols="12" sm="6" md="4">
-                      <v-text-field
-                        v-model="editedItem.id"
-                        label="id"
-                      ></v-text-field>
-                    </v-col> -->
                     <v-col cols="12" sm="6" md="4">
                       <v-text-field
                         v-model="editedItem.name"
@@ -123,14 +117,12 @@ export default {
     dialogDelete: false,
     confirmAddSave: false,
     search: "",
-
     headers: [
       { text: "id", align: "start", value: "id", sortable: true },
       { text: "Domaine name", value: "name", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
     domains: [],
-    isAdd: true,
     editedIndex: -1,
     editedItem: {
       id: "",

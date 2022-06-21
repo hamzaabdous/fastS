@@ -126,17 +126,13 @@ export default {
     dialogDelete: false,
     confirmAddSave: false,
     search: "",
-
     headers: [
       { text: "name", value: "name", sortable: true },
       { text: "created date", value: "createdDate", sortable: true },
-
       { text: "Actions", value: "actions", sortable: false },
     ],
     damageTypes: [],
-    damageTypesFiltre: [],
     damageTypesByProfile_group_id: [],
-    isAdd: true,
     editedIndex: -1,
     editedItem: {
       created_date: "",
@@ -195,9 +191,7 @@ export default {
       val || this.closeDelete();
     },
   },
-  created() {
-    //this.initialize();
-  },
+  created() {},
   methods: {
     initialize() {
       this.setDAMAGETYPESByProfile_group_idAction(
@@ -206,12 +200,6 @@ export default {
         this.damageTypesByProfile_group_id = [
           ...this.getdamageTypesByProfile_group_id,
         ];
-        /* this.damageTypes.map((item) => {
-          if (item.profileGroup.id == localStorage.getItem("id")) {
-            this.damageTypesFiltre.push(item);
-          }
-        }); */
-        console.log(this.damageTypesFiltre);
       });
     },
     ...mapActions([

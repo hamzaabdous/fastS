@@ -112,7 +112,7 @@ export default {
       { text: "Actions", value: "actions", sortable: false },
     ],
     departements: [],
-    isAdd: true,
+
     editedIndex: -1,
     editedItem: {
       id: "",

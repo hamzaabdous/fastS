@@ -172,37 +172,37 @@ export default {
     ],
     users: [],
     usersFiltreByGRP: [],
-    isAdd: true,
+
     profile_groupe_id: "",
     editedIndex: -1,
     editedItem: {
-          id: "",
-          created_date:"",
-          email: "",
-          password: "",
-          phoneNumber: "",
-          update_date: "",
-          username: "",
-          function: {
-            id: null,
-          },
-          firstName: "",
-          lastName: "",
-        },
+      id: "",
+      created_date: "",
+      email: "",
+      password: "",
+      phoneNumber: "",
+      update_date: "",
+      username: "",
+      function: {
+        id: null,
+      },
+      firstName: "",
+      lastName: "",
+    },
     defaultItem: {
-          id: "",
-          created_date:"",
-          email: "",
-          password: "",
-          phoneNumber: "",
-          update_date: "",
-          username: "",
-          function: {
-            id: null,
-          },
-          firstName: "",
-          lastName: "",
-        },
+      id: "",
+      created_date: "",
+      email: "",
+      password: "",
+      phoneNumber: "",
+      update_date: "",
+      username: "",
+      function: {
+        id: null,
+      },
+      firstName: "",
+      lastName: "",
+    },
   }),
   mounted() {
     document.title = "user";
@@ -231,7 +231,7 @@ export default {
       console.log("initialize");
       this.setUsersAction().then(() => {
         this.users = [...this.getUsers];
-       
+
         this.users.forEach((element) => {
           element.profileGroups.map((item) => {
             if (item.id == localStorage.getItem("id")) {
@@ -268,7 +268,7 @@ export default {
     close() {
       this.dialog = false;
     },
-    closemodifier(){
+    closemodifier() {
       this.dialogModifier = false;
     },
     closeDelete() {

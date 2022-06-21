@@ -2,12 +2,10 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Users from "../components/user/Users.vue";
 import Departments from "../components/department/Departments.vue";
-import Roles from "../components/role/Roles.vue";
 import DomainGroupe from "../components/domain_groupe/DomainGroupe.vue";
 import DamageType from "../components/damage_Type/DamageType.vue";
 import Damage from "../components/damage/Damage.vue";
 import domains from "../components/domain/Domains.vue";
-import Damage_IT from "../components/damage/IT/Damage_IT.vue";
 import profile_groupe from "../components/profile_group/profile_groupe.vue";
 import ViewEquipement from "../components/ViewEquipement.vue";
 import ForemanView from "../components/foreman/ForemanView.vue";
@@ -15,7 +13,7 @@ import userGestion from "../components/user/userGestion.vue";
 import technique from "../components/technique/technique.vue";
 import techniqueView from "../components/technique/techniqueView.vue";
 import techniqueEquipment from "../components/technique/techniqueEquipment.vue";
-
+import Dashboard from "../components/dashboard/Dashboard.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -25,9 +23,6 @@ const routes = [
     component: Users,
     params: true,
 
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
   },
   {
     path: "/technique",
@@ -35,9 +30,6 @@ const routes = [
     component: technique,
     params: true,
 
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
   },
   {
     path: "/techniqueView",
@@ -45,9 +37,7 @@ const routes = [
     component: techniqueView,
     params: true,
 
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+
   },
   {
     path: "/techniqueEquipment",
@@ -55,9 +45,15 @@ const routes = [
     component: techniqueEquipment,
     params: true,
 
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+  
+  },
+  {
+    path: "/Dashboard",
+    name: "Dashboard",
+    component: Dashboard,
+    params: true,
+
+ 
   },
   {
     path: "/userGestion",
@@ -65,9 +61,7 @@ const routes = [
     component: userGestion,
     params: true,
 
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+
   },
   {
     path: "/Foreman",
@@ -75,9 +69,6 @@ const routes = [
     component: ForemanView,
     params: true,
 
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
   },
   {
     path: "/departement",
@@ -85,19 +76,6 @@ const routes = [
     component: Departments,
     params: true,
 
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-  },
-  {
-    path: "/role",
-    name: "Role",
-    component: Roles,
-    params: true,
-
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
   },
   {
     path: "/domainGroupe",
@@ -105,9 +83,7 @@ const routes = [
     component: DomainGroupe,
     params: true,
 
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+  
   },
   {
     path: "/damageType",
@@ -115,9 +91,7 @@ const routes = [
     component: DamageType,
     params: true,
 
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+   
   },
   {
     path: "/Damage",
@@ -125,20 +99,12 @@ const routes = [
     component: Damage,
     params: true,
 
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
+   
   },
   {
     path: "/Domain",
     name: "domain",
     component: domains,
-    params: true,
-  },
-  {
-    path: "/damage_IT",
-    name: "Damage_IT",
-    component: Damage_IT,
     params: true,
   },
   {
