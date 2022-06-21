@@ -3,6 +3,7 @@
     <v-data-table
       :headers="headers"
       :items="users"
+      :loading="loading"
       sort-by="item.id"
       class="elevation-1"
       :search="search"

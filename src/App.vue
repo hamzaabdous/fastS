@@ -59,7 +59,7 @@
         </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
-    <v-app style="background-color: #d6e6f2">
+    <v-app style="background-color: #fff">
       <router-view />
     </v-app>
   </v-card>

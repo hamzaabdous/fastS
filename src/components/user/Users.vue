@@ -1,7 +1,10 @@
 <template>
+  <div style="padding: 5px; padding-top: 2%">
+
   <v-data-table
     :headers="headers"
     :items="usersFiltreByGRP"
+    :loading="loading"
     sort-by="item.id"
     class="elevation-1"
     :search="search"
@@ -153,6 +156,7 @@
       <v-btn color="primary" @click="initialize()"> Reset </v-btn>
     </template>
   </v-data-table>
+  </div>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -228,17 +232,15 @@ export default {
   },
   methods: {
     initialize() {
-      console.log("initialize");
       this.setUsersAction().then(() => {
         this.users = [...this.getUsers];
+        console.log("this.users",this.users);
 
         this.users.forEach((element) => {
-          element.profileGroups.map((item) => {
-            if (item.id == localStorage.getItem("id")) {
+            if (element.profile_group_id == localStorage.getItem("id")) {
               this.usersFiltreByGRP.push(element);
             }
           });
-        });
         console.log(this.usersFiltreByGRP);
       });
     },

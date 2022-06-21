@@ -194,7 +194,6 @@
                             v-text="item.name"
                           ></v-list-item-title>
                         </v-list-item-content>
-                      
                       </v-list-item>
                     </div>
                   </v-list-item-group>
@@ -257,7 +256,7 @@ export default {
     ...mapGetters([
       "getUsers",
       "getdamageTypes",
-      "getdomainGroupes",
+      "getprofilegroups",
       "getequipments",
       "getDamageTypeByEquipmentID",
       "getdamage",
@@ -278,68 +277,80 @@ export default {
   },
   methods: {
     changeProfile_groupeSELECT() {
-        this.modelDamageIT.length = 0;
+
+      this.modelDamageIT.length = 0;
       this.modelDamageTEC.length = 0;
       this.equipmentsFiltre.length = 0;
       this.damageTypesIT.length = 0;
       this.damageTypesTEC.length = 0;
-      this.Data.length = 0; 
+      this.Data.length = 0;
       //  this.damageFunction();
       this.disabledEquipmentsFiltre = false;
-      this.profile_groupe.map((item) => {
-        if (item.id == this.profile_groupe_id) {
+     /*  this.profile_groupe.map((item) => {
+
+        if (item.id== this.profile_groupe_id) {
           item.damageTypes.map((item) => {
             this.Data.push(item);
           });
         }
-      });
+      }); */
+      console.log("equipments",this.equipments);
       this.equipments.map((item) => {
-        if (item.profileGroup.id == this.profile_groupe_id) {
+        if (item.profile_group_id == this.profile_groupe_id) {
           this.equipmentsFiltre.push(item);
         }
       });
     },
     changeEquipmentsFiltreSELECT() {
-      var IT=1;
-      var TEC=2;
-      CustomizedAxios.post(`DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentIN/${this.profile_groupe_id}/${IT}/${this.equipments_id}`)
-          .then((response) => {
-            this.modelDamageIT = response.data;
-          })
-          .catch((error) => {
-            console.log("error :", error);
-          });
-      CustomizedAxios.post(`DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentIN/${this.profile_groupe_id}/${TEC}/${this.equipments_id}`)
-          .then((response) => {
-            this.modelDamageTEC = response.data;
-          })
-          .catch((error) => {
-            console.log("error :", error);
-          });
+      var IT = 1;
+      var TEC = 2;
+      CustomizedAxios.post(
+        `DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentIN/${this.profile_groupe_id}/${IT}/${this.equipments_id}`
+      )
+        .then((response) => {
+          this.modelDamageIT = response.data;
+        })
+        .catch((error) => {
+          console.log("error :", error);
+        });
+      CustomizedAxios.post(
+        `DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentIN/${this.profile_groupe_id}/${TEC}/${this.equipments_id}`
+      )
+        .then((response) => {
+          this.modelDamageTEC = response.data;
+        })
+        .catch((error) => {
+          console.log("error :", error);
+        });
 
-       CustomizedAxios.post(`DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentNOT/${this.profile_groupe_id}/${IT}/${this.equipments_id}`)
-          .then((response) => {
-            this.damageTypesIT = response.data;
-          })
-          .catch((error) => {
-            console.log("error :", error);
-          });
-        CustomizedAxios.post(`DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentNOT/${this.profile_groupe_id}/${TEC}/${this.equipments_id}`)
-          .then((response) => {
-            this.damageTypesTEC = response.data;
-          })
-          .catch((error) => {
-            console.log("error :", error);
-          });    
+      CustomizedAxios.post(
+        `DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentNOT/${this.profile_groupe_id}/${IT}/${this.equipments_id}`
+      )
+        .then((response) => {
+          this.damageTypesIT = response.data;
+        })
+        .catch((error) => {
+          console.log("error :", error);
+        });
+      CustomizedAxios.post(
+        `DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentNOT/${this.profile_groupe_id}/${TEC}/${this.equipments_id}`
+      )
+        .then((response) => {
+          this.damageTypesTEC = response.data;
+        })
+        .catch((error) => {
+          console.log("error :", error);
+        });
     },
     initialize() {
       console.log("initialize");
 
-      this.setDOMAINGROUPESAction().then(() => {
-        this.profile_groupe = [...this.getdomainGroupes];
+      this.setPROFILEDROUPSAction().then(() => {
+        this.profile_groupe = [...this.getprofilegroups];
       });
       this.setequipmentsAction().then(() => {
         this.equipments = [...this.getequipments];
+        console.log("set equipments",this.equipments);
       });
     },
     ...mapActions([
@@ -348,7 +359,7 @@ export default {
       "deleteDAMAGEAction",
       "addDAMAGEAction",
       "setDAMAGETYPESAction",
-      "setDOMAINGROUPESAction",
+      "setPROFILEDROUPSAction",
       "setequipmentsAction",
       "addDAMAGESAction",
       "setByProfileGroupAndAndDepartmentAndEquipmentINAction",

@@ -25,9 +25,9 @@ const equipmentModule = {
   actions: {
     setequipmentsAction({ commit }) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.get("Equipment/")
+        CustomizedAxios.get("equipments/")
           .then((response) => {
-            commit("SET_EQUIPMENTS", response.data);
+            commit("SET_EQUIPMENTS", response.data.payload);
             console.log("set EQUIPMENT 1");
             resolve(response);
           })
@@ -38,17 +38,13 @@ const equipmentModule = {
     },
     addEQUIPMENTAction({ commit }, EQUIPMENT) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("Equipment/add", {
-          id: EQUIPMENT.id,
-          name: EQUIPMENT.name,
-          description: EQUIPMENT.description,
-          profileGroup: {
-            id: EQUIPMENT.profileGroup.id,
-          },
-        })
+        CustomizedAxios.post("equipments/create", {
+          name:EQUIPMENT.name,
+          profile_group_id:EQUIPMENT.profile_group_id
+      })
           .then((response) => {
             console.log("res add ", response);
-            commit("ADD_EQUIPMENT", response.data);
+            commit("ADD_EQUIPMENT", response.data.payload);
             resolve(response.data);
           })
           .catch((error) => {
@@ -57,16 +53,14 @@ const equipmentModule = {
       });
     },
 
-    deleteEQUIPMENTAction({ commit }, id) {
+    deleteEQUIPMENTAction({ commit }, EQUIPMENT) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("Equipment/delete",
-        {
-          id: id,
-          
-        }
+        CustomizedAxios.post("equipments/delete", {
+          id:EQUIPMENT.id,
+      }
          )
           .then((response) => {
-            commit("DELETE_EQUIPMENT", id);
+            commit("DELETE_EQUIPMENT", EQUIPMENT.id);
             resolve(response.data);
           })
           .catch((error) => {
@@ -76,16 +70,13 @@ const equipmentModule = {
     },
     editEQUIPMENTAction({ commit }, EQUIPMENT) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.put("Equipment/update", {
-          id: EQUIPMENT.id,
-          name: EQUIPMENT.name,
-          description: EQUIPMENT.description,
-          profileGroup: {
-            id: EQUIPMENT.profileGroup.id,
-          },
-        })
+        CustomizedAxios.post("equipments/update",  {
+          id:EQUIPMENT.id,
+          name:EQUIPMENT.name,
+          profile_group_id:EQUIPMENT.profile_group_id
+      })
           .then((response) => {
-            commit("EDIT_EQUIPMENT", response.data);
+            commit("EDIT_EQUIPMENT", response.data.payload);
             resolve(response.data);
           })
           .catch((error) => {

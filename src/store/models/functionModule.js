@@ -68,7 +68,7 @@ const functionModule = {
     },
     editFUNCTIONAction({ commit }, FUNCTION) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.put("fonctions/update",  {
+        CustomizedAxios.post("fonctions/update",  {
           id:FUNCTION.id,
           name:FUNCTION.name,
           department_id:FUNCTION.department_id

@@ -4,6 +4,8 @@ const damageTypeModule = {
   state: {
     damages: [],
     DamageTypeByEquipmentID: [],
+    getEquipmentDamagesMergedWithDamageTypes:[],
+    foremanIntervention:[],
   },
   mutations: {
     DAMAGE(state, damages) {
@@ -28,13 +30,19 @@ const damageTypeModule = {
     FindDamageTypeByEquipmentID(state, damages) {
       state.DamageTypeByEquipmentID = damages;
     },
+    getEquipmentDamagesMergedWithDamageTypes(state, damages) {
+      state.getEquipmentDamagesMergedWithDamageTypes = damages;
+    },
+    sendDamagePhotosStoragePath(state, foremanIntervention) {
+      state.foremanIntervention.push(foremanIntervention);
+    },
   },
   actions: {
     setDAMAGEAction({ commit }) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.get("Damage/")
+        CustomizedAxios.get("damages/")
           .then((response) => {
-            commit("DAMAGE", response.data);
+            commit("DAMAGE", response.data.payload);
             resolve(response);
           })
           .catch((error) => {
@@ -44,7 +52,7 @@ const damageTypeModule = {
     },
     addDAMAGEAction({ commit }, damage) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("Damage/add", {
+        CustomizedAxios.post("damages/add", {
           created_date: damage.created_date,
           updateDate: damage.updateDate,
           name: damage.name,
@@ -67,7 +75,7 @@ const damageTypeModule = {
     },
     addDAMAGESAction({ commit }, damages) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("Damage/addList", damages)
+        CustomizedAxios.post("damages/addList", damages)
           .then((response) => {
             commit("ADD_DAMAGES", response.data);
             resolve(response.data);
@@ -79,7 +87,7 @@ const damageTypeModule = {
     },
     deleteDAMAGEAction({ commit }, id) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("Damage/delete/" + id)
+        CustomizedAxios.post("damages/delete/" + id)
           .then((response) => {
             commit("DELETE_DAMAGE", id);
             resolve(response.data);
@@ -91,7 +99,7 @@ const damageTypeModule = {
     },
     editDAMAGEAction({ commit }, damage) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.put("Damage/update", {
+        CustomizedAxios.post("damages/update", {
           created_date: damage.created_date,
           updateDate: damage.updateDate,
           name: damage.name,
@@ -113,12 +121,37 @@ const damageTypeModule = {
     },
     FindDamageTypeByEquipmentIDAction({ commit }, id) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("Damage/FindDamageType/" + id)
+        CustomizedAxios.get("damages/getDamagesByEquipments/" + id)
           .then((response) => {
-            commit("FindDamageTypeByEquipmentID", response.data);
-            resolve(response.data);
+            commit("FindDamageTypeByEquipmentID", response.data.payload);
+            resolve(response.data.payload);
           })
           .catch((error) => {
+            reject(error);
+          });
+      });
+    },
+    getEquipmentDamagesMergedWithDamageTypesAction({ commit }, id) {
+      return new Promise((resolve, reject) => {
+        CustomizedAxios.get("damages/getEquipmentDamagesMergedWithDamageTypes/" + id)
+          .then((response) => {
+            commit("getEquipmentDamagesMergedWithDamageTypes", response.data.payload);
+            resolve(response.data.payload);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
+    sendDamagePhotosStoragePathAction({ commit }, formData) {
+      return new Promise((resolve, reject) => {
+        CustomizedAxios.post("damages/foremanIntervention",formData)
+          .then((response) => {
+            commit("sendDamagePhotosStoragePath", response.data.payload);
+            resolve(response.data.payload);
+          })
+          .catch((error) => {
+            console.log("error",error);
             reject(error);
           });
       });
@@ -130,6 +163,12 @@ const damageTypeModule = {
     },
     getDamageTypeByEquipmentID: (state) => {
       return state.DamageTypeByEquipmentID;
+    },
+    getEquipmentDamagesMergedWithDamageTypes: (state) => {
+      return state.getEquipmentDamagesMergedWithDamageTypes;
+    },
+    sendDamagePhotosStoragePath: (state) => {
+      return state.foremanIntervention;
     },
   },
 };

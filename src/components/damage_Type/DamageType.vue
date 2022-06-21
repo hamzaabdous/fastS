@@ -4,7 +4,7 @@
       :headers="headers"
       :items="damageTypesByProfile_group_id"
       sort-by="item.id"
-      class="elevation-1 table"
+      class="elevation-1 "
       :search="search"
     >
       <template v-slot:top>
@@ -44,10 +44,13 @@
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12" sm="6" md="8">
-                      <v-text-field
-                        v-model="editedItem.profileGroup.id"
-                        label="groupe"
-                      ></v-text-field>
+                      <v-select
+                        :items="departments"
+                        item-text="name"
+                        item-value="id"
+                        v-model="editedItem.department_id"
+                        label="department"
+                      ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -128,33 +131,23 @@ export default {
     search: "",
     headers: [
       { text: "name", value: "name", sortable: true },
-      { text: "created date", value: "createdDate", sortable: true },
+      { text: "department", value: "department.name", sortable: true },
+      { text: "created date", value: "created_at", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
     damageTypes: [],
     damageTypesByProfile_group_id: [],
+    departments: [],
     editedIndex: -1,
     editedItem: {
-      created_date: "",
-      updateDate: "",
       name: "",
-      department: {
-        id: "",
-      },
-      profileGroup: {
-        id: "",
-      },
+      profile_group_id: "",
+      department_id: "",
     },
     defaultItem: {
-      created_date: "",
-      updateDate: "",
       name: "",
-      department: {
-        id: "",
-      },
-      profileGroup: {
-        id: "",
-      },
+      profile_group_id: "",
+      department_id: "",
     },
   }),
   mounted() {
@@ -166,25 +159,22 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    ...mapGetters(["getdamageTypes", "getdamageTypesByProfile_group_id"]),
+    ...mapGetters([
+      "getdamageTypes",
+      "getdamageTypesByProfile_group_id",
+      "getdepartements",
+    ]),
   },
   watch: {
     dialog(val) {
       if (this.editedIndex == -1) {
         this.editedIndex = -1;
         this.editedItem = {
-          created_date: "",
-          updateDate: "",
           name: "",
-          department: {
-            id: "",
-          },
-          profileGroup: {
-            id: "",
-          },
+          profile_group_id: "",
+          department_id: "",
         };
       }
-
       val || this.close();
     },
     dialogDelete(val) {
@@ -194,12 +184,16 @@ export default {
   created() {},
   methods: {
     initialize() {
-      this.setDAMAGETYPESByProfile_group_idAction(
-        localStorage.getItem("id")
-      ).then(() => {
-        this.damageTypesByProfile_group_id = [
-          ...this.getdamageTypesByProfile_group_id,
-        ];
+      this.setDAMAGETYPESAction().then(() => {
+        this.damageTypes = [...this.getdamageTypes];
+        this.damageTypes.map((item) => {
+          if (item.profile_group_id == localStorage.getItem("id")) {
+            this.damageTypesByProfile_group_id.push(item);
+          }
+        });
+      });
+      this.setDepartementsAction().then(() => {
+        this.departments = [...this.getdepartements];
       });
     },
     ...mapActions([
@@ -208,6 +202,7 @@ export default {
       "deleteDAMAGETYPEAction",
       "addDAMAGETYPEAction",
       "setDAMAGETYPESByProfile_group_idAction",
+      "setDepartementsAction",
     ]),
 
     editItem(item) {
@@ -222,8 +217,8 @@ export default {
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      this.deleteDAMAGETYPEAction(this.editedIndex).then(() => {
-        this.damageTypes = this.getdamageTypes;
+      this.deleteDAMAGETYPEAction(this.editedItem).then(() => {
+        this.damageTypes = [...this.getdamageTypes];
       });
       this.closeDelete();
     },
@@ -242,13 +237,14 @@ export default {
     },
     save() {
       if (this.editedIndex == -1) {
+        this.editedItem.profile_group_id = localStorage.getItem("id");
         this.addDAMAGETYPEAction(this.editedItem).then(() => {
-          this.damageTypes = [...this.damageTypes];
+          this.damageTypes = [...this.getdamageTypes];
         });
         this.closeAddSaveDialog();
       } else {
         this.editDAMAGETYPEAction(this.editedItem).then(() => {
-          this.damageTypes = this.getdamageTypes;
+          this.damageTypes = [...this.getdamageTypes];
         });
         this.closeAddSaveDialog();
       }

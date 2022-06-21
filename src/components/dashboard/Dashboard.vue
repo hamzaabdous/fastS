@@ -172,7 +172,7 @@
       <v-col cols="4" md="4" sm="12">
         <div>
           <v-select
-            :items="domainGroupes"
+            :items="profilegroups"
             outlined
             item-text="name"
             item-value="id"
@@ -242,7 +242,7 @@ export default {
       { text: "equipments", value: "equipments.length", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    domainGroupes: [],
+    profilegroups: [],
     equipments: [],
     equipmentsFiltre: [],
     chartlineBy: ["Week", "Month", "Year"],
@@ -281,7 +281,7 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    ...mapGetters(["getdomainGroupes", "getequipments"]),
+    ...mapGetters(["getprofilegroups", "getequipments"]),
   },
   watch: {
     dialog(val) {
@@ -304,9 +304,9 @@ export default {
   },
   methods: {
     initialize() {
-      this.setDOMAINGROUPESAction().then(() => {
-        this.domainGroupes = [...this.getdomainGroupes];
-        console.log(this.domainGroupes);
+      this.setPROFILEDROUPSAction().then(() => {
+        this.profilegroups = [...this.getprofilegroups];
+        console.log(this.profilegroups);
       });
     },
     changeProfile_groupeSELECT() {
@@ -331,10 +331,10 @@ export default {
       var cc;
       return (cc = `--start: ${{ item1 }}; --size: calc( ${{ item2 }} / 100 )`);
     },
-    ...mapActions(["setDOMAINGROUPESAction", "setequipmentsAction"]),
+    ...mapActions(["setPROFILEDROUPSAction", "setequipmentsAction"]),
 
     editItem(item) {
-      this.editedIndex = this.domainGroupes.indexOf(item) + 1;
+      this.editedIndex = this.profilegroups.indexOf(item) + 1;
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
@@ -344,8 +344,8 @@ export default {
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      this.deleteDOMAINGROUPEAction(this.editedIndex).then(() => {
-        this.domainGroupes = this.getdomainGroupes;
+      this.deletePROFILEDROUPAction(this.editedIndex).then(() => {
+        this.profilegroups = this.getprofilegroups;
       });
       this.closeDelete();
     },
@@ -368,13 +368,13 @@ export default {
     },
     save() {
       if (this.editedIndex == -1) {
-        this.addDOMAINGROUPEAction(this.editedItem).then(() => {
-          this.domainGroupes = [...this.domainGroupes];
+        this.addPROFILEDROUPAction(this.editedItem).then(() => {
+          this.profilegroups = [...this.profilegroups];
         });
         this.closeAddSaveDialog();
       } else {
-        this.editDOMAINGROUPEAction(this.editedItem).then(() => {
-          this.domainGroupes = this.getdomainGroupes;
+        this.editPROFILEDROUPAction(this.editedItem).then(() => {
+          this.profilegroups = this.getprofilegroups;
         });
         this.closeAddSaveDialog();
       }

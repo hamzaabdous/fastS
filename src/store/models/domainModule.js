@@ -64,7 +64,7 @@ const domainModule = {
     },
     editDomainAction({ commit }, domain) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.put("/domains/update", {
+        CustomizedAxios.post("/domains/update", {
           id: domain.id,
           name: domain.name,
         })

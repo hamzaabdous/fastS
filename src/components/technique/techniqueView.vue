@@ -117,8 +117,8 @@ export default {
     search: "",
     headers: [
       { text: "name", value: "name", sortable: true },
-      { text: "status", value: "status", sortable: true },
-      { text: "damage", value: "damage", sortable: true },
+      { text: "damaged", value: "damaged", sortable: true },
+      { text: "confirmed", value: "confirmed", sortable: true },
       { text: "closed", value: "closed", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
@@ -176,7 +176,7 @@ export default {
       this.setequipmentsAction().then(() => {
         this.equipments = [...this.getequipments];
         this.equipments.map((item) => {
-          if (item.profileGroup.name == this.idgrp) {
+          if (item.profile_group.name == this.idgrp) {
             this.equipmentsFiltre.push(item);
           }
         });

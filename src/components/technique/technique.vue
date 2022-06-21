@@ -4,7 +4,7 @@
       <v-select
         :items="departements"
         item-text="name"
-        item-value="name"
+        item-value="id"
         v-model="departementId"
         label="departements"
         @change="changeDepartment"
@@ -12,7 +12,7 @@
     </v-col>
     <v-data-table
       :headers="headers"
-      :items="domainGroupesBydepartements"
+      :items="profilegroupsBydepartements"
       :search="search"
       :loading="loading"
       sort-by="item.id"
@@ -43,6 +43,7 @@
   </div>
 </template>
 <script>
+import CustomizedAxios from "../../plugins/axios";
 import { mapActions, mapGetters } from "vuex";
 
 export default {
@@ -52,12 +53,17 @@ export default {
     confirmAddSave: false,
     headers: [
       { text: "name", value: "name", sortable: true },
-      { text: "equipments", value: "equipments.length", sortable: true },
+      { text: "damaged", value: "damaged", sortable: true },
+      { text: "confirmed", value: "confirmed", sortable: true },
+      { text: "closed", value: "closed", sortable: true },
+      { text: "equipment count", value: "equipmentLength", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    domainGroupes: [],
-    domainGroupesBydepartements: [],
+    profilegroups: [],
+    profilegroupsBydepartements: [],
     departements: [],
+    test: [],
+    merge: [],
     departementId: "",
     editedIndex: -1,
     editedItem: {
@@ -78,7 +84,7 @@ export default {
     },
   }),
   mounted() {
-    document.title = "domainGroupes";
+    document.title = "profilegroups";
 
     this.loading = true;
     setTimeout(() => {
@@ -90,7 +96,7 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    ...mapGetters(["getdomainGroupes", "getdepartements"]),
+    ...mapGetters(["getprofilegroups", "getdepartements"]),
   },
   watch: {
     dialog(val) {
@@ -112,19 +118,30 @@ export default {
       val || this.closeDelete();
     },
   },
-  created() {
-  },
+  created() {},
   methods: {
     initialize() {
-      this.domainGroupesBydepartements.length = [];
-      this.setDOMAINGROUPESAction().then(() => {
-        this.domainGroupes = [...this.getdomainGroupes];
-        this.domainGroupesBydepartements = [...this.getdomainGroupes];
-        console.log(this.domainGroupes);
-      });
+      this.profilegroupsBydepartements.length = [];
+      this.setPROFILEDROUPSAction().then(() => {
+        this.profilegroups = [...this.getprofilegroups];
+        this.profilegroupsBydepartements = [...this.getprofilegroups];
+        /* this.profilegroups.map((element) => {
+          var department_id = element.department_id;
+          CustomizedAxios.get(
+            `/profilegroup/getProfileGroupEquipments/${{ department_id }}`
+          )
+            .then((response) => {
+              var equipmentCount = response.data.payload.length;
+              element.equipmentLength=equipmentCount;
+            })
+            .catch((error) => {
+              console.log("error :", error);
+            });
+        });
+          console.log(this.profilegroups); */
+      }); 
       this.setDepartementsAction().then(() => {
         this.departements = [...this.getdepartements];
-        console.log(this.departements);
       });
     },
     pageView(item) {
@@ -134,25 +151,22 @@ export default {
       });
       localStorage.removeItem("idDomainGroupes");
       localStorage.setItem("idDomainGroupes", item.name);
-
     },
-    ...mapActions([
-      "setDOMAINGROUPESAction",
-      "setDepartementsAction",
-    ]),
+    ...mapActions(["setPROFILEDROUPSAction", "setDepartementsAction"]),
     changeDepartment() {
-      this.domainGroupesBydepartements = [];
-      this.domainGroupes = [];
-      this.setDOMAINGROUPESAction().then(() => {
-        this.domainGroupes = [...this.getdomainGroupes];
-        this.domainGroupes.map((element) => {
-          if (element.department == this.departementId) {
-            this.domainGroupesBydepartements.push(element);
+      this.profilegroupsBydepartements = [];
+      this.profilegroups = [];
+      console.log("this.departementId", this.departementId);
+      this.setPROFILEDROUPSAction().then(() => {
+        this.profilegroups = [...this.getprofilegroups];
+        this.profilegroups.map((element) => {
+          if (element.department_id == this.departementId) {
+            this.profilegroupsBydepartements.push(element);
           }
+          // PROFILEDROUPSS;
         });
       });
     },
-
   },
 };
 </script>

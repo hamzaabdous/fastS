@@ -2,14 +2,14 @@
   <div style="padding: 5px; padding-top: 8%">
     <v-data-table
       :headers="headers"
-      :items="domainGroupes"
+      :items="profilegroups"
       sort-by="item.id"
       class="elevation-1"
       :search="search"
     >
       <template v-slot:top>
         <v-toolbar flat>
-          <v-toolbar-title>DOMAINGROUPE</v-toolbar-title>
+          <v-toolbar-title>PROFILEDROUP</v-toolbar-title>
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
@@ -135,7 +135,7 @@ export default {
       { text: "domain", value: "domain.name", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    domainGroupes: [],
+    profilegroups: [],
     editedIndex: -1,
     editedItem: {
       id: "",
@@ -155,7 +155,7 @@ export default {
     },
   }),
   mounted() {
-    document.title = "domainGroupes";
+    document.title = "profilegroups";
 
     this.initialize();
   },
@@ -163,7 +163,7 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    ...mapGetters(["getdomainGroupes"]),
+    ...mapGetters(["getprofilegroups"]),
   },
   watch: {
     dialog(val) {
@@ -190,20 +190,20 @@ export default {
   },
   methods: {
     initialize() {
-      this.setDOMAINGROUPESAction().then(() => {
-        this.domainGroupes = [...this.getdomainGroupes];
-        console.log(this.domainGroupes);
+      this.setPROFILEDROUPSAction().then(() => {
+        this.profilegroups = [...this.getprofilegroups];
+        console.log(this.profilegroups);
       });
     },
     ...mapActions([
-      "setDOMAINGROUPESAction",
-      "editDOMAINGROUPEAction",
-      "deleteDOMAINGROUPEAction",
-      "addDOMAINGROUPEAction",
+      "setPROFILEDROUPSAction",
+      "editPROFILEDROUPAction",
+      "deletePROFILEDROUPAction",
+      "addPROFILEDROUPAction",
     ]),
 
     editItem(item) {
-      this.editedIndex = this.domainGroupes.indexOf(item) + 1;
+      this.editedIndex = this.profilegroups.indexOf(item) + 1;
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
@@ -213,8 +213,8 @@ export default {
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      this.deleteDOMAINGROUPEAction(this.editedIndex).then(() => {
-        this.domainGroupes = this.getdomainGroupes;
+      this.deletePROFILEDROUPAction(this.editedIndex).then(() => {
+        this.profilegroups = this.getprofilegroups;
       });
       this.closeDelete();
     },
@@ -234,13 +234,13 @@ export default {
     },
     save() {
       if (this.editedIndex == -1) {
-        this.addDOMAINGROUPEAction(this.editedItem).then(() => {
-          this.domainGroupes = [...this.domainGroupes];
+        this.addPROFILEDROUPAction(this.editedItem).then(() => {
+          this.profilegroups = [...this.profilegroups];
         });
         this.closeAddSaveDialog();
       } else {
-        this.editDOMAINGROUPEAction(this.editedItem).then(() => {
-          this.domainGroupes = this.getdomainGroupes;
+        this.editPROFILEDROUPAction(this.editedItem).then(() => {
+          this.profilegroups = this.getprofilegroups;
         });
         this.closeAddSaveDialog();
       }

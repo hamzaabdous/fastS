@@ -1,4 +1,6 @@
 <template>
+  <div style="padding: 5px; padding-top: 2%">
+
   <v-data-table
     :headers="headers"
     :items="equipmentsFiltres"
@@ -36,12 +38,6 @@
                     <v-text-field
                       v-model="editedItem.name"
                       label="name"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field
-                      v-model="editedItem.description"
-                      label="description"
                     ></v-text-field>
                   </v-col>
                 </v-row>
@@ -90,15 +86,16 @@
       <v-btn
         color="#99A799"
         class="mb-2 btn white--text"
-        @click="editItem(item)"
+        @click="deleteItem(item)"
       >
-        <v-icon medium @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-icon medium > mdi-delete </v-icon>
       </v-btn>
     </template>
     <template v-slot:no-data>
       <v-btn color="primary" @click="initialize()"> Reset </v-btn>
     </template>
   </v-data-table>
+  </div>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -115,15 +112,14 @@ export default {
     ],
     equipments: [],
     equipmentsFiltres: [],
+    profile_groupe: [],
+    profile_groupesFiltre: [],
     idgrp: null,
     editedIndex: -1,
     editedItem: {
       id: null,
       name: "",
-      description: "",
-      profileGroup: {
-        id: null,
-      },
+      profile_group_id: "",
     },
     defaultItem: {
       id: null,
@@ -159,9 +155,9 @@ export default {
       this.idgrp = localStorage.getItem("id");
       this.setequipmentsAction().then(() => {
         this.equipments = [...this.getequipments];
-        this.equipments.map((item) => {
-          if (item.profileGroup.id == this.idgrp) {
-            this.equipmentsFiltres.push(item);
+        this.equipments.forEach((element) => {
+          if (element.profile_group_id == localStorage.getItem("id")) {
+            this.equipmentsFiltres.push(element);
           }
         });
       });
@@ -184,7 +180,7 @@ export default {
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      this.deleteEQUIPMENTAction(this.editedIndex).then(() => {
+      this.deleteEQUIPMENTAction(this.editedItem).then(() => {
         this.equipments = [...this.getequipments];
       });
       this.closeDelete();
@@ -197,7 +193,7 @@ export default {
     },
     save() {
       if (this.editedIndex == -1) {
-        this.editedItem.profileGroup.id = localStorage.getItem("id");
+        this.editedItem.profile_group_id = localStorage.getItem("id");
         this.addEQUIPMENTAction(this.editedItem).then(() => {
           this.equipments = [...this.getequipments];
         });

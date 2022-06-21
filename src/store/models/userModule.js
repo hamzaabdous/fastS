@@ -74,7 +74,7 @@ const usersModule = {
     },
     editUserAction({ commit }, user) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.put("users/update", {
+        CustomizedAxios.post("users/update", {
           id: user.id,
           username: user.username,
           lastName: user.lastName,

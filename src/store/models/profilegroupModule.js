@@ -2,32 +2,32 @@ import CustomizedAxios from "../../plugins/axios";
 
 const profilegroupModule = {
   state: {
-    domainGroupes: [],
+    profilegroups: [],
   },
   mutations: {
-    SET_DOMAINGROUPES(state, domainGroupes) {
-      state.domainGroupes = domainGroupes;
+    SET_PROFILEDROUPS(state, profilegroups) {
+      state.profilegroups = profilegroups;
     },
-    ADD_DOMAINGROUPE(state, domainGroupes) {
-      state.domainGroupes.push(domainGroupes);
+    ADD_PROFILEDROUP(state, profilegroups) {
+      state.profilegroups.push(profilegroups);
     },
-    DELETE_DOMAINGROUPE(state, id) {
-      state.domainGroupes = state.domainGroupes.filter((c) => c.id != id);
+    DELETE_PROFILEDROUP(state, id) {
+      state.profilegroups = state.profilegroups.filter((c) => c.id != id);
     },
-    EDIT_DOMAINGROUPE(state, domainGroupes) {
-      state.domainGroupes = state.domainGroupes.map((c) => {
-        if (c.id == domainGroupes.id) return domainGroupes;
+    EDIT_PROFILEDROUP(state, profilegroups) {
+      state.profilegroups = state.profilegroups.map((c) => {
+        if (c.id == profilegroups.id) return profilegroups;
         return c;
       });
     },
   },
   actions: {
-    setDOMAINGROUPESAction({ commit }) {
+    setPROFILEDROUPSAction({ commit }) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.get("ProfileGroup/")
+        CustomizedAxios.get("profilegroup/")
           .then((response) => {
-            commit("SET_DOMAINGROUPES", response.data);
-            console.log("set domainGroupes ");
+            commit("SET_PROFILEDROUPS", response.data.payload);
+            console.log("set profilegroups ");
             resolve(response);
           })
           .catch((error) => {
@@ -35,14 +35,14 @@ const profilegroupModule = {
           });
       });
     },
-    addDOMAINGROUPEAction({ commit }, domainGroupes) {
+    addPROFILEDROUPAction({ commit }, profilegroup) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("ProfileGroup/add", {
-          name: domainGroupes.name,
+        CustomizedAxios.post("profilegroup/create", {
+          name: profilegroup.name,
+          department_id: profilegroup.department_id,
         })
           .then((response) => {
-            console.log("res add ", response);
-            commit("ADD_DOMAINGROUPE", response.data);
+            commit("ADD_PROFILEDROUP", response.data.payload);
             resolve(response.data);
           })
           .catch((error) => {
@@ -51,11 +51,13 @@ const profilegroupModule = {
       });
     },
 
-    deleteDOMAINGROUPEAction({ commit }, id) {
+    deletePROFILEDROUPAction({ commit }, profilegroup) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("ProfileGroup/delete/" + id)
+        CustomizedAxios.post("profilegroup/delete", {
+          id: profilegroup.id,
+        })
           .then((response) => {
-            commit("DELETE_DOMAINGROUPE", id);
+            commit("DELETE_PROFILEDROUP", profilegroup.id);
             resolve(response.data);
           })
           .catch((error) => {
@@ -63,13 +65,15 @@ const profilegroupModule = {
           });
       });
     },
-    editDOMAINGROUPEAction({ commit }, domainGroupes) {
+    editPROFILEDROUPAction({ commit }, profilegroup) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.put("ProfileGroup/update", {
-          name: domainGroupes.name,
+        CustomizedAxios.post("profilegroup/update", {
+          id: profilegroup.id,
+          name: profilegroup.name,
+          department_id: profilegroup.department_id,
         })
           .then((response) => {
-            commit("EDIT_DOMAINGROUPE", response.data);
+            commit("EDIT_PROFILEDROUP", response.data.payload);
             resolve(response.data);
           })
           .catch((error) => {
@@ -79,8 +83,8 @@ const profilegroupModule = {
     },
   },
   getters: {
-    getdomainGroupes: (state) => {
-      return state.domainGroupes;
+    getprofilegroups: (state) => {
+      return state.profilegroups;
     },
   },
 };

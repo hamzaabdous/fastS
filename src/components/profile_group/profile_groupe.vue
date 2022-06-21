@@ -2,7 +2,7 @@
   <div style="padding: 5px; padding-top: 8%">
     <v-data-table
       :headers="headers"
-      :items="domainGroupes"
+      :items="profilegroups"
       :loading="loading"
       sort-by="item.id"
       class="elevation-1"
@@ -32,11 +32,20 @@
               <v-card-text>
                 <v-container>
                   <v-row>
-                    <v-col cols="12" sm="6" md="4">
+                    <v-col cols="12" sm="6" md="6">
                       <v-text-field
                         v-model="editedItem.name"
                         label="name"
                       ></v-text-field>
+                    </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-select
+                        :items="departments"
+                        item-text="name"
+                        item-value="id"
+                        v-model="editedItem.department_id"
+                        label="departments :"
+                      ></v-select>
                     </v-col>
                   </v-row>
                 </v-container>
@@ -194,22 +203,26 @@ export default {
     loading: "false",
     headers: [
       { text: "name", value: "name", sortable: true },
-      { text: "equipments", value: "equipments.length", sortable: true },
+      { text: "department", value: "department.name", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
-    domainGroupes: [],
+    profilegroups: [],
+    departments: [],
+    departmentid: "",
     editedIndex: -1,
     editedItem: {
       id: "",
       name: "",
+      department_id: "",
     },
     defaultItem: {
       id: "",
       name: "",
+      department_id: "",
     },
   }),
   mounted() {
-    document.title = "domainGroupes";
+    document.title = "profilegroups";
     this.loading = true;
     setTimeout(() => {
       this.initialize();
@@ -220,7 +233,7 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    ...mapGetters(["getdomainGroupes"]),
+    ...mapGetters(["getprofilegroups", "getdepartements"]),
   },
   watch: {
     dialog(val) {
@@ -229,6 +242,7 @@ export default {
         this.editedItem = {
           id: "",
           name: "",
+          department_id: "",
         };
       }
 
@@ -241,8 +255,11 @@ export default {
   created() {},
   methods: {
     initialize() {
-      this.setDOMAINGROUPESAction().then(() => {
-        this.domainGroupes = [...this.getdomainGroupes];
+      this.setPROFILEDROUPSAction().then(() => {
+        this.profilegroups = [...this.getprofilegroups];
+      });
+      this.setDepartementsAction().then(() => {
+        this.departments = [...this.getdepartements];
       });
     },
     pageView(item) {
@@ -254,14 +271,15 @@ export default {
       localStorage.setItem("id", item.id);
     },
     ...mapActions([
-      "setDOMAINGROUPESAction",
-      "editDOMAINGROUPEAction",
-      "deleteDOMAINGROUPEAction",
-      "addDOMAINGROUPEAction",
+      "setPROFILEDROUPSAction",
+      "editPROFILEDROUPAction",
+      "deletePROFILEDROUPAction",
+      "addPROFILEDROUPAction",
+      "setDepartementsAction",
     ]),
 
     editItem(item) {
-      this.editedIndex = this.domainGroupes.indexOf(item) + 1;
+      this.editedIndex = this.profilegroups.indexOf(item) + 1;
       this.editedItem = Object.assign({}, item);
       this.dialog = true;
     },
@@ -271,8 +289,10 @@ export default {
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      this.deleteDOMAINGROUPEAction(this.editedIndex).then(() => {
-        this.domainGroupes = this.getdomainGroupes;
+      
+      console.log("this.editedItem",this.editedItem);
+      this.deletePROFILEDROUPAction(this.editedItem).then(() => {
+        this.profilegroups = [...this.getprofilegroups];
       });
       this.closeDelete();
     },
@@ -294,14 +314,17 @@ export default {
       this.confirmAddSave = true;
     },
     save() {
+
+      console.log("this.editedItem",this.editedItem);
       if (this.editedIndex == -1) {
-        this.addDOMAINGROUPEAction(this.editedItem).then(() => {
-          this.domainGroupes = [...this.domainGroupes];
+        this.addPROFILEDROUPAction(this.editedItem).then(() => {
+          this.profilegroups = [...this.getprofilegroups];
+          console.log("this.profilegroups",this.profilegroups);
         });
         this.closeAddSaveDialog();
       } else {
-        this.editDOMAINGROUPEAction(this.editedItem).then(() => {
-          this.domainGroupes = this.getdomainGroupes;
+        this.editPROFILEDROUPAction(this.editedItem).then(() => {
+          this.profilegroups = [...this.getprofilegroups];
         });
         this.closeAddSaveDialog();
       }

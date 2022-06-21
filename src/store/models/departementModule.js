@@ -67,7 +67,7 @@ const departementModule = {
     },
     editDepartementAction({ commit }, departement) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.put("departments/update", {
+        CustomizedAxios.post("departments/update", {
           name: departement.name,
         })
           .then((response) => {

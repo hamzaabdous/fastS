@@ -32,9 +32,9 @@ const damageTypeModule = {
   actions: {
     setDAMAGETYPESAction({ commit }) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.get("DamageType/")
+        CustomizedAxios.get("damage_types/")
           .then((response) => {
-            commit("SET_DAMAGETYPS", response.data);
+            commit("SET_DAMAGETYPS", response.data.payload);
             console.log("set damageTypes ");
             resolve(response);
           })
@@ -45,7 +45,7 @@ const damageTypeModule = {
     },
     setDAMAGETYPESByProfile_group_idAction({ commit }, id) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("DamageType/getByProfile_group_id/" + id)
+        CustomizedAxios.post("damage_types/getByProfile_group_id/" + id)
           .then((response) => {
             commit("SET_DAMAGETYPSByProfile_group_id", response.data);
             resolve(response);
@@ -58,7 +58,7 @@ const damageTypeModule = {
     setByProfileGroupAndAndDepartmentAndEquipmentINAction({ commit }, id,id2,id3) {
       console.log(id, id2, id3);
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post(`DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentIN/${id}/${id2}/${id3}`)
+        CustomizedAxios.post(`damage_types/getAllByProfileGroupAndAndDepartmentAndEquipmentIN/${id}/${id2}/${id3}`)
           .then((response) => {
             commit("SET_ByProfileGroupAndAndDepartmentAndEquipmentIN", response.data);
             resolve(response);
@@ -68,23 +68,17 @@ const damageTypeModule = {
           });
       });
     },
-    addDAMAGETYPEAction({ commit }, damageTypes) {
+    addDAMAGETYPEAction({ commit }, damageType) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("DamageType/add", {
-          created_date: damageTypes.created_date,
-          updateDate: damageTypes.updateDate,
-          name: damageTypes.name,
-          department: {
-            id: damageTypes.department.id,
-          },
-          profileGroup: {
-            id: damageTypes.profileGroup.id,
-          },
-        })
+        CustomizedAxios.post("damage_types/create", {
+          name:damageType.name,
+          profile_group_id:damageType.profile_group_id,
+          department_id:damageType.department_id
+      })
           .then((response) => {
             console.log("res add ", response);
-            commit("ADD_DAMAGETYPE", response.data);
-            resolve(response.data);
+            commit("ADD_DAMAGETYPE", response.data.payload);
+            resolve(response.data.payload);
           })
           .catch((error) => {
             reject(error);
@@ -92,11 +86,13 @@ const damageTypeModule = {
       });
     },
 
-    deleteDAMAGETYPEAction({ commit }, id) {
+    deleteDAMAGETYPEAction({ commit }, damageType) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("DamageType/delete/" + id)
+        CustomizedAxios.post("damage_types/delete",{
+          id:damageType.id
+        })
           .then((response) => {
-            commit("DELETE_DAMAGETYPE", id);
+            commit("DELETE_DAMAGETYPE", damageType.id);
             resolve(response.data);
           })
           .catch((error) => {
@@ -104,19 +100,14 @@ const damageTypeModule = {
           });
       });
     },
-    editDAMAGETYPEAction({ commit }, damageTypes) {
+    editDAMAGETYPEAction({ commit }, damageType) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.put("DamageType/update", {
-          created_date: damageTypes.created_date,
-          updateDate: damageTypes.updateDate,
-          name: damageTypes.name,
-          department: {
-            id: damageTypes.department.id,
-          },
-          profileGroup: {
-            id: damageTypes.profileGroup.id,
-          },
-        })
+        CustomizedAxios.post("damage_types/update",  {
+          id:damageType.id,
+          name:damageType.name,
+          profile_group_id:damageType.profile_group_id,
+          department_id:damageType.department_id
+      })
           .then((response) => {
             commit("EDIT_DAMAGETYPE", response.data);
             resolve(response.data);
