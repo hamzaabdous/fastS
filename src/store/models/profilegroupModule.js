@@ -3,10 +3,14 @@ import CustomizedAxios from "../../plugins/axios";
 const profilegroupModule = {
   state: {
     profilegroups: [],
+    ProfileGroupUsers: [],
   },
   mutations: {
     SET_PROFILEDROUPS(state, profilegroups) {
       state.profilegroups = profilegroups;
+    },
+    SET_ProfileGroupUsers(state, ProfileGroupUsers) {
+      state.ProfileGroupUsers = ProfileGroupUsers;
     },
     ADD_PROFILEDROUP(state, profilegroups) {
       state.profilegroups.push(profilegroups);
@@ -28,6 +32,18 @@ const profilegroupModule = {
           .then((response) => {
             commit("SET_PROFILEDROUPS", response.data.payload);
             console.log("set profilegroups ");
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log("error :", error);
+          });
+      });
+    },
+    getProfileGroupUsersAction({ commit }, id) {
+      return new Promise((resolve, reject) => {
+        CustomizedAxios.get("profilegroup/getProfileGroupUsers/"+ id)
+          .then((response) => {
+            commit("SET_ProfileGroupUsers", response.data.payload);
             resolve(response);
           })
           .catch((error) => {
@@ -85,6 +101,9 @@ const profilegroupModule = {
   getters: {
     getprofilegroups: (state) => {
       return state.profilegroups;
+    },
+    getProfileGroupUsers: (state) => {
+      return state.ProfileGroupUsers;
     },
   },
 };

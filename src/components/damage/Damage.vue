@@ -238,6 +238,7 @@ export default {
     damagesend: [],
     modelIT: [],
     modelTEC: [],
+    DamageTypeByEquipmentID:[],
     equipments_id: "",
     dialogTEC: false,
     dialogIT: false,
@@ -261,7 +262,6 @@ export default {
       "getDamageTypeByEquipmentID",
       "getdamage",
       "getDamageTypeByEquipmentID",
-      "getAllByProfileGroupAndAndDepartmentAndEquipmentIN",
     ]),
   },
   watch: {
@@ -302,45 +302,23 @@ export default {
       });
     },
     changeEquipmentsFiltreSELECT() {
-      var IT = 1;
-      var TEC = 2;
-      CustomizedAxios.post(
-        `DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentIN/${this.profile_groupe_id}/${IT}/${this.equipments_id}`
-      )
-        .then((response) => {
-          this.modelDamageIT = response.data;
-        })
-        .catch((error) => {
-          console.log("error :", error);
-        });
-      CustomizedAxios.post(
-        `DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentIN/${this.profile_groupe_id}/${TEC}/${this.equipments_id}`
-      )
-        .then((response) => {
-          this.modelDamageTEC = response.data;
-        })
-        .catch((error) => {
-          console.log("error :", error);
-        });
-
-      CustomizedAxios.post(
-        `DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentNOT/${this.profile_groupe_id}/${IT}/${this.equipments_id}`
-      )
-        .then((response) => {
-          this.damageTypesIT = response.data;
-        })
-        .catch((error) => {
-          console.log("error :", error);
-        });
-      CustomizedAxios.post(
-        `DamageType/getAllByProfileGroupAndAndDepartmentAndEquipmentNOT/${this.profile_groupe_id}/${TEC}/${this.equipments_id}`
-      )
-        .then((response) => {
-          this.damageTypesTEC = response.data;
-        })
-        .catch((error) => {
-          console.log("error :", error);
-        });
+      var IT = 2;
+      var TEC = 1;
+      this.modelDamageTEC = [];
+      this.modelDamageIT = [];
+      this.FindDamageTypeByEquipmentID = [];
+      this.FindDamageTypeByEquipmentIDAction(this.equipments_id).then(() => {
+        this.DamageTypeByEquipmentID = [...this.getDamageTypeByEquipmentID];
+         this.DamageTypeByEquipmentID.map((item) => {
+        if (item.damage_type.department_id == TEC) {
+            this.modelDamageTEC.push(item);
+          }
+          if (item.damage_type.department_id == IT) {
+            this.modelDamageIT.push(item);
+          }
+      });
+      });
+      
     },
     initialize() {
       console.log("initialize");
@@ -362,7 +340,7 @@ export default {
       "setPROFILEDROUPSAction",
       "setequipmentsAction",
       "addDAMAGESAction",
-      "setByProfileGroupAndAndDepartmentAndEquipmentINAction",
+      "FindDamageTypeByEquipmentIDAction",
     ]),
     deleteDamage() {
       this.damageTypesIT = this.damageTypesIT.filter((e) => {

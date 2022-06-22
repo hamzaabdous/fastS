@@ -3,7 +3,7 @@
 
   <v-data-table
     :headers="headers"
-    :items="usersFiltreByGRP"
+    :items="users"
     :loading="loading"
     sort-by="item.id"
     class="elevation-1"
@@ -217,7 +217,7 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    ...mapGetters(["getUsers"]),
+    ...mapGetters(["getUsers","getProfileGroupUsers"]),
   },
   watch: {
     dialog(val) {
@@ -232,16 +232,15 @@ export default {
   },
   methods: {
     initialize() {
-      this.setUsersAction().then(() => {
-        this.users = [...this.getUsers];
+      this.getProfileGroupUsersAction(localStorage.getItem("id")).then(() => {
+        this.users = [...this.getProfileGroupUsers];
         console.log("this.users",this.users);
 
-        this.users.forEach((element) => {
+       /*  this.users.forEach((element) => {
             if (element.profile_group_id == localStorage.getItem("id")) {
               this.usersFiltreByGRP.push(element);
             }
-          });
-        console.log(this.usersFiltreByGRP);
+          }); */
       });
     },
     ...mapActions([
@@ -249,6 +248,7 @@ export default {
       "editUserAction",
       "deleteUserAction",
       "addUserAction",
+      "getProfileGroupUsersAction",
     ]),
 
     editItem(item) {

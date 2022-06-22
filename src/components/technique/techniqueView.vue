@@ -8,7 +8,7 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="4" md="4">
+      <v-col cols="3" md="3">
         <template>
           <v-card class="mx-auto" max-width="200" outlined>
             <v-list-item three-line>
@@ -30,7 +30,29 @@
           </v-card>
         </template>
       </v-col>
-      <v-col cols="4" md="4">
+      <v-col cols="3" md="3">
+        <template>
+          <v-card class="mx-auto" max-width="200" outlined>
+            <v-list-item three-line>
+              <v-list-item-content>
+                <div class="text-overline mb-4 deep-orange--text">
+                  CONFIRMED DAMAGE TICKETS
+                </div>
+                <v-list-item-title class="text-h5 mb-1 deep-orange--text">
+                  5
+                </v-list-item-title>
+              </v-list-item-content>
+
+              <v-list-item-avatar tile size="60" color="white">
+                <v-icon color="deep-orange" large>
+                  mdi-bell-check
+                </v-icon></v-list-item-avatar
+              >
+            </v-list-item>
+          </v-card>
+        </template>
+      </v-col>
+      <v-col cols="3" md="3">
         <template>
           <v-card class="mx-auto" max-width="200" outlined>
             <v-list-item three-line>
@@ -52,7 +74,8 @@
           </v-card>
         </template>
       </v-col>
-      <v-col cols="4" md="4">
+
+      <v-col cols="3" md="3">
         <template>
           <v-card class="mx-auto" max-width="200" outlined>
             <v-list-item three-line>
