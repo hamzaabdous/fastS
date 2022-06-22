@@ -87,9 +87,12 @@ export default {
     Login() {
       console.log("username", this.username);
       console.log("password", this.password);
-
+      
       this.userActive=this.getUserActive;
+      /* localStorage.removeItem("userActive");
+      localStorage.setItem('userActive', JSON.stringify(this.userActive)); */
       console.log("this.userActive",this.userActive);
+
       CustomizedAxios
         .post("users/login", {
           username: this.username,

@@ -122,7 +122,12 @@
                 <v-toolbar-title>Settings</v-toolbar-title>
                 <v-spacer></v-spacer>
                 <v-toolbar-items>
-                  <v-btn dark text @click="save(editedItem)"> confirmed </v-btn>
+                  <v-btn  dark text @click="save(editedItem)">
+                    confirme
+                  </v-btn>
+                  <v-btn  dark text @click="save(editedItem)">
+                    close
+                  </v-btn>
                 </v-toolbar-items>
               </v-toolbar>
               <v-card-title class="text-h5 grey--text text--darken-3">
@@ -156,7 +161,6 @@
                     <h3>updated_at :</h3>
                     <h3>cc</h3>
                   </v-col>
-
                 </v-row>
               </v-container>
               <v-card-title class="text-h5 grey--text text--darken-3">

@@ -107,7 +107,6 @@ export default {
     search: "",
     headers: [
       { text: "name", value: "name", sortable: true },
-      { text: "description", value: "description", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
     equipments: [],

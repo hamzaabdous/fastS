@@ -136,13 +136,7 @@
         </v-toolbar>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn
-          color="#99A799"
-          class="mr-2 btn white--text"
-          @click="editItem(item)"
-        >
-          <v-icon medium class="mr-2"> mdi-pencil </v-icon>
-        </v-btn>
+        
         <v-btn
           color="#99A799"
           class="m-2 btn white--text"

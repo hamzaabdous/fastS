@@ -204,17 +204,15 @@
         </v-container>
         <v-container>
           <v-row>
-            <v-col cols="4"> </v-col>
-            <v-col cols="4">
+            <v-col cols="12">
               <v-btn
                 color="#1D4F91"
-                class="mb-2 btn white--text"
+                class="mb-2 btn centre white--text"
                 @click="validerDamages"
               >
                 Valider
               </v-btn>
             </v-col>
-            <v-col cols="4"></v-col>
           </v-row>
         </v-container>
       </v-container>

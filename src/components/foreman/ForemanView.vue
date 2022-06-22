@@ -85,9 +85,7 @@
                   <v-list-item-group
                     name="it"
                     v-model="modelIT"
-                    multiple
-                    color="#f54"
-                  >
+                    multiple>
                     <div>
                       <v-list-item
                         v-for="(item, i) in modelDamageIT"
@@ -100,7 +98,7 @@
                         @click="valider(item)"
                       >
                         <v-list-item-icon>
-                          <v-icon medium> mdi-progress-wrench </v-icon>
+                          <v-icon color="red" medium> mdi-progress-wrench </v-icon>
                         </v-list-item-icon>
 
                         <v-list-item-content>
@@ -137,7 +135,6 @@
                     name="TEC"
                     v-model="modelTEC"
                     multiple
-                    color="#f54"
                   >
                     <div>
                       <v-list-item
@@ -151,7 +148,7 @@
                         @click="valider(item)"
                       >
                         <v-list-item-icon>
-                          <v-icon medium> mdi-progress-wrench </v-icon>
+                          <v-icon color="red" medium> mdi-progress-wrench </v-icon>
                         </v-list-item-icon>
 
                         <v-list-item-content>

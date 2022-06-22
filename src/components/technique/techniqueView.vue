@@ -216,7 +216,6 @@ export default {
       this.setequipmentsAction().then(() => {
         this.equipments = [...this.getequipments];
         this.equipments.map((item) => {
-          debugger;
           if (item.profile_group.name == this.idgrp) {
               this.equipmentsFiltre.push(this.EquipmentsByCounters);
           }
