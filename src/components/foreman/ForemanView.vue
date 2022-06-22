@@ -169,20 +169,7 @@
             </v-col>
           </v-row>
         </v-container>
-        <v-container>
-          <v-row>
-            <v-col cols="4"> </v-col>
-            <v-col cols="4">
-              <v-btn
-                color="#1D4F91"
-                class="mb-2 btn white--text"
-                @click="damageFunction"
-              >
-                Valider
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-container>
+       
       </v-container>
     </div>
   </div>
