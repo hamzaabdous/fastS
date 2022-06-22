@@ -4,8 +4,8 @@ const damageTypeModule = {
   state: {
     damages: [],
     DamageTypeByEquipmentID: [],
-    getEquipmentDamagesMergedWithDamageTypes:[],
-    foremanIntervention:[],
+    getEquipmentDamagesMergedWithDamageTypes: [],
+    foremanIntervention: [],
   },
   mutations: {
     DAMAGE(state, damages) {
@@ -50,22 +50,47 @@ const damageTypeModule = {
           });
       });
     },
-    addDAMAGEAction({ commit }, damage) {
+    confirmDamageAction({ commit }, damage) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("damages/add", {
-          created_date: damage.created_date,
-          updateDate: damage.updateDate,
-          name: damage.name,
-          department: {
-            id: damage.department.id,
-          },
-          profileGroup: {
-            id: damage.profileGroup.id,
-          },
+        CustomizedAxios.post("damages/confirmDamage", {
+          id: damage.id,
+          confirmedBy_id: damage.confirmedBy_id,
         })
           .then((response) => {
             console.log("res add ", response);
-            commit("ADD_DAMAGE", response.data);
+            commit("EDIT_DAMAGE", response.data.payload);
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
+    closeDamageAction({ commit }, damage) {
+      return new Promise((resolve, reject) => {
+        CustomizedAxios.post("damages/closeDamage", {
+          id: damage.id,
+          closedBy_id: damage.closedBy_id,
+        })
+          .then((response) => {
+            console.log("res add ", response);
+            commit("EDIT_DAMAGE", response.data.payload);
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
+    revertDamageAction({ commit }, damage) {
+      return new Promise((resolve, reject) => {
+        CustomizedAxios.post("damages/revertDamage", {
+          id: damage.id,
+          revertedBy_id: damage.revertedBy_id,
+        })
+          .then((response) => {
+            console.log("res add ", response);
+            commit("EDIT_DAMAGE", response.data.payload);
             resolve(response.data);
           })
           .catch((error) => {
@@ -133,9 +158,14 @@ const damageTypeModule = {
     },
     getEquipmentDamagesMergedWithDamageTypesAction({ commit }, id) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.get("damages/getEquipmentDamagesMergedWithDamageTypes/" + id)
+        CustomizedAxios.get(
+          "damages/getEquipmentDamagesMergedWithDamageTypes/" + id
+        )
           .then((response) => {
-            commit("getEquipmentDamagesMergedWithDamageTypes", response.data.payload);
+            commit(
+              "getEquipmentDamagesMergedWithDamageTypes",
+              response.data.payload
+            );
             resolve(response.data.payload);
           })
           .catch((error) => {
@@ -145,13 +175,13 @@ const damageTypeModule = {
     },
     sendDamagePhotosStoragePathAction({ commit }, formData) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("damages/foremanIntervention",formData)
+        CustomizedAxios.post("damages/foremanIntervention", formData)
           .then((response) => {
             commit("sendDamagePhotosStoragePath", response.data.payload);
             resolve(response.data.payload);
           })
           .catch((error) => {
-            console.log("error",error);
+            console.log("error", error);
             reject(error);
           });
       });

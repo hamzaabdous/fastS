@@ -33,7 +33,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import axios from "axios";
-
+import CustomizedAxios from "../plugins/axios";
 export default {
   components: {},
   data() {
@@ -41,32 +41,59 @@ export default {
       logged: false,
       username: null,
       password: null,
+      userActive:{
+        user: {
+        id: null,
+        username: "",
+        lastName: "",
+        firstName: "",
+        email: "",
+        phoneNumber: "",
+        fonction_id: null,
+        created_at: "",
+        updated_at: "",
+        fonction: {
+            id: null,
+            name: "",
+            department_id: null,
+            created_at: "",
+            updated_at: "",
+            department: {
+                id: null,
+                name: "",
+                created_at: "",
+                updated_at: ""
+            }
+        }
+    },
+    token: ""
+      },
     };
   },
   mounted() {
     document.title = "Dashboard";
 
-    //  this.initialize();
+     this.initialize();
   },
   computed: {
-    ...mapGetters(["getUsers"]),
+    ...mapGetters(["getUsers","getUserActive"]),
   },
   watch: {},
   methods: {
     initialize() {
       console.log("xccc");
-      console.log(this.logged);
+     
     },
     Login() {
       console.log("username", this.username);
       console.log("password", this.password);
 
-      axios.defaults.headers.common["Accept"] = "application/json";
-
-      axios
-        .post("authenticate", {
-          password: this.password,
+      this.userActive=this.getUserActive;
+      console.log("this.userActive",this.userActive);
+      CustomizedAxios
+        .post("users/login", {
           username: this.username,
+          password: this.password,
         })
         .then((response) => {
           console.log("res login ", response.data);

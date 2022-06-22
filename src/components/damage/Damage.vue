@@ -101,7 +101,7 @@
                             name="modelDamageIT"
                             v-text="item.name"
                           ></v-list-item-title>
-                          <h4>on progress</h4>
+                          <h4>{{item.damage[0].status}}</h4>
                         </v-list-item-content>
                       </v-list-item>
                     </div>
@@ -173,7 +173,7 @@
                             name="modelDamageTEC"
                             v-text="item.name"
                           ></v-list-item-title>
-                          <h4>on progress</h4>
+                          <h4>{{item.damage[0].status}}</h4>
                         </v-list-item-content>
                       </v-list-item>
                     </div>
@@ -238,7 +238,8 @@ export default {
     damagesend: [],
     modelIT: [],
     modelTEC: [],
-    DamageTypeByEquipmentID:[],
+    DamageTypeByEquipmentID: [],
+    DamagesMergedWithDamageTypes: [],
     equipments_id: "",
     dialogTEC: false,
     dialogIT: false,
@@ -261,7 +262,7 @@ export default {
       "getequipments",
       "getDamageTypeByEquipmentID",
       "getdamage",
-      "getDamageTypeByEquipmentID",
+      "getEquipmentDamagesMergedWithDamageTypes",
     ]),
   },
   watch: {
@@ -277,7 +278,6 @@ export default {
   },
   methods: {
     changeProfile_groupeSELECT() {
-
       this.modelDamageIT.length = 0;
       this.modelDamageTEC.length = 0;
       this.equipmentsFiltre.length = 0;
@@ -286,7 +286,7 @@ export default {
       this.Data.length = 0;
       //  this.damageFunction();
       this.disabledEquipmentsFiltre = false;
-     /*  this.profile_groupe.map((item) => {
+      /*  this.profile_groupe.map((item) => {
 
         if (item.id== this.profile_groupe_id) {
           item.damageTypes.map((item) => {
@@ -294,7 +294,7 @@ export default {
           });
         }
       }); */
-      console.log("equipments",this.equipments);
+      console.log("equipments", this.equipments);
       this.equipments.map((item) => {
         if (item.profile_group_id == this.profile_groupe_id) {
           this.equipmentsFiltre.push(item);
@@ -306,19 +306,53 @@ export default {
       var TEC = 1;
       this.modelDamageTEC = [];
       this.modelDamageIT = [];
+      this.damageTypesTEC = [];
+      this.damageTypesIT = [];
       this.FindDamageTypeByEquipmentID = [];
-      this.FindDamageTypeByEquipmentIDAction(this.equipments_id).then(() => {
-        this.DamageTypeByEquipmentID = [...this.getDamageTypeByEquipmentID];
-         this.DamageTypeByEquipmentID.map((item) => {
-        if (item.damage_type.department_id == TEC) {
-            this.modelDamageTEC.push(item);
+      this.getEquipmentDamagesMergedWithDamageTypesAction(
+        this.equipments_id
+      ).then(() => {
+        this.DamagesMergedWithDamageTypes = [
+          ...this.getEquipmentDamagesMergedWithDamageTypes,
+        ];
+        console.log(
+          "DamagesMergedWithDamageTypes",
+          this.DamagesMergedWithDamageTypes
+        );
+        this.DamagesMergedWithDamageTypes.map((item) => {
+
+        //  debugger;
+          if (item.department_id == TEC && item.damage.length != 0 ) {
+            if (item.damage.status == "closed") {
+              this.damageTypesTEC.push(item);
+            } 
+            else {
+              this.modelDamageTEC.push(item);
+            }
+          } else if (
+            item.department_id == TEC &&
+            item.damage.length == 0
+          ) {
+            this.damageTypesTEC.push(item);
           }
-          if (item.damage_type.department_id == IT) {
-            this.modelDamageIT.push(item);
+
+          if (
+            item.department_id == IT &&
+            item.damage.length != 0 
+          ) {
+            if (item.damage.status == "closed") {
+              this.damageTypesIT.push(item);
+            } else  {
+              this.modelDamageIT.push(item);
+            }
+          } else if (
+            item.department_id == IT &&
+            item.damage.length == 0
+          ) {
+            this.damageTypesIT.push(item);
           }
+        });
       });
-      });
-      
     },
     initialize() {
       console.log("initialize");
@@ -328,7 +362,7 @@ export default {
       });
       this.setequipmentsAction().then(() => {
         this.equipments = [...this.getequipments];
-        console.log("set equipments",this.equipments);
+        console.log("set equipments", this.equipments);
       });
     },
     ...mapActions([
@@ -341,24 +375,8 @@ export default {
       "setequipmentsAction",
       "addDAMAGESAction",
       "FindDamageTypeByEquipmentIDAction",
+      "getEquipmentDamagesMergedWithDamageTypesAction",
     ]),
-    deleteDamage() {
-      this.damageTypesIT = this.damageTypesIT.filter((e) => {
-        return (
-          this.modelDamageIT.filter((e1) => {
-            return e.name == e1.name;
-          }).length == 0
-        );
-      });
-      this.damageTypesTEC.map((item) => {
-        this.modelDamageTEC.map((item2) => {
-          if (item.name == item2.name) {
-            let index = this.damageTypesTEC.indexOf(item);
-            this.damageTypesTEC.splice(index, 1);
-          }
-        });
-      });
-    },
     validerTEC(item) {
       var id = item.id;
       var userid = 1;

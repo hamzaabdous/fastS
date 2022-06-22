@@ -2,10 +2,8 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Users from "../components/user/Users.vue";
 import Departments from "../components/department/Departments.vue";
-import DomainGroupe from "../components/domain_groupe/DomainGroupe.vue";
 import DamageType from "../components/damage_Type/DamageType.vue";
 import Damage from "../components/damage/Damage.vue";
-import domains from "../components/domain/Domains.vue";
 import profile_groupe from "../components/profile_group/profile_groupe.vue";
 import ViewEquipement from "../components/ViewEquipement.vue";
 import ForemanView from "../components/foreman/ForemanView.vue";
@@ -78,14 +76,6 @@ const routes = [
 
   },
   {
-    path: "/domainGroupe",
-    name: "Domain Groupe",
-    component: DomainGroupe,
-    params: true,
-
-  
-  },
-  {
     path: "/damageType",
     name: "Damage Type",
     component: DamageType,
@@ -100,12 +90,6 @@ const routes = [
     params: true,
 
    
-  },
-  {
-    path: "/Domain",
-    name: "domain",
-    component: domains,
-    params: true,
   },
   {
     path: "/profile_groupe",

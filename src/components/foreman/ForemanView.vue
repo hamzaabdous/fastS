@@ -366,6 +366,7 @@ export default {
         this.foremanIntervention = [...this.sendDamagePhotosStoragePath];
       });
       console.log("itemTEC", this.foremanIntervention);
+      this.dialog=false;
 
       /* CustomizedAxios.post("damages/foremanIntervention", formData)
         .then((res) => {

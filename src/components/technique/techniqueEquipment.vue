@@ -126,23 +126,37 @@
                 </v-toolbar-items>
               </v-toolbar>
               <v-card-title class="text-h5 grey--text text--darken-3">
-                Damage :
+                Damage Details:
               </v-card-title>
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="3" md="3">
-                    <h3>description</h3>
+                    <h3>Description :</h3>
                     <h3>cc</h3>
                   </v-col>
                   <v-col cols="12" sm="3" md="3">
-                    <h3>test</h3>
+                    <h3>Status :</h3>
+                    <h3>cc</h3>
                   </v-col>
                   <v-col cols="12" sm="3" md="3">
-                    <h3>test</h3>
+                    <h3>declaredAt :</h3>
+                    <h3>cc</h3>
                   </v-col>
                   <v-col cols="12" sm="3" md="3">
-                    <h3>test</h3>
+                    <h3>closedAt :</h3>
+                    <h3>cc</h3>
                   </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="12" sm="3" md="3">
+                    <h3>revertedTimes :</h3>
+                    <h3>cc</h3>
+                  </v-col>
+                  <v-col cols="12" sm="3" md="3">
+                    <h3>updated_at :</h3>
+                    <h3>cc</h3>
+                  </v-col>
+
                 </v-row>
               </v-container>
               <v-card-title class="text-h5 grey--text text--darken-3">
@@ -242,7 +256,7 @@ export default {
       this.idEquipment = localStorage.getItem("idEquipment");
       this.FindDamageTypeByEquipmentIDAction(this.idEquipment).then(() => {
         this.damageByEquipments = [...this.getDamageTypeByEquipmentID];
-        console.log("damageByEquipments",this.damageByEquipments);
+        console.log("damageByEquipments", this.damageByEquipments);
         this.damageByEquipments.map((item) => {
           if (item.damage_type.profile_group.name == this.equipment) {
             this.equipmentsFiltre.push(item);
@@ -255,7 +269,7 @@ export default {
     ...mapActions(["FindDamageTypeByEquipmentIDAction"]),
     pageView(item) {
       this.dialog = true;
-      this.equipmentSelect[0]=item;
+      this.equipmentSelect[0] = item;
       console.log("this.equipmentSelect", this.equipmentSelect[0]);
     },
   },

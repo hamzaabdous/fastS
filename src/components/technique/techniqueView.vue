@@ -17,7 +17,7 @@
                   Pending Damage Tickets
                 </div>
                 <v-list-item-title class="text-h5 mb-1 red--text">
-                  5
+                  {{ this.ProfileGroupsByCounters.damagedCount }}
                 </v-list-item-title>
               </v-list-item-content>
 
@@ -39,7 +39,7 @@
                   CONFIRMED DAMAGE TICKETS
                 </div>
                 <v-list-item-title class="text-h5 mb-1 deep-orange--text">
-                  5
+                  {{ this.ProfileGroupsByCounters.confirmedCount }}
                 </v-list-item-title>
               </v-list-item-content>
 
@@ -61,7 +61,7 @@
                   Closed Damage Tickets
                 </div>
                 <v-list-item-title class="text-h5 mb-1 blue--text">
-                  5
+                  {{ this.ProfileGroupsByCounters.closedCount }}
                 </v-list-item-title>
               </v-list-item-content>
 
@@ -84,7 +84,7 @@
                   Total Functional Equipement
                 </div>
                 <v-list-item-title class="text-h5 mb-1 green--text">
-                  5
+                  {{ this.ProfileGroupsByCounters.closedCount  }}
                 </v-list-item-title>
               </v-list-item-content>
 
@@ -139,16 +139,29 @@ export default {
     loading: false,
     search: "",
     headers: [
-      { text: "name", value: "name", sortable: true },
-      { text: "damaged", value: "damaged", sortable: true },
-      { text: "confirmed", value: "confirmed", sortable: true },
-      { text: "closed", value: "closed", sortable: true },
+      { text: "name", value: "nameEquipment", sortable: true },
+      { text: "damaged", value: "damagedCount", sortable: true },
+      { text: "confirmed", value: "confirmedCount", sortable: true },
+      { text: "closed", value: "closedCount", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
     equipments: [],
     equipmentsFiltre: [],
     idgrp: null,
-
+    ProfileGroupsByCounters: {
+      id: null,
+      equipmentsCount: null,
+      damagedCount: null,
+      confirmedCount: null,
+      closedCount: null,
+    },
+    EquipmentsByCounters: {
+      id: null,
+      nameEquipment: null,
+      damagedCount: null,
+      confirmedCount: null,
+      closedCount: null,
+    },
     editedIndex: -1,
     editedItem: {
       id: null,
@@ -180,7 +193,11 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    ...mapGetters(["getequipments"]),
+    ...mapGetters([
+      "getequipments",
+      "getProfileGroupsByCounters",
+      "getEquipmentsByCounters",
+    ]),
   },
   watch: {
     dialog(val) {
@@ -199,26 +216,42 @@ export default {
       this.setequipmentsAction().then(() => {
         this.equipments = [...this.getequipments];
         this.equipments.map((item) => {
+          debugger;
           if (item.profile_group.name == this.idgrp) {
-            this.equipmentsFiltre.push(item);
+              this.equipmentsFiltre.push(this.EquipmentsByCounters);
           }
         });
       });
-      console.log("initialize", this.idgrp);
+      this.getProfileGroupsByCountersAction(
+        localStorage.getItem("idDomainGroupesid")
+      ).then(() => {
+        this.ProfileGroupsByCounters.id = this.getProfileGroupsByCounters.id;
+        this.ProfileGroupsByCounters.equipmentsCount =
+          this.getProfileGroupsByCounters.equipmentsCount;
+        this.ProfileGroupsByCounters.damagedCount =
+          this.getProfileGroupsByCounters.damagedCount;
+        this.ProfileGroupsByCounters.confirmedCount =
+          this.getProfileGroupsByCounters.confirmedCount;
+        this.ProfileGroupsByCounters.closedCount =
+          this.getProfileGroupsByCounters.closedCount;
+      });
+      console.log("this.equipmentsFiltre", this.equipmentsFiltre);
     },
     ...mapActions([
       "setequipmentsAction",
+      "getProfileGroupsByCountersAction",
+      "getEquipmentsByCountersAction",
     ]),
     pageView(item) {
       this.$router.push({
         name: "techniqueEquipment",
         params: { name: item.name },
       });
+
       localStorage.removeItem("equipment");
       localStorage.setItem("equipment", item.name);
       localStorage.removeItem("idEquipment");
       localStorage.setItem("idEquipment", item.id);
-
     },
   },
 };

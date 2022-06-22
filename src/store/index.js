@@ -5,7 +5,6 @@ import departementModule from "./models/departementModule";
 import functionModule from "./models/functionModule";
 import profilegroupModule from "./models/profilegroupModule";
 import damageTypeModule from "./models/damageTypeModule";
-import domainModule from "./models/domainModule";
 import damageModule from "./models/damageModule";
 import equipmentModule from "./models/equipmentModule";
 //import VuexPersist from "vuex-persist";
@@ -31,7 +30,6 @@ export default function () {
       functionModule,
       profilegroupModule,
       damageTypeModule,
-      domainModule,
       damageModule,
       equipmentModule,
     },

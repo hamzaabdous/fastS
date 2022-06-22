@@ -3,6 +3,7 @@ import CustomizedAxios from "../../plugins/axios";
 const equipmentModule = {
   state: {
     equipments: [],
+    EquipmentsByCounters:[],
   },
   mutations: {
     SET_EQUIPMENTS(state, equipments) {
@@ -21,6 +22,9 @@ const equipmentModule = {
         return c;
       });
     },
+    SET_EquipmentsByCounters(state, EquipmentsByCounters) {
+      state.EquipmentsByCounters = EquipmentsByCounters;
+    },
   },
   actions: {
     setequipmentsAction({ commit }) {
@@ -29,6 +33,18 @@ const equipmentModule = {
           .then((response) => {
             commit("SET_EQUIPMENTS", response.data.payload);
             console.log("set EQUIPMENT 1");
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log("error :", error);
+          });
+      });
+    },
+    getEquipmentsByCountersAction({ commit }, id) {
+      return new Promise((resolve, reject) => {
+        CustomizedAxios.get("equipments/getEquipmentsByCounters/" + id)
+          .then((response) => {
+            commit("SET_EquipmentsByCounters", response.data.payload);
             resolve(response);
           })
           .catch((error) => {
@@ -88,6 +104,9 @@ const equipmentModule = {
   getters: {
     getequipments: (state) => {
       return state.equipments;
+    },
+    getEquipmentsByCounters: (state) => {
+      return state.EquipmentsByCounters;
     },
   },
 };

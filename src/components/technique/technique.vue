@@ -66,6 +66,13 @@ export default {
     merge: [],
     departementId: "",
     editedIndex: -1,
+    ProfileGroupsByCounters: {
+      id: null,
+      equipmentsCount: null,
+      damagedCount: null,
+      confirmedCount: null,
+      closedCount: null,
+    },
     editedItem: {
       id: "",
       name: "",
@@ -96,7 +103,7 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    ...mapGetters(["getprofilegroups", "getdepartements"]),
+    ...mapGetters(["getprofilegroups", "getdepartements",]),
   },
   watch: {
     dialog(val) {
@@ -139,7 +146,7 @@ export default {
             });
         });
           console.log(this.profilegroups); */
-      }); 
+      });
       this.setDepartementsAction().then(() => {
         this.departements = [...this.getdepartements];
       });
@@ -150,7 +157,10 @@ export default {
         params: { name: item.name },
       });
       localStorage.removeItem("idDomainGroupes");
+      localStorage.removeItem("idDomainGroupesid");
+
       localStorage.setItem("idDomainGroupes", item.name);
+      localStorage.setItem("idDomainGroupesid", item.id);
     },
     ...mapActions(["setPROFILEDROUPSAction", "setDepartementsAction"]),
     changeDepartment() {
