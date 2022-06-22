@@ -352,14 +352,17 @@ export default {
       var formData = new FormData();
       formData.append("id", parseFloat(this.photo.id));
       formData.append("description", this.photo.description);
-      formData.append("photos", this.photo.photos);
+
+      this.photo.photos.map((item) => {
+        formData.append("photos[]", item);        
+        });
       formData.append(
         "foreman_id",
         parseFloat(parseFloat(this.photo.foreman_id))
       );
 
-      this.sendDamagePhotosStoragePathAction(formData).then(() => {
          console.log("formData",formData);
+      this.sendDamagePhotosStoragePathAction(formData).then(() => {
         this.foremanIntervention = [...this.sendDamagePhotosStoragePath];
       });
       console.log("itemTEC", this.foremanIntervention);
