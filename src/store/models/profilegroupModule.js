@@ -4,13 +4,7 @@ const profilegroupModule = {
   state: {
     profilegroups: [],
     ProfileGroupUsers: [],
-    ProfileGroupsByCounters: {
-      id: null,
-      equipmentsCount: null,
-      damagedCount: null,
-      confirmedCount: null,
-      closedCount: null,
-    },
+    ProfileGroupsByCounters: []
   },
   mutations: {
     SET_PROFILEDROUPS(state, profilegroups) {
