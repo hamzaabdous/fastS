@@ -326,6 +326,7 @@ export default {
 
     valider(item) {
       console.log("item",item);
+      this.photo.description=item.description;
       this.photo.id = item.id;
       this.photo.foreman_id = 1;
       this.dialog = true;
