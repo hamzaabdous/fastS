@@ -106,10 +106,9 @@
                     <h3>Description :</h3>
                   </v-col>
                   <v-col cols="9" sm="9" md="9">
-                    <h4 v-if="showdetails">
-                      {{ equipmentSelect.description }}
+                    <h4 >
+                      {{ damageSelect.description }}
                     </h4>
-                    <h4 v-else>cccc</h4>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -117,10 +116,9 @@
                     <h3>Status :</h3>
                   </v-col>
                   <v-col cols="6" sm="6" md="6">
-                    <h4 v-if="showdetails">
-                      {{ equipmentSelect.status }}
+                    <h4 >
+                      {{ damageSelect.status }}
                     </h4>
-                    <h4 v-else>cccc</h4>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -128,10 +126,9 @@
                     <h3>declaredAt :</h3>
                   </v-col>
                   <v-col cols="6" sm="6" md="6">
-                    <h4 v-if="showdetails">
-                      {{ equipmentSelect.declaredAt }}
+                    <h4 >
+                      {{ damageSelect.declaredAt }}
                     </h4>
-                    <h4 v-else>cccc</h4>
                   </v-col>
                 </v-row>
 
@@ -140,10 +137,9 @@
                     <h3>closedAt :</h3>
                   </v-col>
                   <v-col cols="6" sm="6" md="6">
-                    <h4 v-if="showdetails">
-                      {{ equipmentSelect.closedAt }}
+                    <h4 >
+                      {{ damageSelect.closedAt }}
                     </h4>
-                    <h4 v-else>cccc</h4>
                   </v-col>
                 </v-row>
 
@@ -152,10 +148,9 @@
                     <h3>revertedTimes :</h3>
                   </v-col>
                   <v-col cols="6" sm="6" md="6">
-                    <h4 v-if="showdetails">
-                      {{ equipmentSelect.revertedTimes }}
+                    <h4 >
+                      {{ damageSelect.revertedTimes }}
                     </h4>
-                    <h4 v-else>cccc</h4>
                   </v-col>
                 </v-row>
 
@@ -164,10 +159,9 @@
                     <h3>updated at :</h3>
                   </v-col>
                   <v-col cols="6" sm="6" md="6">
-                    <h4 v-if="showdetails">
-                      {{ equipmentSelect.updated_at }}
+                    <h4 >
+                      {{ damageSelect.updated_at }}
                     </h4>
-                    <h4 v-else>cccc</h4>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -175,18 +169,26 @@
                     <h3>created at :</h3>
                   </v-col>
                   <v-col cols="6" sm="6" md="6">
-                    <h4 v-if="showdetails">
-                      {{ equipmentSelect.created_at }}
+                    <h4 >
+                      {{ damageSelect.created_at }}
                     </h4>
-                    <h4 v-else>cccc</h4>
                   </v-col>
                 </v-row>
               </v-container>
               <v-card-title class="text-h5 blue--text text--darken-3">
                 photos :
               </v-card-title>
-              <v-container>
-                <h4></h4>
+              <v-container v-if="damageSelect.photos!=null" >
+                <template >
+                <v-row :v-for="(item, i) in damageSelect.photos">
+                  <v-img
+                    :key="i"
+                    max-height="150"
+                    max-width="250"
+                    :src="`http://localhost:8000/storage/cdn/damagePhotos/${item.filename}`"
+                  ></v-img>
+                </v-row>
+              </template>
               </v-container>
               <v-card-actions>
                 <v-spacer></v-spacer>
@@ -250,10 +252,10 @@ export default {
     equipmentsFiltre: [],
     showdetails: false,
     ImagesPath: "http://localhost:8000/storage/cdn/damagePhotos/",
-    equipmentSelect: {
+    damageSelect: {
       id: null,
       status: "",
-      description: "ccc",
+      description: "",
       declaredBy_id: null,
       declaredAt: "",
       confirmedBy_id: null,
@@ -443,8 +445,8 @@ export default {
       "revertDamageAction",
     ]),
     pageView(item) {
-      this.equipmentSelect = item;
-      console.log("this.equipmentSelect", this.equipmentSelect);
+      this.damageSelect = item;
+      console.log("this.damageSelect", this.damageSelect);
       this.dialog = true;
       this.showdetails = true;
     },
@@ -453,7 +455,7 @@ export default {
       this.dialog = false;
     },
     confirmed() {
-      this.confirmDamage.id = this.equipmentSelect.id;
+      this.confirmDamage.id = this.damageSelect.id;
       this.confirmDamage.confirmedBy_id = localStorage.getItem("userid");
        
       this.confirmDamageAction(this.confirmDamage).then(() => {});
@@ -461,7 +463,7 @@ export default {
       this.dialog = false;
     },
     closed() {
-      this.closeDamage.id = this.equipmentSelect.id;
+      this.closeDamage.id = this.damageSelect.id;
       this.closeDamage.closedBy_id = localStorage.getItem("userid");
        
       this.closeDamageAction(this.closeDamage).then(() => {});
@@ -469,7 +471,7 @@ export default {
       this.dialog = false;
     },
     revert() {
-      this.revertDamage.id = this.equipmentSelect.id;
+      this.revertDamage.id = this.damageSelect.id;
       this.revertDamage.revertedBy_id = localStorage.getItem("userid");
        
       this.revertDamageAction(this.revertDamage).then(() => {});
