@@ -53,11 +53,11 @@ export default {
     confirmAddSave: false,
     headers: [
       { text: "name", value: "name", sortable: true },
-      { text: "damaged", value: "damaged", sortable: true },
-      { text: "confirmed", value: "confirmed", sortable: true },
-      { text: "closed", value: "closed", sortable: true },
-      { text: "equipment count", value: "equipmentLength", sortable: true },
-      { text: "Functional Equipement", value: "functional_equipement", sortable: true },
+      { text: "damaged", value: "damagedCount", sortable: true },
+      { text: "confirmed", value: "confirmedCount", sortable: true },
+      { text: "closed", value: "closedCount", sortable: true },
+      { text: "equipment count", value: "equipmentsCount", sortable: true },
+      { text: "Functional Equipement", value: "functionalEquipmnet", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
     profilegroups: [],
@@ -104,7 +104,7 @@ export default {
     formTitle() {
       return this.editedIndex === -1 ? "New Item" : "Edit Item";
     },
-    ...mapGetters(["getprofilegroups", "getdepartements",]),
+    ...mapGetters(["getProfileGroupsByCounters", "getdepartements",]),
   },
   watch: {
     dialog(val) {
@@ -130,9 +130,8 @@ export default {
   methods: {
     initialize() {
       this.profilegroupsBydepartements.length = [];
-      this.setPROFILEDROUPSAction().then(() => {
-        this.profilegroups = [...this.getprofilegroups];
-        this.profilegroupsBydepartements = [...this.getprofilegroups];
+      this.getProfileGroupsByCountersAction().then(() => {
+        this.profilegroupsBydepartements = [...this.getProfileGroupsByCounters];
         /* this.profilegroups.map((element) => {
           var department_id = element.department_id;
           CustomizedAxios.get(
@@ -157,26 +156,24 @@ export default {
         name: "techniqueView",
         params: { name: item.name },
       });
-      localStorage.removeItem("idDomainGroupes");
       localStorage.removeItem("idDomainGroupesid");
 
-      localStorage.setItem("idDomainGroupes", item.name);
       localStorage.setItem("idDomainGroupesid", item.id);
     },
-    ...mapActions(["setPROFILEDROUPSAction", "setDepartementsAction"]),
+    ...mapActions(["getProfileGroupsByCountersAction", "setDepartementsAction"]),
     changeDepartment() {
       this.profilegroupsBydepartements = [];
       this.profilegroups = [];
       console.log("this.departementId", this.departementId);
-      this.setPROFILEDROUPSAction().then(() => {
-        this.profilegroups = [...this.getprofilegroups];
-        this.profilegroups.map((element) => {
+      /* this.getProfileGroupsByCountersAction().then(() => {
+        this.profilegroupsBydepartements = [...this.getProfileGroupsByCounters];
+        this.profilegroupsBydepartements.map((element) => {
           if (element.department_id == this.departementId) {
             this.profilegroupsBydepartements.push(element);
           }
           // PROFILEDROUPSS;
         });
-      });
+      }); */
     },
   },
 };

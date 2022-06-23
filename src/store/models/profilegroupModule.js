@@ -4,7 +4,16 @@ const profilegroupModule = {
   state: {
     profilegroups: [],
     ProfileGroupUsers: [],
-    ProfileGroupsByCounters: []
+    ProfileGroupsByCounters: [],
+    ProfileGroupsByCounter: {
+      id: null,
+      name: "",
+      equipmentsCount: null,
+      functionalEquipmnet: null,
+      damagedCount: null,
+      confirmedCount: null,
+      closedCount: null,
+    },
   },
   mutations: {
     SET_PROFILEDROUPS(state, profilegroups) {
@@ -14,15 +23,17 @@ const profilegroupModule = {
       state.ProfileGroupUsers = ProfileGroupUsers;
     },
     SET_ProfileGroupsByCounters(state, ProfileGroupsByCounters) {
-      state.ProfileGroupsByCounters.id = ProfileGroupsByCounters.id;
-      state.ProfileGroupsByCounters.equipmentsCount =
-        ProfileGroupsByCounters.equipmentsCount;
-      state.ProfileGroupsByCounters.damagedCount =
-        ProfileGroupsByCounters.damagedCount;
-      state.ProfileGroupsByCounters.confirmedCount =
-        ProfileGroupsByCounters.confirmedCount;
-      state.ProfileGroupsByCounters.closedCount =
-        ProfileGroupsByCounters.closedCount;
+      state.ProfileGroupsByCounters = ProfileGroupsByCounters;
+    },
+    SET_ProfileGroupsByCounter(state, ProfileGroupsByCounter) {
+      state.ProfileGroupsByCounter.id = ProfileGroupsByCounter.id;
+      state.ProfileGroupsByCounter.name = ProfileGroupsByCounter.name;
+      state.ProfileGroupsByCounter.equipmentsCount = ProfileGroupsByCounter.equipmentsCount;
+      state.ProfileGroupsByCounter.functionalEquipmnet = ProfileGroupsByCounter.functionalEquipmnet;
+      state.ProfileGroupsByCounter.damagedCount = ProfileGroupsByCounter.damagedCount;
+      state.ProfileGroupsByCounter.confirmedCount = ProfileGroupsByCounter.confirmedCount;
+      state.ProfileGroupsByCounter.closedCount = ProfileGroupsByCounter.closedCount;
+
     },
     ADD_PROFILEDROUP(state, profilegroups) {
       state.profilegroups.push(profilegroups);
@@ -65,9 +76,21 @@ const profilegroupModule = {
     },
     getProfileGroupsByCountersAction({ commit }, id) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.get("profilegroup/getProfileGroupsByCounters/" + id)
+        CustomizedAxios.get("profilegroup/getProfileGroupsByCounters")
           .then((response) => {
             commit("SET_ProfileGroupsByCounters", response.data.payload);
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log("error :", error);
+          });
+      });
+    },
+    getProfileGroupsByCounterAction({ commit }, id) {
+      return new Promise((resolve, reject) => {
+        CustomizedAxios.get("profilegroup/getProfileGroupsByCounter/" + id)
+          .then((response) => {
+            commit("SET_ProfileGroupsByCounter", response.data.payload);
             resolve(response);
           })
           .catch((error) => {
@@ -147,6 +170,9 @@ const profilegroupModule = {
     },
     getProfileGroupsByCounters: (state) => {
       return state.ProfileGroupsByCounters;
+    },
+    getProfileGroupsByCounter: (state) => {
+      return state.ProfileGroupsByCounter;
     },
   },
 };

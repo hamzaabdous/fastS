@@ -72,8 +72,9 @@ const damageTypeModule = {
           confirmedBy_id: damage.confirmedBy_id,
         })
           .then((response) => {
-            console.log("res add ", response);
-            commit("EDIT_DAMAGE", response.data.payload);
+            console.log("res confirmDamage ", response.data.payload);
+
+       //     commit("EDIT_DAMAGE", response.data.payload);
             resolve(response.data);
           })
           .catch((error) => {
@@ -88,8 +89,8 @@ const damageTypeModule = {
           closedBy_id: damage.closedBy_id,
         })
           .then((response) => {
-            console.log("res add ", response);
-            commit("EDIT_DAMAGE", response.data.payload);
+            console.log("res closeDamage ", response.data.payload);
+            //commit("EDIT_DAMAGE", response.data.payload);
             resolve(response.data);
           })
           .catch((error) => {
@@ -104,8 +105,8 @@ const damageTypeModule = {
           revertedBy_id: damage.revertedBy_id,
         })
           .then((response) => {
-            console.log("res add ", response);
-            commit("EDIT_DAMAGE", response.data.payload);
+            console.log("res revertDamage ", response.data.payload);
+          //  commit("EDIT_DAMAGE", response.data.payload);
             resolve(response.data);
           })
           .catch((error) => {

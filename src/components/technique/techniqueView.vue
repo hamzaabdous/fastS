@@ -3,7 +3,7 @@
     <v-row style="text-align: center">
       <v-col cols="12" md="12">
         <h3>
-          Profile group : <span class="red--text"> {{ this.idgrp }}</span>
+          Profile group : <span class="red--text"> {{ this.ProfileGroupsByCounter.name }}</span>
         </h3>
       </v-col>
     </v-row>
@@ -17,7 +17,7 @@
                   Pending Damage Tickets
                 </div>
                 <v-list-item-title class="text-h5 mb-1 red--text">
-                  {{ this.ProfileGroupsByCounters.damagedCount }}
+                  {{ this.ProfileGroupsByCounter.damagedCount }}
                 </v-list-item-title>
               </v-list-item-content>
 
@@ -39,7 +39,7 @@
                   CONFIRMED DAMAGE TICKETS
                 </div>
                 <v-list-item-title class="text-h5 mb-1 deep-orange--text">
-                  {{ this.ProfileGroupsByCounters.confirmedCount }}
+                  {{ this.ProfileGroupsByCounter.confirmedCount }}
                 </v-list-item-title>
               </v-list-item-content>
 
@@ -61,7 +61,7 @@
                   Closed Damage Tickets
                 </div>
                 <v-list-item-title class="text-h5 mb-1 blue--text">
-                  {{ this.ProfileGroupsByCounters.closedCount }}
+                  {{ this.ProfileGroupsByCounter.closedCount }}
                 </v-list-item-title>
               </v-list-item-content>
 
@@ -84,7 +84,7 @@
                   Total Functional Equipement
                 </div>
                 <v-list-item-title class="text-h5 mb-1 green--text">
-                  {{ this.ProfileGroupsByCounters.closedCount  }}
+                  {{ this.ProfileGroupsByCounter.functionalEquipmnet }}
                 </v-list-item-title>
               </v-list-item-content>
 
@@ -101,7 +101,7 @@
     <div style="padding: 3px; padding-top: 4%">
       <v-data-table
         :headers="headers"
-        :items="equipmentsFiltre"
+        :items="equipments"
         :search="search"
         :loading="loading"
         sort-by="item.id"
@@ -148,9 +148,11 @@ export default {
     equipments: [],
     equipmentsFiltre: [],
     idgrp: null,
-    ProfileGroupsByCounters: {
+    ProfileGroupsByCounter: {
       id: null,
+      name: "",
       equipmentsCount: null,
+      functionalEquipmnet: null,
       damagedCount: null,
       confirmedCount: null,
       closedCount: null,
@@ -195,7 +197,7 @@ export default {
     },
     ...mapGetters([
       "getequipments",
-      "getProfileGroupsByCounters",
+      "getProfileGroupsByCounter",
       "getEquipmentsByCounters",
     ]),
   },
@@ -213,32 +215,35 @@ export default {
   methods: {
     initialize() {
       this.idgrp = localStorage.getItem("idDomainGroupes");
-      this.setequipmentsAction().then(() => {
-        this.equipments = [...this.getequipments];
-        this.equipments.map((item) => {
+      this.getEquipmentsByCountersAction(localStorage.getItem("idDomainGroupesid")).then(() => {
+        this.equipments = [...this.getEquipmentsByCounters];
+       /*  this.equipments.map((item) => {
           if (item.profile_group.name == this.idgrp) {
-              this.equipmentsFiltre.push(this.EquipmentsByCounters);
+            this.equipmentsFiltre.push(this.EquipmentsByCounters);
           }
-        });
+        }); */
       });
-      this.getProfileGroupsByCountersAction(
+      this.getProfileGroupsByCounterAction(
         localStorage.getItem("idDomainGroupesid")
       ).then(() => {
-        this.ProfileGroupsByCounters.id = this.getProfileGroupsByCounters.id;
-        this.ProfileGroupsByCounters.equipmentsCount =
-          this.getProfileGroupsByCounters.equipmentsCount;
-        this.ProfileGroupsByCounters.damagedCount =
-          this.getProfileGroupsByCounters.damagedCount;
-        this.ProfileGroupsByCounters.confirmedCount =
-          this.getProfileGroupsByCounters.confirmedCount;
-        this.ProfileGroupsByCounters.closedCount =
-          this.getProfileGroupsByCounters.closedCount;
+        this.ProfileGroupsByCounter.id = this.getProfileGroupsByCounter.id;
+        this.ProfileGroupsByCounter.name = this.getProfileGroupsByCounter.name;
+        this.ProfileGroupsByCounter.equipmentsCount =
+          this.getProfileGroupsByCounter.equipmentsCount;
+        this.ProfileGroupsByCounter.functionalEquipmnet =
+          this.getProfileGroupsByCounter.functionalEquipmnet;
+        this.ProfileGroupsByCounter.damagedCount =
+          this.getProfileGroupsByCounter.damagedCount;
+        this.ProfileGroupsByCounter.confirmedCount =
+          this.getProfileGroupsByCounter.confirmedCount;
+        this.ProfileGroupsByCounter.closedCount =
+          this.getProfileGroupsByCounter.closedCount;
       });
-      console.log("this.equipmentsFiltre", this.equipmentsFiltre);
+      console.log("this.ProfileGroupsByCounter", this.ProfileGroupsByCounter);
     },
     ...mapActions([
       "setequipmentsAction",
-      "getProfileGroupsByCountersAction",
+      "getProfileGroupsByCounterAction",
       "getEquipmentsByCountersAction",
     ]),
     pageView(item) {
@@ -247,8 +252,7 @@ export default {
         params: { name: item.name },
       });
 
-      localStorage.removeItem("equipment");
-      localStorage.setItem("equipment", item.name);
+  
       localStorage.removeItem("idEquipment");
       localStorage.setItem("idEquipment", item.id);
     },

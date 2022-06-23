@@ -98,10 +98,13 @@ export default {
       })
         .then((response) => {
           console.log("res login ", response.data);
-           localStorage.removeItem("token");
-           localStorage.removeItem("userid");
+          localStorage.removeItem("token");
+          localStorage.removeItem("userid");
+          localStorage.removeItem("userRole");
 
           localStorage.setItem("userid", response.data.payload.user.id);
+          localStorage.setItem("userRole", response.data.payload.user.fonction.department.name);
+
           localStorage.setItem("token", response.data.payload.token);
           this.$router.push({
             name: "Damage",

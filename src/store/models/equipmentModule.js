@@ -3,7 +3,14 @@ import CustomizedAxios from "../../plugins/axios";
 const equipmentModule = {
   state: {
     equipments: [],
-    EquipmentsByCounters:[],
+    EquipmentsByCounters: [],
+    EquipmentsByCounter: {
+      id: null,
+      nameEquipment: "",
+      damagedCount: null,
+      confirmedCount: null,
+      closedCount: null,
+    },
   },
   mutations: {
     SET_EQUIPMENTS(state, equipments) {
@@ -24,6 +31,14 @@ const equipmentModule = {
     },
     SET_EquipmentsByCounters(state, EquipmentsByCounters) {
       state.EquipmentsByCounters = EquipmentsByCounters;
+    },
+    SET_EquipmentsByCounter(state, EquipmentsByCounter) {
+      state.EquipmentsByCounter.id = EquipmentsByCounter.id;
+      state.EquipmentsByCounter.nameEquipment = EquipmentsByCounter.nameEquipment;
+      state.EquipmentsByCounter.damagedCount = EquipmentsByCounter.damagedCount;
+      state.EquipmentsByCounter.confirmedCount = EquipmentsByCounter.confirmedCount;
+      state.EquipmentsByCounter.closedCount = EquipmentsByCounter.closedCount;
+
     },
   },
   actions: {
@@ -52,12 +67,24 @@ const equipmentModule = {
           });
       });
     },
+    getEquipmentsByCounterAction({ commit }, id) {
+      return new Promise((resolve, reject) => {
+        CustomizedAxios.get("equipments/getEquipmentsByCounter/" + id)
+          .then((response) => {
+            commit("SET_EquipmentsByCounter", response.data.payload);
+            resolve(response);
+          })
+          .catch((error) => {
+            console.log("error :", error);
+          });
+      });
+    },
     addEQUIPMENTAction({ commit }, EQUIPMENT) {
       return new Promise((resolve, reject) => {
         CustomizedAxios.post("equipments/create", {
-          name:EQUIPMENT.name,
-          profile_group_id:EQUIPMENT.profile_group_id
-      })
+          name: EQUIPMENT.name,
+          profile_group_id: EQUIPMENT.profile_group_id,
+        })
           .then((response) => {
             console.log("res add ", response);
             commit("ADD_EQUIPMENT", response.data.payload);
@@ -72,9 +99,8 @@ const equipmentModule = {
     deleteEQUIPMENTAction({ commit }, EQUIPMENT) {
       return new Promise((resolve, reject) => {
         CustomizedAxios.post("equipments/delete", {
-          id:EQUIPMENT.id,
-      }
-         )
+          id: EQUIPMENT.id,
+        })
           .then((response) => {
             commit("DELETE_EQUIPMENT", EQUIPMENT.id);
             resolve(response.data);
@@ -86,11 +112,11 @@ const equipmentModule = {
     },
     editEQUIPMENTAction({ commit }, EQUIPMENT) {
       return new Promise((resolve, reject) => {
-        CustomizedAxios.post("equipments/update",  {
-          id:EQUIPMENT.id,
-          name:EQUIPMENT.name,
-          profile_group_id:EQUIPMENT.profile_group_id
-      })
+        CustomizedAxios.post("equipments/update", {
+          id: EQUIPMENT.id,
+          name: EQUIPMENT.name,
+          profile_group_id: EQUIPMENT.profile_group_id,
+        })
           .then((response) => {
             commit("EDIT_EQUIPMENT", response.data.payload);
             resolve(response.data);
@@ -107,6 +133,9 @@ const equipmentModule = {
     },
     getEquipmentsByCounters: (state) => {
       return state.EquipmentsByCounters;
+    },
+    getEquipmentsByCounter: (state) => {
+      return state.EquipmentsByCounter;
     },
   },
 };
