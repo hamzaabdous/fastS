@@ -4,7 +4,7 @@
       :headers="headers"
       :items="damageTypesByProfile_group_id"
       sort-by="item.id"
-      class="elevation-1 "
+      class="elevation-1"
       :search="search"
     >
       <template v-slot:top>
@@ -105,12 +105,12 @@
         </v-toolbar>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-btn color="#99A799" class="m-2 mr-2 btn white--text">
+        <v-btn color="primary" class="m-2 mr-2 btn white--text">
           <v-icon medium class="mr-2" @click="editItem(item)">
             mdi-pencil
           </v-icon>
         </v-btn>
-        <v-btn color="#99A799" class="m-2 btn white--text">
+        <v-btn color="#f45" class="m-2 btn white--text">
           <v-icon medium @click="deleteItem(item)"> mdi-delete </v-icon>
         </v-btn>
       </template>

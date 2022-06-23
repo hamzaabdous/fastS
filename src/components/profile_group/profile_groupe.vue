@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 5px; padding-top: 8%">
+  <div style="padding: 50px; padding-top: 8%">
     <v-data-table
       :headers="headers"
       :items="profilegroups"
@@ -172,12 +172,28 @@
         </v-toolbar>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-icon large @click="pageView(item)" class="mr-5">
-          mdi-eye-outline
-        </v-icon>
+        <v-btn
+          color="teal"
+          class="mr-2 btn white--text"
+          @click="pageView(item)"
+        >
+          <v-icon medium class="mr-2"> mdi-eye-outline </v-icon>
+        </v-btn>
+        <v-btn
+          color="primary"
+          class="mr-2 btn white--text"
+          @click="editItem(item)"
+        >
+          <v-icon medium class="mr-2"> mdi-pencil </v-icon>
+        </v-btn>
 
-        <v-icon large class="mr-5" @click="editItem(item)"> mdi-pencil </v-icon>
-        <v-icon large @click="deleteItem(item)"> mdi-delete </v-icon>
+        <v-btn
+          color="#f45"
+          class="mr-2 btn white--text"
+          @click="deleteItem(item)"
+        >
+          <v-icon medium> mdi-delete </v-icon>
+        </v-btn>
       </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="initialize()"> Reset </v-btn>
@@ -289,8 +305,7 @@ export default {
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      
-      console.log("this.editedItem",this.editedItem);
+      console.log("this.editedItem", this.editedItem);
       this.deletePROFILEDROUPAction(this.editedItem).then(() => {
         this.profilegroups = [...this.getprofilegroups];
       });
@@ -314,12 +329,11 @@ export default {
       this.confirmAddSave = true;
     },
     save() {
-
-      console.log("this.editedItem",this.editedItem);
+      console.log("this.editedItem", this.editedItem);
       if (this.editedIndex == -1) {
         this.addPROFILEDROUPAction(this.editedItem).then(() => {
           this.profilegroups = [...this.getprofilegroups];
-          console.log("this.profilegroups",this.profilegroups);
+          console.log("this.profilegroups", this.profilegroups);
         });
         this.closeAddSaveDialog();
       } else {

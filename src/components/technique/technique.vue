@@ -32,9 +32,13 @@
         </v-toolbar>
       </template>
       <template v-slot:[`item.actions`]="{ item }">
-        <v-icon medium class="mr-2" @click="pageView(item)">
-          mdi-eye-outline
-        </v-icon>
+        <v-btn
+          color="teal"
+          class="mr-2 btn white--text"
+          @click="pageView(item)"
+        >
+          <v-icon medium class="mr-2"> mdi-eye-outline </v-icon>
+        </v-btn>
       </template>
       <template v-slot:no-data>
         <v-btn color="primary" @click="initialize()"> Reset </v-btn>

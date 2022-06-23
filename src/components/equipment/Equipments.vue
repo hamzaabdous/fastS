@@ -76,7 +76,7 @@
     </template>
     <template v-slot:[`item.actions`]="{ item }">
       <v-btn
-        color="#99A799"
+        color="primary"
         class="mb-2 btn white--text"
         @click="editItem(item)"
       >
@@ -84,7 +84,7 @@
       </v-btn>
 
       <v-btn
-        color="#99A799"
+          color="#f45"
         class="mb-2 btn white--text"
         @click="deleteItem(item)"
       >

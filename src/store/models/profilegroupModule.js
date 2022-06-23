@@ -144,6 +144,22 @@ const profilegroupModule = {
           });
       });
     },
+    deleteUserFromProfileGroupAction({ commit }, profilegroup) {
+      return new Promise((resolve, reject) => {
+        CustomizedAxios.post("profilegroup/deleteUserFromProfileGroup", {
+          profile_group_id: profilegroup.profile_group_id,
+          user_id: profilegroup.user_id,
+        })
+          .then((response) => {
+            console.log("res",response.data.payload);
+           // commit("DELETE_PROFILEDROUP", profilegroup.id);
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
     editPROFILEDROUPAction({ commit }, profilegroup) {
       return new Promise((resolve, reject) => {
         CustomizedAxios.post("profilegroup/update", {

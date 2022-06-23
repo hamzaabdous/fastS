@@ -37,7 +37,7 @@
                     <v-col cols="12">
                       <v-col class="d-flex" cols="12" sm="12">
                         <v-select
-                          :items="users"
+                          :items="usersSelect"
                           item-text="username"
                           item-value="id"
                           v-model="UserToProfile.user_id"
@@ -138,7 +138,7 @@
       <template v-slot:[`item.actions`]="{ item }">
         
         <v-btn
-          color="#99A799"
+          color="#f45"
           class="m-2 btn white--text"
           @click="deleteItem(item)"
         >
@@ -168,6 +168,7 @@ export default {
       { text: "Actions", value: "actions", sortable: false },
     ],
     users: [],
+    usersSelect: [],
     usersFiltreByGRP: [],
     UserToProfile: {
       user_id: null,
@@ -231,22 +232,21 @@ export default {
     initialize() {
       
       this.UserToProfile.profile_group_id=parseFloat(localStorage.getItem("id"));
-      this.setUsersAction().then(() => {
-        this.users = [...this.getUsers];
+      this.getProfileGroupUsersAction(localStorage.getItem("id")).then(() => {
+        this.users = [...this.getProfileGroupUsers];
         console.log("this.users", this.users);
 
-        /*  this.users.forEach((element) => {
-            if (element.profile_group_id == localStorage.getItem("id")) {
-              this.usersFiltreByGRP.push(element);
-            }
-          }); */
+      });
+      this.setUsersAction(localStorage.getItem("id")).then(() => {
+        this.usersSelect = [...this.getUsers];
+        console.log("this.users", this.usersSelect);
+
       });
     },
     ...mapActions([
       "setUsersAction",
       "editUserAction",
-      "deleteUserAction",
-      "addUserAction",
+      "deleteUserFromProfileGroupAction",
       "getProfileGroupUsersAction",
       "addUserToProfileGroupAction",
     ]),
@@ -258,13 +258,15 @@ export default {
     },
     deleteItem(item) {
       this.editedIndex = item.id;
+      this.UserToProfile.user_id=item.id;
+       this.UserToProfile.profile_group_id=localStorage.getItem("id");
       this.editedItem = Object.assign({}, item);
       this.dialogDelete = true;
     },
     deleteItemConfirm() {
-      this.deleteUserAction(this.editedIndex).then(() => {
-        this.users = this.getUsers;
-      });
+      //console.log("UserToProfile",this.UserToProfile);
+       this.deleteUserFromProfileGroupAction(this.UserToProfile).then(() => {
+      }); 
       this.closeDelete();
     },
     close() {
