@@ -224,6 +224,18 @@ export default {
         name: "closed",
       },
     ],
+     departmentIT: {
+      id: null,
+      name: "",
+      created_at: "",
+      updated_at: "",
+    },
+    departmentTEC: {
+      id: null,
+      name: "",
+      created_at: "",
+      updated_at: "",
+    },
   }),
   mounted() {
     document.title = "damage";
@@ -265,16 +277,18 @@ export default {
       //this.damagetypeITandTEC();
     },
     changeEquipmentsFiltreSELECT() {
+       var IT = this.departmentIT.id;
+      var TEC = this.departmentTEC.id;
       this.modelDamageTEC = [];
       this.modelDamageIT = [];
       this.FindDamageTypeByEquipmentID = [];
       this.FindDamageTypeByEquipmentIDAction(this.equipments_id).then(() => {
         this.FindDamageTypeByEquipmentID = [...this.getDamageTypeByEquipmentID];
         this.FindDamageTypeByEquipmentID.map((item) => {
-          if (item.damage_type.department_id == 1 && item.status != "confirmed") {
+          if (item.damage_type.department_id == TEC && item.status != "confirmed") {
             this.modelDamageTEC.push(item);
           }
-          if (item.damage_type.department_id == 2 && item.status != "confirmed") {
+          if (item.damage_type.department_id == IT && item.status != "confirmed") {
             this.modelDamageIT.push(item);
           }
         });
@@ -290,6 +304,18 @@ export default {
       this.setequipmentsAction().then(() => {
         this.equipments = [...this.getequipments];
         console.log(this.equipments);
+      });
+      this.setDepartementsAction().then(() => {
+        this.department = [...this.getdepartements];
+        this.department.map((item) =>{
+          if(item.name.toLowerCase() == "technique"){
+            this.departmentTEC=item;
+          }
+          if( item.name.toLowerCase() == "it"){
+            this.departmentIT=item;
+          }
+        })
+        console.log("set Departements", this.department);
       });
     },
     ...mapActions([

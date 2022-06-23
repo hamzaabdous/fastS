@@ -27,31 +27,37 @@
         </v-row>
         <v-dialog v-model="dialog" persistent max-width="490">
           <v-card>
-            <v-card-title class="text text-h5 red--text text--lighten-1 text-uppercase"> Warning ! </v-card-title>
+            <v-card-title
+              class="text text-h5 red--text text--lighten-1 text-uppercase"
+            >
+              Warning !
+            </v-card-title>
             <v-card-text class="font-weight-bold"
               >Are you sure you want to add this damage ?</v-card-text
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="red lighten-1"  @click="cancel"> No </v-btn>
-              <v-btn color="primary"  @click="dialog = false">
-                Yes
-              </v-btn>
+              <v-btn color="red lighten-1" @click="cancel"> No </v-btn>
+              <v-btn color="primary" @click="dialog = false"> Yes </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
         <v-dialog v-model="dialogValide" persistent max-width="490">
           <v-card>
-            <v-card-title class="text text-h4 red--text text--lighten-1 text-uppercase"> Warning ! </v-card-title>
+            <v-card-title
+              class="text text-h4 red--text text--lighten-1 text-uppercase"
+            >
+              Warning !
+            </v-card-title>
             <v-card-text class="font-weight-bold"
               >Are you sure you want to valide this Damages ?</v-card-text
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="red lighten-1"  @click="dialogValide= false"> No </v-btn>
-              <v-btn color="primary"  @click="validerDamages">
-                Yes
+              <v-btn color="red lighten-1" @click="dialogValide = false">
+                No
               </v-btn>
+              <v-btn color="primary" @click="validerDamages"> Yes </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -234,6 +240,19 @@ export default {
     damagesend: [],
     modelIT: [],
     modelTEC: [],
+    department: [],
+    departmentIT: {
+      id: null,
+      name: "",
+      created_at: "",
+      updated_at: "",
+    },
+    departmentTEC: {
+      id: null,
+      name: "",
+      created_at: "",
+      updated_at: "",
+    },
     DamageTypeByEquipmentID: [],
     DamagesMergedWithDamageTypes: [],
     equipments_id: "",
@@ -259,6 +278,7 @@ export default {
       "getDamageTypeByEquipmentID",
       "getdamage",
       "getEquipmentDamagesMergedWithDamageTypes",
+      "getdepartements",
     ]),
   },
   watch: {
@@ -289,8 +309,8 @@ export default {
       });
     },
     changeEquipmentsFiltreSELECT() {
-      var IT = 2;
-      var TEC = 1;
+      var IT = this.departmentIT.id;
+      var TEC = this.departmentTEC.id;
       this.modelDamageTEC = [];
       this.modelDamageIT = [];
       this.damageTypesTEC = [];
@@ -340,6 +360,18 @@ export default {
         this.equipments = [...this.getequipments];
         console.log("set equipments", this.equipments);
       });
+      this.setDepartementsAction().then(() => {
+        this.department = [...this.getdepartements];
+        this.department.map((item) =>{
+          if(item.name.toLowerCase() == "technique"){
+            this.departmentTEC=item;
+          }
+          if( item.name.toLowerCase() == "it"){
+            this.departmentIT=item;
+          }
+        })
+        console.log("set Departements", this.department);
+      });
     },
     ...mapActions([
       "setDAMAGEAction",
@@ -352,6 +384,7 @@ export default {
       "addDAMAGESAction",
       "FindDamageTypeByEquipmentIDAction",
       "getEquipmentDamagesMergedWithDamageTypesAction",
+      "setDepartementsAction",
     ]),
     valider(item) {
       console.log("item ", item);
@@ -379,7 +412,7 @@ export default {
     },
 
     dialogValideFunction() {
-      this.dialogValide=true;
+      this.dialogValide = true;
       /* this.declareDamageAction(this.Data).then(() => {
         console.log("validerDamages");
       }); */
@@ -387,8 +420,8 @@ export default {
     validerDamages() {
       this.declareDamageAction(this.Data).then(() => {
         console.log("validerDamages");
-      }); 
-        this.dialogValide=false;
+      });
+      this.dialogValide = false;
     },
   },
 };

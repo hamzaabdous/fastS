@@ -70,7 +70,7 @@ const usersModule = {
         CustomizedAxios.post("users/create",)
           .then((response) => {
             console.log("res add ", response);
-            commit("GET_USERACTIVE", response.data.payload);
+            commit("ADD_USER", response.data.payload);
             resolve(response.data.payload);
           })
           .catch((error) => {
