@@ -25,7 +25,7 @@
             ></v-select>
           </v-col>
         </v-row>
-        <v-dialog v-model="dialogTEC" persistent max-width="290">
+        <v-dialog v-model="dialog" persistent max-width="290">
           <v-card>
             <v-card-title class="text-h5"> Warning ! </v-card-title>
             <v-card-text
@@ -33,14 +33,14 @@
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="cancelTEC"> No </v-btn>
-              <v-btn color="green darken-1" text @click="dialogTEC = false">
+              <v-btn color="green darken-1" text @click="cancel"> No </v-btn>
+              <v-btn color="green darken-1" text @click="dialog = false">
                 Yes
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialogIT" persistent max-width="290">
+        <v-dialog v-model="dialog" persistent max-width="290">
           <v-card>
             <v-card-title class="text-h5"> Warning ! </v-card-title>
             <v-card-text
@@ -48,8 +48,8 @@
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="cancelIT"> No </v-btn>
-              <v-btn color="green darken-1" text @click="dialogIT = false">
+              <v-btn color="green darken-1" text @click="cancel"> No </v-btn>
+              <v-btn color="green darken-1" text @click="dialog = false">
                 Yes
               </v-btn>
             </v-card-actions>
@@ -79,7 +79,8 @@
                     name="it"
                     v-model="modelIT"
                     multiple
-                    color="#f54"
+                    active-class="bg-active"
+                    color="#fff"
                   >
                     <div>
                       <v-list-item
@@ -101,7 +102,7 @@
                             name="modelDamageIT"
                             v-text="item.name"
                           ></v-list-item-title>
-                          <h4>{{item.damage[0].status}}</h4>
+                          <h4>{{ item.damage.status }}</h4>
                         </v-list-item-content>
                       </v-list-item>
                     </div>
@@ -110,7 +111,7 @@
                         v-for="(item, i) in damageTypesIT"
                         :key="i"
                         class="item"
-                        @click="validerIT(item)"
+                        @click="valider(item)"
                       >
                         <v-list-item-icon>
                           <v-icon> mdi-cellphone-link-off</v-icon>
@@ -151,7 +152,8 @@
                     name="TEC"
                     v-model="modelTEC"
                     multiple
-                    color="#f54"
+                    active-class="bg-active"
+                    color="#fff"
                   >
                     <div>
                       <v-list-item
@@ -173,7 +175,7 @@
                             name="modelDamageTEC"
                             v-text="item.name"
                           ></v-list-item-title>
-                          <h4>{{item.damage[0].status}}</h4>
+                          <h4>{{ item.damage.status }}</h4>
                         </v-list-item-content>
                       </v-list-item>
                     </div>
@@ -182,7 +184,7 @@
                         v-for="(item, i) in damageTypesTEC"
                         :key="i"
                         class="item"
-                        @click="validerTEC(item)"
+                        @click="valider(item)"
                       >
                         <v-list-item-icon>
                           <v-icon>mdi-car-wrench</v-icon>
@@ -204,12 +206,8 @@
         </v-container>
         <v-container>
           <v-row>
-            <v-col cols="12">
-              <v-btn
-                color="#1D4F91"
-                class="mb-2 btn centre white--text"
-                @click="validerDamages"
-              >
+            <v-col class="d-flex justify-center" cols="12">
+              <v-btn depressed color="primary" @click="validerDamages">
                 Valider
               </v-btn>
             </v-col>
@@ -239,8 +237,8 @@ export default {
     DamageTypeByEquipmentID: [],
     DamagesMergedWithDamageTypes: [],
     equipments_id: "",
-    dialogTEC: false,
-    dialogIT: false,
+    dialog: false,
+    dialog: false,
     profile_groupe_id: null,
     disabledEquipmentsFiltre: true,
   }),
@@ -265,7 +263,7 @@ export default {
   },
   watch: {
     dialog(val) {
-      val || this.close();
+      val || this.cancel();
     },
     dialogDelete(val) {
       val || this.closeDelete();
@@ -281,17 +279,8 @@ export default {
       this.equipmentsFiltre.length = 0;
       this.damageTypesIT.length = 0;
       this.damageTypesTEC.length = 0;
-      this.Data.length = 0;
-      //  this.damageFunction();
       this.disabledEquipmentsFiltre = false;
-      /*  this.profile_groupe.map((item) => {
 
-        if (item.id== this.profile_groupe_id) {
-          item.damageTypes.map((item) => {
-            this.Data.push(item);
-          });
-        }
-      }); */
       console.log("equipments", this.equipments);
       this.equipments.map((item) => {
         if (item.profile_group_id == this.profile_groupe_id) {
@@ -318,35 +307,24 @@ export default {
           this.DamagesMergedWithDamageTypes
         );
         this.DamagesMergedWithDamageTypes.map((item) => {
-
-        //  debugger;
-          if (item.department_id == TEC && item.damage.length != 0 ) {
+          //  debugger;
+          if (item.department_id == TEC && item.damage != null) {
             if (item.damage.status == "closed") {
               this.damageTypesTEC.push(item);
-            } 
-            else {
+            } else {
               this.modelDamageTEC.push(item);
             }
-          } else if (
-            item.department_id == TEC &&
-            item.damage.length == 0
-          ) {
+          } else if (item.department_id == TEC && item.damage == null) {
             this.damageTypesTEC.push(item);
           }
 
-          if (
-            item.department_id == IT &&
-            item.damage.length != 0 
-          ) {
+          if (item.department_id == IT && item.damage != null) {
             if (item.damage.status == "closed") {
               this.damageTypesIT.push(item);
-            } else  {
+            } else {
               this.modelDamageIT.push(item);
             }
-          } else if (
-            item.department_id == IT &&
-            item.damage.length == 0
-          ) {
+          } else if (item.department_id == IT && item.damage == null) {
             this.damageTypesIT.push(item);
           }
         });
@@ -367,7 +345,7 @@ export default {
       "setDAMAGEAction",
       "editDAMAGEAction",
       "deleteDAMAGEAction",
-      "addDAMAGEAction",
+      "declareDamageAction",
       "setDAMAGETYPESAction",
       "setPROFILEDROUPSAction",
       "setequipmentsAction",
@@ -375,73 +353,33 @@ export default {
       "FindDamageTypeByEquipmentIDAction",
       "getEquipmentDamagesMergedWithDamageTypesAction",
     ]),
-    validerTEC(item) {
-      var id = item.id;
-      var userid = 1;
-      var equipmentsid = this.equipments_id;
-      var name = "dmagaetest";
+    valider(item) {
+      console.log("item ", item);
 
-      var obj = {
-        name: name,
-        status: "",
-        description: "",
-        equipement: {
-          id: equipmentsid,
-        },
-        userDeclaration: {
-          id: userid,
-        },
-        damageType: {
-          id: id,
-        },
+      var Damage = {
+        declaredBy_id: null,
+        equipment_id: null,
+        damage_type_id: null,
       };
-      this.damagesend.push(obj);
 
-      this.dialogTEC = true;
-    },
-    validerIT(item) {
-      var id = item.id;
-      var userid = 1;
-      var equipmentsid = this.equipments_id;
-      var name = "dmagaetest";
+      Damage.declaredBy_id = localStorage.getItem("userid");
+      Damage.damage_type_id = item.id;
+      Damage.equipment_id = this.equipments_id;
 
-      console.log("item vvvv", id);
-      console.log("equipmentsid vvvv", equipmentsid);
-      var obj = {
-        name: name,
-        status: "",
-        description: "",
-        equipement: {
-          id: equipmentsid,
-        },
-        userDeclaration: {
-          id: userid,
-        },
-        damageType: {
-          id: id,
-        },
-      };
-      this.damagesend.push(obj);
+      this.Data.push(Damage);
 
-      console.log(this.damagesend);
-      this.dialogIT = true;
+      console.log(this.Data);
+
+      this.dialog = true;
     },
-    cancelTEC() {
-      this.modelTEC.pop();
-      this.dialogTEC = false;
+
+    cancel() {
+      this.damagesend.pop();
+      this.dialog = false;
     },
-    cancelIT() {
-      this.modelIT.pop();
-      this.dialogIT = false;
-    },
-    damageFunction() {
-      this.damage = [...this.getdamage];
-      this.setDAMAGEAction().then(() => {
-        this.damageTypes = [...this.getdamageTypes];
-      });
-    },
+
     validerDamages() {
-      this.addDAMAGESAction(this.damagesend).then(() => {
+      this.declareDamageAction(this.Data).then(() => {
         console.log("validerDamages");
       });
     },

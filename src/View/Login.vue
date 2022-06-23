@@ -1,5 +1,5 @@
 <template>
-  <v-row style="margin: 0; padding: 0;background: #fff;" >
+  <v-row style="margin: 0; padding: 0; background: #fff">
     <v-col cols="7" class="backgroundLogin"> </v-col>
     <v-col cols="5" class="form">
       <v-row>
@@ -41,67 +41,68 @@ export default {
       logged: false,
       username: null,
       password: null,
-      userActive:{
+      userActive: {
         user: {
-        id: null,
-        username: "",
-        lastName: "",
-        firstName: "",
-        email: "",
-        phoneNumber: "",
-        fonction_id: null,
-        created_at: "",
-        updated_at: "",
-        fonction: {
+          id: null,
+          username: "",
+          lastName: "",
+          firstName: "",
+          email: "",
+          phoneNumber: "",
+          fonction_id: null,
+          created_at: "",
+          updated_at: "",
+          fonction: {
             id: null,
             name: "",
             department_id: null,
             created_at: "",
             updated_at: "",
             department: {
-                id: null,
-                name: "",
-                created_at: "",
-                updated_at: ""
-            }
-        }
-    },
-    token: ""
+              id: null,
+              name: "",
+              created_at: "",
+              updated_at: "",
+            },
+          },
+        },
+        token: "",
       },
     };
   },
   mounted() {
     document.title = "Dashboard";
 
-     this.initialize();
+    this.initialize();
   },
   computed: {
-    ...mapGetters(["getUsers","getUserActive"]),
+    ...mapGetters(["getUsers", "getUserActive"]),
   },
   watch: {},
   methods: {
     initialize() {
       console.log("xccc");
-     
     },
     Login() {
       console.log("username", this.username);
       console.log("password", this.password);
-      
-      this.userActive=this.getUserActive;
+
+      this.userActive = this.getUserActive;
       /* localStorage.removeItem("userActive");
       localStorage.setItem('userActive', JSON.stringify(this.userActive)); */
-      console.log("this.userActive",this.userActive);
+      console.log("this.userActive", this.userActive);
 
-      CustomizedAxios
-        .post("users/login", {
-          username: this.username,
-          password: this.password,
-        })
+      CustomizedAxios.post("users/login", {
+        username: this.username,
+        password: this.password,
+      })
         .then((response) => {
           console.log("res login ", response.data);
-          // localStorage.removeItem("token");
-          localStorage.setItem("token", response.data.token);
+           localStorage.removeItem("token");
+           localStorage.removeItem("userid");
+
+          localStorage.setItem("userid", response.data.payload.user.id);
+          localStorage.setItem("token", response.data.payload.token);
           this.$router.push({
             name: "Damage",
             params: { token: response.data.token },

@@ -50,6 +50,21 @@ const damageTypeModule = {
           });
       });
     },
+    declareDamageAction({ commit }, damagesList) {
+      return new Promise((resolve, reject) => {
+        CustomizedAxios.post("damages/declareDamage", {
+          damages:damagesList
+        })
+          .then((response) => {
+            console.log("res add ", response);
+            commit("ADD_DAMAGES", response.data.payload);
+            resolve(response.data);
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    },
     confirmDamageAction({ commit }, damage) {
       return new Promise((resolve, reject) => {
         CustomizedAxios.post("damages/confirmDamage", {

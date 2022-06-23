@@ -57,6 +57,7 @@ export default {
       { text: "confirmed", value: "confirmed", sortable: true },
       { text: "closed", value: "closed", sortable: true },
       { text: "equipment count", value: "equipmentLength", sortable: true },
+      { text: "Functional Equipement", value: "functional_equipement", sortable: true },
       { text: "Actions", value: "actions", sortable: false },
     ],
     profilegroups: [],

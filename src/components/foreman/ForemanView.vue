@@ -27,19 +27,16 @@
         </v-row>
         <v-dialog
           v-model="dialog"
-          fullscreen
-          hide-overlay
-          transition="dialog-bottom-transition"
+          max-width="700px"
         >
           <v-card>
             <v-toolbar dark color="primary">
-              <v-btn icon dark @click="cancel">
+              <v-btn icon dark  @click="cancel">
                 <v-icon>mdi-close</v-icon>
               </v-btn>
               <v-toolbar-title>Settings</v-toolbar-title>
               <v-spacer></v-spacer>
               <v-toolbar-items>
-                <v-btn dark text @click="validerDamages"> Save </v-btn>
               </v-toolbar-items>
             </v-toolbar>
 
@@ -62,6 +59,15 @@
                 prepend-icon="mdi-camera"
               ></v-file-input>
             </v-col>
+            <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn depressed color="" @click="dialog = false">
+                  Close
+                </v-btn>
+                <v-btn depressed color="primary" @click="save(editedItem)">
+                  Save
+                </v-btn>
+              </v-card-actions>
           </v-card>
         </v-dialog>
         <v-container>
@@ -265,10 +271,10 @@ export default {
       this.FindDamageTypeByEquipmentIDAction(this.equipments_id).then(() => {
         this.FindDamageTypeByEquipmentID = [...this.getDamageTypeByEquipmentID];
         this.FindDamageTypeByEquipmentID.map((item) => {
-          if (item.damage_type.department_id == 1) {
+          if (item.damage_type.department_id == 1 && item.status != "confirmed") {
             this.modelDamageTEC.push(item);
           }
-          if (item.damage_type.department_id == 2) {
+          if (item.damage_type.department_id == 2 && item.status != "confirmed") {
             this.modelDamageIT.push(item);
           }
         });
@@ -319,6 +325,7 @@ export default {
     },
 
     valider(item) {
+      console.log("item",item);
       this.photo.id = item.id;
       this.photo.foreman_id = 1;
       this.dialog = true;
@@ -327,11 +334,6 @@ export default {
       this.dialog = false;
     },
 
-    damageFunction() {
-      this.setDAMAGEAction().then(() => {
-        this.damage = [...this.getdamage];
-      });
-    },
     validerDamages() {
       var formData = new FormData();
       formData.append("id", parseFloat(this.photo.id));
