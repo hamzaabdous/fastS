@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 3px; padding-top: 2%">
+  <div style="padding: 30px; padding-top: 2%">
     <v-row style="text-align: center">
       <v-col cols="12" md="12">
         <h3>

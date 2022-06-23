@@ -25,31 +25,31 @@
             ></v-select>
           </v-col>
         </v-row>
-        <v-dialog v-model="dialog" persistent max-width="290">
+        <v-dialog v-model="dialog" persistent max-width="490">
           <v-card>
-            <v-card-title class="text-h5"> Warning ! </v-card-title>
-            <v-card-text
+            <v-card-title class="text text-h5 red--text text--lighten-1 text-uppercase"> Warning ! </v-card-title>
+            <v-card-text class="font-weight-bold"
               >Are you sure you want to add this damage ?</v-card-text
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="cancel"> No </v-btn>
-              <v-btn color="green darken-1" text @click="dialog = false">
+              <v-btn color="red lighten-1"  @click="cancel"> No </v-btn>
+              <v-btn color="primary"  @click="dialog = false">
                 Yes
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-dialog v-model="dialog" persistent max-width="290">
+        <v-dialog v-model="dialogValide" persistent max-width="490">
           <v-card>
-            <v-card-title class="text-h5"> Warning ! </v-card-title>
-            <v-card-text
-              >Are you sure you want to add this damage ?</v-card-text
+            <v-card-title class="text text-h4 red--text text--lighten-1 text-uppercase"> Warning ! </v-card-title>
+            <v-card-text class="font-weight-bold"
+              >Are you sure you want to valide this Damages ?</v-card-text
             >
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn color="green darken-1" text @click="cancel"> No </v-btn>
-              <v-btn color="green darken-1" text @click="dialog = false">
+              <v-btn color="red lighten-1"  @click="dialogValide= false"> No </v-btn>
+              <v-btn color="primary"  @click="validerDamages">
                 Yes
               </v-btn>
             </v-card-actions>
@@ -207,7 +207,7 @@
         <v-container>
           <v-row>
             <v-col class="d-flex justify-center" cols="12">
-              <v-btn depressed color="primary" @click="validerDamages">
+              <v-btn depressed color="primary" @click="dialogValideFunction">
                 Valider
               </v-btn>
             </v-col>
@@ -238,7 +238,7 @@ export default {
     DamagesMergedWithDamageTypes: [],
     equipments_id: "",
     dialog: false,
-    dialog: false,
+    dialogValide: false,
     profile_groupe_id: null,
     disabledEquipmentsFiltre: true,
   }),
@@ -378,10 +378,17 @@ export default {
       this.dialog = false;
     },
 
+    dialogValideFunction() {
+      this.dialogValide=true;
+      /* this.declareDamageAction(this.Data).then(() => {
+        console.log("validerDamages");
+      }); */
+    },
     validerDamages() {
       this.declareDamageAction(this.Data).then(() => {
         console.log("validerDamages");
-      });
+      }); 
+        this.dialogValide=false;
     },
   },
 };

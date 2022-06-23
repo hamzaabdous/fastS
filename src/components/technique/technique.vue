@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 5px; padding-top: 8%">
+  <div style="padding: 50px; padding-top: 8%">
     <v-col cols="6" md="6">
       <v-select
         :items="departements"

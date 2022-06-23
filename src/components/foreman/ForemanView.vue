@@ -41,7 +41,7 @@
             </v-toolbar>
 
             <v-card-title class="text-h5"> Description : </v-card-title>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="12">
               <v-textarea
                 solo
                 name="input-7-4"
@@ -50,7 +50,7 @@
               ></v-textarea>
             </v-col>
             <v-card-title class="text-h5"> Add picture : </v-card-title>
-            <v-col cols="12" md="6">
+            <v-col cols="12" md="12">
               <v-file-input
                 label="Pictures"
                 v-model="photo.photos"
